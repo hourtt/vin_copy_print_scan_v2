@@ -5,7 +5,7 @@
             <span x-text="viewState === 'FORM' ? (editingId ? 'Edit Address' : 'Add New Address') : 'Delivery Addresses'"></span>
         </x-slot>
 
-        <div class="font-['DM_Sans',sans-serif]">
+        <div class="font-['Kantumruy_Pro',sans-serif]">
 
             {{-- Success Toast --}}
             @if (session('status') === 'profile-updated' && session('inline_field') === 'address')

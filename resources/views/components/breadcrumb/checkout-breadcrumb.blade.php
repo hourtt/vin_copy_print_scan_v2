@@ -10,7 +10,7 @@
     $currentKeyIndex = array_search($current, array_keys($steps));
 @endphp
 
-<nav class="flex items-center text-sm font-['DM_Sans',sans-serif] py-2 mb-6">
+<nav class="flex items-center text-sm font-['Kantumruy_Pro',sans-serif] py-2 mb-6">
     @foreach ($steps as $key => $label)
         @php
             $loopIndex = $loop->index;

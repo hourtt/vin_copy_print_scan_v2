@@ -11,7 +11,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/checkout-bundle.js'])
 </head>
 
-<body class="bg-zinc-50 text-[#27272a] font-['DM_Sans',sans-serif] min-h-screen flex flex-col"
+<body class="bg-zinc-50 text-[#27272a] font-['Kantumruy_Pro',sans-serif] min-h-screen flex flex-col"
     x-data="checkout({{ $subtotal }}, {{ $shippingMethods->toJson() }})">
 
     <!-- Header -->
@@ -39,7 +39,7 @@
             <div class="lg:w-7/12 flex flex-col">
                 <x-breadcrumb.checkout-breadcrumb current="shipping" />
 
-                <h1 class="font-['DM_Sans',sans-serif] text-3xl font-bold mb-6">Shipping Address</h1>
+                <h1 class="font-['Kantumruy_Pro',sans-serif] text-3xl font-bold mb-6">Shipping Address</h1>
 
                 @if ($errors->any())
                     <div class="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-sm">
@@ -61,7 +61,7 @@
 
                     <x-checkout.address-form :user="auth()->user()" />
 
-                    <h2 class="font-['DM_Sans',sans-serif] text-2xl font-bold mb-4">Shipping Method</h2>
+                    <h2 class="font-['Kantumruy_Pro',sans-serif] text-2xl font-bold mb-4">Shipping Method</h2>
 
                     <x-checkout.shipping-methods />
 

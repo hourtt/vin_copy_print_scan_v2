@@ -1,6 +1,6 @@
 @props(['items'])
 
-<nav class="flex flex-wrap items-center text-sm font-['DM_Sans',sans-serif] py-2 mb-6 gap-y-2">
+<nav class="flex flex-wrap items-center text-sm font-['Kantumruy Pro',sans-serif] py-2 mb-6 gap-y-2">
     @foreach ($items as $item)
         <div class="flex items-center">
             @if ($loop->last || empty($item['url']))

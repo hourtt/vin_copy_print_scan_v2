@@ -1,7 +1,7 @@
 @props(['cartItems'])
 
 <div class="bg-white border border-[#e4e4e7] shadow-sm rounded-2xl p-6 lg:sticky lg:top-8">
-    <h2 class="font-['DM_Sans',sans-serif] text-2xl font-bold mb-6 text-[#27272a]">Your Cart</h2>
+    <h2 class="font-['Kantumruy_Pro',sans-serif] text-2xl font-bold mb-6 text-[#27272a]">Your Cart</h2>
 
     <div class="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
         @foreach ($cartItems as $item)
