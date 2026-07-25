@@ -12,12 +12,6 @@ document.addEventListener("alpine:init", () => {
             city: "",
             zip: "",
         },
-        card: {
-            // Kept for UI visual purposes if they type, but Stripe will handle real input
-            number: "",
-            expiry: "",
-            cvv: "",
-        },
 
         // Safely parse initialSubtotal whether passed as a number or an object
         baseSubtotal:
@@ -62,12 +56,9 @@ document.addEventListener("alpine:init", () => {
                         !this.customer.address ||
                         !this.customer.city
                     ) {
-                        alert("Please fill in all delivery details.");
                         return;
                     }
                 }
-            } else if (this.step === 2) {
-                // We won't validate card here as Stripe Checkout handles it server-side via redirect
             }
 
             if (this.step < 3) this.step++;
