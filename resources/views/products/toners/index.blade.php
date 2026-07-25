@@ -17,11 +17,7 @@
     @include('layouts.navigation')
 
     <div class="max-w-[1320px] mx-auto px-6 pt-8">
-        <x-breadcrumb :items="[
-            ['label' => 'Home', 'url' => route('dashboard')],
-            ['label' => 'Products', 'url' => route('product-catalog.index')],
-            ['label' => 'Toners', 'url' => null],
-        ]" />
+        <x-breadcrumb :items="$items" />
     </div>
 
     {{-- Hero --}}

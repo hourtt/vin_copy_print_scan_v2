@@ -59,6 +59,10 @@
                                 class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-b-md justify-center">
                                 Papers
                             </a>
+                            <a href="{{ route('product-catalog.index') }}"
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-b-md justify-center">
+                                Product Catalog
+                            </a>
                         </div>
                     </div>
                 </div>

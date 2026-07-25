@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 
+use App\Services\BreadcrumbService;
+
 class CartController extends Controller
 {
     protected $cartService;
@@ -15,12 +17,13 @@ class CartController extends Controller
         $this->cartService = $cartService;
     }
 
-    public function index()
+    public function index(BreadcrumbService $breadcrumbService)
     {
         $cartItems = $this->cartService->getCartItems();
         $subtotal = $this->cartService->getSubtotal();
+        $breadcrumbs = $breadcrumbService->getForCart();
 
-        return view('cart.index', compact('cartItems', 'subtotal'));
+        return view('cart.index', compact('cartItems', 'subtotal', 'breadcrumbs'));
     }
 
     public function add(Request $request, Product $product)

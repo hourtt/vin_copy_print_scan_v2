@@ -10,6 +10,8 @@ use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Services\BreadcrumbService;
+
 class ProductController extends Controller
 {
     /**
@@ -47,8 +49,11 @@ class ProductController extends Controller
         return view('dashboard', compact('featured', 'popular', 'newArrivals', 'hotSale'));
     }
 
-    public function product_catalog_index(Request $request)
+    public function product_catalog_index(Request $request, BreadcrumbService $breadcrumbService)
     {
+        $breadcrumbService->push('Product Catalog', $request->fullUrl());
+        $items = $breadcrumbService->getForListing('Product Catalog', $request->fullUrl());
+
         $query = Product::with('category');
 
         if ($request->has('categories') && !empty($request->query('categories'))) {
@@ -83,7 +88,7 @@ class ProductController extends Controller
         $products = $query->paginate(12)->withQueryString();
         $categories = Category::select('id', 'name')->orderBy('name')->get();
 
-        return view('products-catalog.index', compact('products', 'categories'));
+        return view('products-catalog.index', compact('products', 'categories', 'items'));
     }
 
     private function calculatePercentageChange($current, $previous)
@@ -148,10 +153,15 @@ class ProductController extends Controller
         ));
     }
 
-    public function printers_index(Request $request)
+    public function printers_index(Request $request, BreadcrumbService $breadcrumbService)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
+
+        if (!$isAjax) {
+            $breadcrumbService->push('Printers', $request->fullUrl());
+            $items = $breadcrumbService->getForListing('Printers', $request->fullUrl());
+        }
 
         // Strict category isolation — only Printers (category_id = 1)
         $query = Product::with($isAjax ? ['brand'] : ['category', 'brand', 'voucher'])
@@ -214,13 +224,18 @@ class ProductController extends Controller
             $q->where('category_id', 1)
         )->orderBy('name')->get();
 
-        return view('products.printers.index', compact('products', 'brands'));
+        return view('products.printers.index', compact('products', 'brands', 'items'));
     }
 
-    public function toners_index(Request $request)
+    public function toners_index(Request $request, BreadcrumbService $breadcrumbService)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
+
+        if (!$isAjax) {
+            $breadcrumbService->push('Toners', $request->fullUrl());
+            $items = $breadcrumbService->getForListing('Toners', $request->fullUrl());
+        }
 
         // Strict category isolation — only Toners (category_id = 2)
         $query = Product::with($isAjax ? ['brand'] : ['category', 'brand', 'voucher'])
@@ -277,13 +292,18 @@ class ProductController extends Controller
             $q->where('category_id', 2)
         )->orderBy('name')->get();
 
-        return view('products.toners.index', compact('products', 'brands'));
+        return view('products.toners.index', compact('products', 'brands', 'items'));
     }
 
-    public function inks_index(Request $request)
+    public function inks_index(Request $request, BreadcrumbService $breadcrumbService)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
+
+        if (!$isAjax) {
+            $breadcrumbService->push('Ink Cartridges', $request->fullUrl());
+            $items = $breadcrumbService->getForListing('Ink Cartridges', $request->fullUrl());
+        }
 
         $query = Product::with($isAjax ? ['brand'] : ['category', 'brand', 'voucher'])
             ->whereHas('category', fn($q) => $q->where('slug', 'ink-cartridges'));
@@ -339,13 +359,18 @@ class ProductController extends Controller
             $q->whereHas('category', fn($q2) => $q2->where('slug', 'ink-cartridges'))
         )->orderBy('name')->get();
 
-        return view('products.inks.index', compact('products', 'brands'));
+        return view('products.inks.index', compact('products', 'brands', 'items'));
     }
 
-    public function papers_index(Request $request)
+    public function papers_index(Request $request, BreadcrumbService $breadcrumbService)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
+
+        if (!$isAjax) {
+            $breadcrumbService->push('Papers', $request->fullUrl());
+            $items = $breadcrumbService->getForListing('Papers', $request->fullUrl());
+        }
 
         // Papers grid groups by category, so we need 'category' for AJAX too
         $query = Product::with($isAjax ? ['brand', 'category'] : ['category', 'brand', 'voucher'])
@@ -405,7 +430,7 @@ class ProductController extends Controller
             $q->whereHas('category', fn($q2) => $q2->where('slug', 'paper'))
         )->orderBy('name')->get();
 
-        return view('products.papers.index', compact('products', 'brands'));
+        return view('products.papers.index', compact('products', 'brands', 'items'));
     }
 
 }
