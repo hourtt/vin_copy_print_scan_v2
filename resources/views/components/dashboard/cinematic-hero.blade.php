@@ -21,7 +21,7 @@
                 </p>
 
                 {{-- English subtitle --}}
-                <p class="mb-10 text-sm leading-relaxed -mt-4 text-[#9A9A96] font-['DM_Sans',sans-serif] ">
+                <p class="mb-10 text-sm leading-relaxed -mt-4 text-[#9A9A96] font-['Kantumruy Pro',sans-serif] ">
                     We sell and rent printers, copiers, toners, ink cartridges, and A4/A3 paper at affordable prices.
                 </p>
 
@@ -41,12 +41,12 @@
 
                 {{-- Trust micro-copy --}}
                 <div class="mt-12 flex items-center gap-6">
-                    <div class="font-['DM_Sans',sans-serif]">
+                    <div class="font-['Kantumruy Pro',sans-serif]">
                         <div class="text-xs font-bold text-[#0D0D0B]">High Quality Printing</div>
                         <div class="text-xs text-[#9A9A96]">OEM &amp; Compatible Cartridges</div>
                     </div>
                     <div class="w-px h-8 bg-[#DDDDD8]"></div>
-                    <div class="font-['DM_Sans',sans-serif]">
+                    <div class="font-['Kantumruy Pro',sans-serif]">
                         <div class="text-xs font-bold text-[#0D0D0B]">Rental plans</div>
                         <div class="text-xs text-[#9A9A96]">Flexible terms</div>
                     </div>

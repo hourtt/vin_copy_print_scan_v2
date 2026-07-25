@@ -38,7 +38,7 @@
                         <x-icons.clock class="stroke-[#1a6b4a]" />
                     </div>
                     <div class="flex-1">
-                        <h4 class="font-semibold text-[#1a1a2e] text-sm mb-3">ម៉ោងបើកដំណើរការអាជីវកម្ម</h4>
+                        <h4 class="font-semibold text-[#1a1a2e] text-sm mb-1">ម៉ោងបើកដំណើរការអាជីវកម្ម</h4>
                         <table class="w-full text-sm" aria-label="Opening hours">
                             <tbody>
                                 <tr class="border-b border-[#e8ede9]">

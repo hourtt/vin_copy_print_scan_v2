@@ -5,11 +5,11 @@
         aria-hidden="true"></div>
 
     <div class="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8 w-full">
-        <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-medium mb-3 sm:mb-4">ដំណើរការបញ្ជាទិញ</p>
-        <h2
-            class="font-sans font-bold text-[clamp(1.5rem,3vw+0.5rem,2.75rem)] text-white tracking-normal leading-[1.65] max-w-[560px] mb-10 sm:mb-14">
+        <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-medium mb-3 sm:mb-4">ការបញ្ជាទិញ</p>
+        <h3
+            class="font-sans font-bold text-[clamp(1.375rem,3vw+0.5rem,2.375rem)] text-white tracking-normal leading-[1.65] max-w-[560px] mb-10 sm:mb-14">
             ធ្វើការបញ្ជាទិញតាម៤ជំហានងាយៗ
-        </h2>
+        </h3>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 relative">
             {{-- Connecting line (desktop only) --}}
