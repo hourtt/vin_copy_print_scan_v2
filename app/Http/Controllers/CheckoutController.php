@@ -91,7 +91,7 @@ class CheckoutController extends Controller
 
             // Clear the cart
             $this->cartService->clear();
-            app(\App\Services\BreadcrumbService::class)->reset();
+            app(\App\Services\BreadcrumbTrail::class)->reset();
 
             DB::commit();
 

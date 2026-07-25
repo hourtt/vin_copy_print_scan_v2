@@ -10,7 +10,7 @@ use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Services\BreadcrumbService;
+use App\Services\BreadcrumbTrail;
 
 class ProductController extends Controller
 {
@@ -49,10 +49,9 @@ class ProductController extends Controller
         return view('dashboard', compact('featured', 'popular', 'newArrivals', 'hotSale'));
     }
 
-    public function product_catalog_index(Request $request, BreadcrumbService $breadcrumbService)
+    public function product_catalog_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
     {
-        $breadcrumbService->push('Product Catalog', $request->fullUrl());
-        $items = $breadcrumbService->getForListing('Product Catalog', $request->fullUrl());
+        $items = $breadcrumbTrail->resolveForCatalog();
 
         $query = Product::with('category');
 
@@ -153,14 +152,13 @@ class ProductController extends Controller
         ));
     }
 
-    public function printers_index(Request $request, BreadcrumbService $breadcrumbService)
+    public function printers_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
 
         if (!$isAjax) {
-            $breadcrumbService->push('Printers', $request->fullUrl());
-            $items = $breadcrumbService->getForListing('Printers', $request->fullUrl());
+            $items = $breadcrumbTrail->resolveForCategory('Printer', route('products.printers.index'));
         }
 
         // Strict category isolation — only Printers (category_id = 1)
@@ -227,14 +225,13 @@ class ProductController extends Controller
         return view('products.printers.index', compact('products', 'brands', 'items'));
     }
 
-    public function toners_index(Request $request, BreadcrumbService $breadcrumbService)
+    public function toners_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
 
         if (!$isAjax) {
-            $breadcrumbService->push('Toners', $request->fullUrl());
-            $items = $breadcrumbService->getForListing('Toners', $request->fullUrl());
+            $items = $breadcrumbTrail->resolveForCategory('Toners', route('products.toners.index'));
         }
 
         // Strict category isolation — only Toners (category_id = 2)
@@ -295,14 +292,13 @@ class ProductController extends Controller
         return view('products.toners.index', compact('products', 'brands', 'items'));
     }
 
-    public function inks_index(Request $request, BreadcrumbService $breadcrumbService)
+    public function inks_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
 
         if (!$isAjax) {
-            $breadcrumbService->push('Ink Cartridges', $request->fullUrl());
-            $items = $breadcrumbService->getForListing('Ink Cartridges', $request->fullUrl());
+            $items = $breadcrumbTrail->resolveForCategory('Ink', route('products.inks.index'));
         }
 
         $query = Product::with($isAjax ? ['brand'] : ['category', 'brand', 'voucher'])
@@ -362,14 +358,13 @@ class ProductController extends Controller
         return view('products.inks.index', compact('products', 'brands', 'items'));
     }
 
-    public function papers_index(Request $request, BreadcrumbService $breadcrumbService)
+    public function papers_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
     {
         // * For AJAX filter requests: minimal eager loading, skip $brands query
         $isAjax = $request->ajax() || $request->wantsJson();
 
         if (!$isAjax) {
-            $breadcrumbService->push('Papers', $request->fullUrl());
-            $items = $breadcrumbService->getForListing('Papers', $request->fullUrl());
+            $items = $breadcrumbTrail->resolveForCategory('Paper', route('products.papers.index'));
         }
 
         // Papers grid groups by category, so we need 'category' for AJAX too
@@ -433,4 +428,25 @@ class ProductController extends Controller
         return view('products.papers.index', compact('products', 'brands', 'items'));
     }
 
+    public function breadcrumbBack(Request $request, BreadcrumbTrail $breadcrumbTrail)
+    {
+        $from = $request->query('from', 'category');
+
+        if ($from === 'terminal') {
+            $top = $breadcrumbTrail->top();
+            if ($top && !empty($top['url'])) {
+                return redirect($top['url']);
+            }
+            return redirect()->route('dashboard');
+        }
+
+        $breadcrumbTrail->pop();
+        $newTop = $breadcrumbTrail->top();
+
+        if ($newTop && !empty($newTop['url'])) {
+            return redirect($newTop['url']);
+        }
+
+        return redirect()->route('dashboard');
+    }
 }
