@@ -54,12 +54,8 @@ class BreadcrumbService
             $preceding[] = $entry;
         }
 
-        if (empty($preceding) && !in_array($currentLabel, ['Product Catalog', 'Product Catalogs'])) {
-            $items[] = ['label' => 'Products', 'url' => route('product-catalog.index')];
-        } else {
-            foreach ($preceding as $entry) {
-                $items[] = ['label' => $entry['label'], 'url' => $entry['url']];
-            }
+        foreach ($preceding as $entry) {
+            $items[] = ['label' => $entry['label'], 'url' => $entry['url']];
         }
 
         $items[] = ['label' => $currentLabel, 'url' => null];
@@ -77,8 +73,6 @@ class BreadcrumbService
         if (!empty($stack)) {
             $last = end($stack);
             $items[] = ['label' => $last['label'], 'url' => $last['url']];
-        } else {
-            $items[] = ['label' => 'Products Catalog', 'url' => route('product-catalog.index')];
         }
 
         $items[] = ['label' => 'Shopping Cart', 'url' => null];
