@@ -74,7 +74,12 @@
 
             <!-- RIGHT COLUMN: Cart Summary -->
             <div class="lg:w-5/12">
-                <x-checkout.cart-summary :cartItems="$cartItems" />
+                <x-checkout.cart-summary 
+                    :cartItems="$cartItems" 
+                    :subtotal="$subtotal" 
+                    :shippingFee="$shippingFee" 
+                    :total="$total" 
+                />
             </div>
 
         </div>

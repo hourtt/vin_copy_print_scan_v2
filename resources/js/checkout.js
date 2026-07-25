@@ -1,4 +1,4 @@
-document.addEventListener('alpine:init', () => {
+const initCheckout = () => {
     Alpine.data('checkout', (initialSubtotal, initialShippingMethods) => ({
         subtotal: parseFloat(initialSubtotal) || 0,
         shippingMethods: initialShippingMethods || [],
@@ -14,7 +14,15 @@ document.addEventListener('alpine:init', () => {
         },
         
         formatPrice(amount) {
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+            const val = Number(amount);
+            if (isNaN(val)) return '$0.00';
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
         }
     }));
-});
+};
+
+if (window.Alpine) {
+    initCheckout();
+} else {
+    document.addEventListener('alpine:init', initCheckout);
+}
