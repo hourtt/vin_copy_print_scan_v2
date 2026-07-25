@@ -67,7 +67,13 @@ class CheckoutController extends Controller
                 'subtotal' => $subtotal,
                 'shipping_method_id' => $request->shipping_method_id,
                 'shipping_fee' => $shippingFee,
-                'shipping_address' => "Name: {$request->name}\nPhone: {$request->phone}\nAddress: {$request->shipping_address}",
+                'shipping_address' => "Name: {$request->first_name} {$request->name}\nPhone: {$request->phone_number}\nAddress: {$request->address}\nCity: {$request->city}\nState: {$request->state_province}\nZip: {$request->zip_code}",
+                'phone_number' => $request->phone_number,
+                'address' => $request->address,
+                'city' => $request->city,
+                'state_province' => $request->state_province,
+                'zip_code' => $request->zip_code,
+                'order_notes' => $request->order_notes,
                 'total' => $total,
                 'status' => 'pending', // Pending payment
             ]);
