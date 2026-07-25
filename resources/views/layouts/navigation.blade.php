@@ -19,14 +19,14 @@
             <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-8">
 
                 <a href="{{ Auth::check() ? Auth::user()->getRedirectRoute() : route('dashboard') }}"
-                    class="nav-link text-sm font-medium transition-colors duration-200 font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
+                    class="nav-link text-sm font-medium transition-colors duration-200 font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
                     Home
                 </a>
 
                 {{-- Products dropdown --}}
                 <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button @click="open = !open"
-                        class="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 focus:outline-none font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]"
+                        class="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 focus:outline-none font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]"
                         :class="{ '!text-[#0D0D0B]': open }">
                         Products
                         <svg class="w-4 h-4 shrink-0 transition-transform duration-200" :class="{ 'rotate-180': open }"
@@ -44,19 +44,19 @@
                         class="absolute z-50 top-full left-1/2 -translate-x-1/2 mt-3 w-48 rounded-xl overflow-hidden bg-white border border-[#E5E5E2] shadow-[0_8px_24px_rgba(0,0,0,0.07)]">
                         <div class="flex flex-col gap-1.5">
                             <a href="{{ route('products.printers.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['DM_Sans',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-t-md justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-t-md justify-center">
                                 Printers
                             </a>
                             <a href="{{ route('products.toners.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['DM_Sans',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
                                 Toners
                             </a>
                             <a href="{{ route('products.inks.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['DM_Sans',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
                                 Ink Cartridges
                             </a>
                             <a href="{{ route('products.papers.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['DM_Sans',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-b-md justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-b-md justify-center">
                                 Papers
                             </a>
                         </div>
@@ -64,7 +64,7 @@
                 </div>
 
                 <a href="{{ route('services') }}"
-                    class="text-sm font-medium transition-colors duration-200 font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
+                    class="text-sm font-medium transition-colors duration-200 font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
                     Services
                 </a>
             </div>
@@ -121,20 +121,20 @@
                             x-transition:leave-end="opacity-0 translate-y-1" x-cloak
                             class="absolute z-50 right-0 top-full mt-3 w-52 rounded-xl overflow-hidden bg-white border border-[#E5E5E2] shadow-[0_8px_24px_rgba(0,0,0,0.07)]">
                             <div class="px-4 py-3 border-b border-[#F0F0EE]">
-                                <div class="text-sm font-semibold font-['DM_Sans',sans-serif] text-[#0D0D0B]">
+                                <div class="text-sm font-semibold font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
                                     {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                                 </div>
-                                <div class="text-xs mt-0.5 truncate text-[#9A9A96] font-['DM_Sans',sans-serif]">
+                                <div class="text-xs mt-0.5 truncate text-[#9A9A96] font-['Kantumruy_Pro',sans-serif]">
                                     {{ Auth::user()->email }}
                                 </div>
                             </div>
                             <div class="py-1.5">
                                 <a href="{{ route('profile.edit') }}"
-                                    class="flex items-center px-4 py-2.5 text-sm transition-colors duration-150 font-['DM_Sans',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B]">
+                                    class="flex items-center px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B]">
                                     Profile
                                 </a>
                                 <button type="button" onclick="event.preventDefault(); openLogoutModal();"
-                                    class="w-full flex items-center px-4 py-2.5 text-sm transition-colors duration-150 font-['DM_Sans',sans-serif] text-[#C0392B] hover:bg-[#FFF5F5]">
+                                    class="w-full flex items-center px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#C0392B] hover:bg-[#FFF5F5]">
                                     Log Out
                                 </button>
                             </div>
@@ -144,11 +144,11 @@
                     {{-- Guest: Sign In text link + Register pill --}}
                     <div class="hidden sm:flex items-center gap-4">
                         <a href="{{ route('login') }}"
-                            class="text-sm font-medium transition-colors duration-200 font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
+                            class="text-sm font-medium transition-colors duration-200 font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
                             Sign In
                         </a>
                         <a href="{{ route('register') }}"
-                            class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-normal text-white transition-all duration-200 hover:brightness-90 bg-[#305CDE] font-['DM_Sans',sans-serif]">
+                            class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-normal text-white transition-all duration-200 hover:brightness-90 bg-[#305CDE] font-['Kantumruy Pro',sans-serif]">
                             Get Started
                         </a>
                     </div>
@@ -181,14 +181,14 @@
         <div class="max-w-[1280px] mx-auto px-6 py-4 space-y-1">
 
             <a href="{{ Auth::check() ? Auth::user()->getRedirectRoute() : route('dashboard') }}"
-                class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['DM_Sans',sans-serif] text-[#0D0D0B]">
+                class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
                 Home
             </a>
 
             {{-- Mobile Products Accordion --}}
             <div x-data="{ mOpen: false }">
                 <button @click="mOpen = !mOpen"
-                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['DM_Sans',sans-serif] text-[#0D0D0B]">
+                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
                     Products
                     <svg class="w-4 h-4 shrink-0 transition-transform duration-200" :class="{ 'rotate-180': mOpen }"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -197,24 +197,24 @@
                 </button>
                 <div x-show="mOpen" x-cloak class="pl-5 pt-1 space-y-0.5">
                     <a href="{{ route('products.printers.index') }}"
-                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Printers</a>
+                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Printers</a>
                     <a href="{{ route('products.toners.index') }}"
-                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Toners</a>
+                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Toners</a>
                     <a href="{{ route('products.inks.index') }}"
-                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Ink
+                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Ink
                         Cartridges</a>
                     <a href="{{ route('products.papers.index') }}"
-                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Papers</a>
+                        class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Papers</a>
                 </div>
             </div>
 
             <a href="{{ route('services') }}"
-                class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['DM_Sans',sans-serif] text-[#0D0D0B]">
+                class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
                 Services
             </a>
 
             <a href="{{ route('product-catalog.index') }}"
-                class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['DM_Sans',sans-serif] text-[#0D0D0B]">
+                class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
                 Catalog
             </a>
         </div>
@@ -227,17 +227,17 @@
                             class="text-xs font-bold text-white">{{ strtoupper(substr(Auth::user()->first_name, 0, 1)) }}</span>
                     </div>
                     <div>
-                        <div class="text-sm font-semibold font-['DM_Sans',sans-serif] text-[#0D0D0B]">
+                        <div class="text-sm font-semibold font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
                             {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                         </div>
-                        <div class="text-xs text-[#9A9A96] font-['DM_Sans',sans-serif]">
+                        <div class="text-xs text-[#9A9A96] font-['Kantumruy_Pro',sans-serif]">
                             {{ Auth::user()->email }}</div>
                     </div>
                 </div>
                 <div class="space-y-0.5">
                     @if (Auth::user()->role === 'customer')
                         <a href="{{ route('cart.index') }}" data-turbo="false" data-turbo-cache="false"
-                            class="relative flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
+                            class="relative flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
                             <span>My Cart</span>
                             <span x-show="cartCount > 0" x-text="cartCount" x-cloak
                                 class="pt-[1px] inline-flex items-center justify-center h-[18px] min-w-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold tabular-nums shadow-sm">
@@ -246,24 +246,24 @@
                     @endif
                     @if (Auth::user()->role === 'admin')
                         <a href="{{ route('admin.dashboard') }}"
-                            class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['DM_Sans',sans-serif] text-indigo-600 hover:bg-[#ECEAE6] hover:text-indigo-800">Admin
+                            class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-indigo-600 hover:bg-[#ECEAE6] hover:text-indigo-800">Admin
                             Dashboard</a>
                     @endif
                     <a href="{{ route('profile.edit') }}"
-                        class="block px-3 py-2.5 rounded-lg text-sm transition-colors font-['DM_Sans',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Profile</a>
+                        class="block px-3 py-2.5 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Profile</a>
                     <button type="button" onclick="event.preventDefault(); openLogoutModal();"
-                        class="w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors font-['DM_Sans',sans-serif] text-[#C0392B] hover:bg-[#FFF5F5]">
+                        class="w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#C0392B] hover:bg-[#FFF5F5]">
                         Log Out
                     </button>
                 </div>
             @else
                 <div class="flex items-center gap-3 pt-3">
                     <a href="{{ route('login') }}"
-                        class="flex-1 text-center px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors font-['DM_Sans',sans-serif] text-[#0D0D0B] border-[#DDDDD8] hover:bg-[#ECEAE6]">
+                        class="flex-1 text-center px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B] border-[#DDDDD8] hover:bg-[#ECEAE6]">
                         Sign In
                     </a>
                     <a href="{{ route('register') }}"
-                        class="flex-1 text-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white transition-all hover:brightness-90 bg-[#305CDE] font-['DM_Sans',sans-serif]">
+                        class="flex-1 text-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white transition-all hover:brightness-90 bg-[#305CDE] font-['Kantumruy_Pro',sans-serif]">
                         Get Started
                     </a>
                 </div>
