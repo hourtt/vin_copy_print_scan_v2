@@ -63,16 +63,18 @@ class BreadcrumbService
         return $items;
     }
 
-    public function getForCart(): array
+    public function getForCart(bool $fromIcon = false): array
     {
-        $stack = $this->getStack();
         $items = [
             ['label' => 'Dashboard', 'url' => route('dashboard')],
         ];
 
-        if (!empty($stack)) {
-            $last = end($stack);
-            $items[] = ['label' => $last['label'], 'url' => $last['url']];
+        if (!$fromIcon) {
+            $stack = $this->getStack();
+            if (!empty($stack)) {
+                $last = end($stack);
+                $items[] = ['label' => $last['label'], 'url' => $last['url']];
+            }
         }
 
         $items[] = ['label' => 'Shopping Cart', 'url' => null];

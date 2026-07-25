@@ -17,11 +17,12 @@ class CartController extends Controller
         $this->cartService = $cartService;
     }
 
-    public function index(BreadcrumbService $breadcrumbService)
+    public function index(Request $request, BreadcrumbService $breadcrumbService)
     {
         $cartItems = $this->cartService->getCartItems();
         $subtotal = $this->cartService->getSubtotal();
-        $breadcrumbs = $breadcrumbService->getForCart();
+        $fromIcon = $request->query('entry') === 'icon';
+        $breadcrumbs = $breadcrumbService->getForCart($fromIcon);
 
         return view('cart.index', compact('cartItems', 'subtotal', 'breadcrumbs'));
     }
