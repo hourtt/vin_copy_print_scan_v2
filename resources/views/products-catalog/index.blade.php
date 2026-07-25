@@ -15,13 +15,16 @@
 
 <body class="bg-[#f8f9fa] text-[#212529] antialiased min-h-screen flex flex-col">
     @include('layouts.navigation')
-    <div class="px-4 md:px-6 flex flex-col md:flex-row justify-center items-center w-full my-6">
-        <h3 class="font-bold font-sans text-[#212529] text-center text-3xl">
-            Product Catalogs
-        </h3>
-    <div class="max-w-7xl mx-auto w-full px-4 md:px-6 pt-4">
+
+    {{-- Top Header & Breadcrumbs --}}
+    <div class="max-w-7xl mx-auto w-full px-4 md:px-6 pt-6 pb-2">
         <x-breadcrumb :items="$items" />
+        <h1 class="text-3xl font-bold font-sans text-[#212529] mt-2">
+            Product Catalogs
+        </h1>
     </div>
+
+    {{-- Main Container: Sidebar Filters & Product Grid --}}
     <div
         class="max-w-7xl mx-auto w-full px-4 md:px-6 my-4 md:my-6 flex flex-col md:flex-row gap-6 md:gap-8 items-start flex-1">
         <!-- Sidebar Filters -->
@@ -38,7 +41,6 @@
                     <ul class="flex flex-col gap-3 m-0 p-0 list-none">
                         @foreach ($categories as $category)
                             <li>
-                                {{-- Allow only the authenticated user to tick the checkbox --}}
                                 @auth
                                     <label class="flex items-center gap-3 cursor-pointer text-sm text-[#212529]">
                                         <input type="checkbox" name="categories[]" value="{{ $category->id }}"
@@ -104,7 +106,7 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 min-w-0">
+        <main class="flex-1 min-w-0 w-full">
             <!-- Top Bar -->
             <div
                 class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-[#dee2e6]">
@@ -149,9 +151,10 @@
     </div>
 
     <!-- PAGINATION -->
-    <div class="w-full flex items-center justify-center my-12 px-4">
+    <div class="w-full flex items-center justify-center my-8 px-4">
         <x-pagination :paginator="$products" />
     </div>
+
     <div class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
         <button type="button"
             onclick="document.getElementById('mobile-filter-sheet').classList.remove('translate-y-full'); document.getElementById('mobile-filter-overlay').classList.remove('opacity-0', 'pointer-events-none'); document.body.style.overflow = 'hidden';"
@@ -251,7 +254,7 @@
 
         <!-- Fixed Action Area -->
         <div class="px-6 py-4 border-t border-[#dee2e6] bg-white grid grid-cols-2 gap-4 pb-8">
-            <button type="button" onclick="window.location.href='{{ route('products.index') }}'"
+            <button type="button" onclick="window.location.href='{{ route('product-catalog.index') }}'"
                 class="w-full py-3 px-4 bg-white hover:bg-[#f8f9fa] border border-[#dee2e6] rounded-lg text-sm font-medium transition-colors text-[#212529] text-center shadow-sm">
                 Clear All
             </button>

@@ -19,7 +19,7 @@
         @endif
 
         {{-- Stock badge --}}
-        <span class="absolute top-3 right-3 text-[0.65rem] font-semibold capitalize tracking-wide px-2 py-1 rounded-lg {{ $stock['badgeBg'] ?? 'bg-gray-100 text-gray-800' }}">
+        <span class="absolute top-3 right-3 text-[0.65rem] font-semibold capitalize tracking-wide px-2 py-1 rounded-lg whitespace-nowrap {{ $stock['badgeBg'] ?? 'bg-gray-100 text-gray-800' }}">
             {{ $stock['label'] }}
         </span>
 
