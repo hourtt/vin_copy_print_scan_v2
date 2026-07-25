@@ -4,12 +4,20 @@
         <h3 class="font-semibold text-gray-900">Summary</h3>
         <div class="flex gap-2">
             <a href="{{ route('admin.products.edit', $product) }}"
-               class="p-1.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded transition-colors" title="Edit Product">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                class="p-1.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+                title="Edit Product">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
             </a>
             <a href="{{ route('products.show', $product->slug) }}" target="_blank"
-               class="p-1.5 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded transition-colors" title="View on Storefront">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                class="p-1.5 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
+                title="View on Storefront">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
             </a>
         </div>
     </div>
@@ -24,7 +32,12 @@
         <div class="pt-4 border-t border-gray-100">
             <p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Inventory Status</p>
             <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full @if($product->stock > 10) bg-green-500 @elseif($product->stock > 0) bg-amber-500 @else bg-red-500 @endif"></div>
+                <div class="@class([
+                    'w-2 h-2 rounded-full',
+                    'bg-green-500' => $product->stock > 10,
+                    'bg-amber-500' => $product->stock > 0 && $product->stock <= 10,
+                    'bg-red-500' => $product->stock <= 0,
+                ])"></div>
                 <p class="text-sm font-medium text-gray-900">{{ $product->stock }} units available</p>
             </div>
         </div>

@@ -29,12 +29,12 @@
     </td>
     <td class="py-3 px-4">
         <div class="flex flex-col items-start gap-1">
-            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium
-                @if($product->stock > 10) bg-green-50 text-green-700
-                @elseif($product->stock > 0) bg-amber-50 text-amber-700
-                @else bg-red-50 text-red-700
-                @endif
-            ">
+            <span class="@class([
+                'inline-flex items-center px-2 py-1 rounded text-xs font-medium',
+                'bg-green-50 text-green-700' => $product->stock > 10,
+                'bg-amber-50 text-amber-700' => $product->stock > 0 && $product->stock <= 10,
+                'bg-red-50 text-red-700' => $product->stock <= 0,
+            ])">
                 {{ $product->stock }} in stock
             </span>
             @if($product->stock <= 10 && $product->stock > 0)
