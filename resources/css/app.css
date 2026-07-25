@@ -5,35 +5,29 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] {
-    display: none !important;
-}
-/* Scrollbar styling for sidebar */
-.sidebar-scroll::-webkit-scrollbar {
-    width: 4px;
-}
-.sidebar-scroll::-webkit-scrollbar-track {
-    background: transparent;
-}
-.sidebar-scroll::-webkit-scrollbar-thumb {
-    background-color: #e5e7eb;
-    border-radius: 20px;
+@layer utilities {
+    [x-cloak] {
+        display: none !important;
+    }
+
+    /* Scrollbar styling for sidebar */
+    .sidebar-scroll::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+        @apply bg-gray-200 rounded-full;
+    }
 }
 
-/* Reusable Form Input (Checkout & Others) */
-.form-input {
-    width: 100%;
-    border: 1px solid #e4e4e7;
-    border-radius: 0.5rem;
-    padding: 0.75rem 1rem;
-    font-family: "Kantumruy Pro", sans-serif;
-    transition: border-color 0.2s;
-    background-color: #ffffff;
-    color: #27272a;
+@layer components {
+    /* Reusable Form Input (Checkout & Others) */
+    .form-input {
+        @apply w-full border border-zinc-200 rounded-lg px-4 py-3 font-['Kantumruy_Pro',sans-serif] transition-colors bg-white text-zinc-800 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-700;
+    }
 }
 
-.form-input:focus {
-    outline: none;
-    border-color: #3f3f46;
-    box-shadow: 0 0 0 1px #3f3f46;
-}
