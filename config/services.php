@@ -41,4 +41,8 @@ return [
         'redirect' => env('GITHUB_REDIRECT_URI', 'http://localhost:8000/auth/callback/github'),
     ],
 
+    'google_maps' => [
+        'embed_url' => env('GOOGLE_MAPS_EMBED'),
+        'link' => env('GOOGLE_MAPS_LINK'),
+    ],
 ];
