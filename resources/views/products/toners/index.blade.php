@@ -7,7 +7,8 @@
     <title>ធូន័រ​ (Toners) - {{ config('app.name') }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=fraunces:400,500,600,700,900i&family=dm-sans:300,400,500,600" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=fraunces:400,500,600,700,900i&family=dm-sans:300,400,500,600"
+        rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/category-filter.js'])
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -31,7 +32,8 @@
     </div>
 
     {{-- Controls bar --}}
-    <div class="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-6 px-6 py-4 bg-white border border-[#e4e4e7] rounded-2xl shadow-sm max-w-[1320px] mx-auto mb-8">
+    <div
+        class="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-6 px-6 py-4 bg-white border border-[#e4e4e7] rounded-2xl shadow-sm max-w-[1320px] mx-auto mb-8">
 
         {{-- Search --}}
         <div class="relative flex-1 min-w-[250px]">
@@ -48,16 +50,12 @@
         <x-category-pills :brands="$brands" />
 
         {{-- Sort --}}
-        <x-sort-dropdown
-            id="sort-select"
-            :options="[
-                'default'    => 'Sort: Default',
-                'price-asc'  => 'Price: Low → High',
-                'price-desc' => 'Price: High → Low',
-                'name-asc'   => 'Name A → Z',
-            ]"
-            label="Sort toners"
-        />
+        <x-sort-dropdown id="sort-select" :options="[
+            'default' => 'Sort: Default',
+            'price-asc' => 'Price: Low → High',
+            'price-desc' => 'Price: High → Low',
+            'name-asc' => 'Name A → Z',
+        ]" label="Sort toners" />
 
     </div>
 
@@ -80,22 +78,24 @@
             </div>
 
             {{-- Empty State (Hidden by default) --}}
-            <div id="empty-state" class="hidden absolute inset-0 z-10 flex flex-col items-center justify-center text-center py-24 text-[#71717a] bg-white">
-                <p class="text-lg">No products found matching your filters.</p>
+            <div id="empty-state" class="hidden absolute inset-0 z-10">
+                <div class="flex flex-col items-center justify-center text-center py-24 text-[#71717a] bg-white h-full">
+                    <p class="text-lg">No products found matching your filters.</p>
+                </div>
             </div>
 
             {{-- Product Groups --}}
             <div id="product-groups" class="transition-opacity duration-150 relative z-0">
                 @include('components.products._grid', [
-                    'products'         => $products,
-                    'groupBy'          => 'brand_id',
-                    'headingRelation'  => 'brand',
-                    'headingFallback'  => 'Other',
+                    'products' => $products,
+                    'groupBy' => 'brand_id',
+                    'headingRelation' => 'brand',
+                    'headingFallback' => 'Other',
                     'subLabelRelation' => 'brand',
                     'subLabelFallback' => 'Toner',
-                    'compatKey'        => 'compatibility',
-                    'emptyMessage'     => 'No toners found.',
-                    'badgeCase'        => 'uppercase',
+                    'compatKey' => 'compatibility',
+                    'emptyMessage' => 'No toners found.',
+                    'badgeCase' => 'uppercase',
                 ])
             </div>
         </div>
