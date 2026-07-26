@@ -65,7 +65,7 @@
                 @click.prevent="scrollTo('visit')"
                 :class="activeSection === 'visit' ? 'text-white bg-[#1a1a2e] font-medium shadow-md' : 'text-[#1a1a2e]/60 hover:text-[#1a1a2e] hover:bg-[#f8f9fa] bg-transparent font-medium'"
                 class="shrink-0 px-4 md:px-5 py-2.5 rounded-full text-[clamp(0.875rem,1.1vw,1rem)] transition-all duration-200 ease-in-out leading-[1.65] border border-transparent">
-                មកកាន់យើង
+                ទីតាំង
             </a>
             <a href="#why"
                 @click.prevent="scrollTo('why')"

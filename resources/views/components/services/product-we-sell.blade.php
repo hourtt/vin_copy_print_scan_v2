@@ -2,7 +2,7 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8 w-full">
         {{-- Section header --}}
         <div class="mb-10 sm:mb-14 md:mb-16">
-            <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-medium mb-3 sm:mb-4">អ្វីដែលយើងលក់</p>
+            <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-semibold mb-3 sm:mb-4">អ្វីដែលយើងលក់</p>
             <h2
                 class="font-sans text-[clamp(1.5rem,3vw+0.5rem,2.75rem)] text-[#1a1a2e] tracking-normal leading-[1.65] max-w-[560px] mb-4">
                 <span class="block pb-1 sm:pb-2">ឧបករណ៍ និងសម្ភារៈប្រើប្រាស់</span>

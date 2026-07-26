@@ -1,6 +1,6 @@
 <section class="scroll-mt-32 md:scroll-mt-36 py-12 sm:py-16 md:py-20 bg-[#f8f9fa] font-['Kantumruy_Pro',sans-serif]" id="instore">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8 w-full">
-        <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-medium mb-3 sm:mb-4">អញ្ជើញមកកាន់ហាង ហើយយើងនឹងរៀបចំជូន</p>
+        <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-semibold mb-3 sm:mb-4">អញ្ជើញមកកាន់ហាង ហើយយើងនឹងរៀបចំជូន</p>
         <h2
             class="font-sans text-[clamp(1.5rem,3vw+0.5rem,2.75rem)] text-[#1a1a2e] tracking-normal leading-[1.65] max-w-[560px] mb-4">
             សេវាកម្មក្នុងហាង</h2>
