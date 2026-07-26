@@ -59,7 +59,7 @@
                     <!-- Default payment method for now -->
                     <input type="hidden" name="payment_method" value="cod">
 
-                    <x-checkout.address-form :user="auth()->user()" />
+                    <x-checkout.address-form :user="auth()->user()" :addresses="$addresses" />
 
                     <h2 class="font-['Kantumruy_Pro',sans-serif] text-2xl font-bold mb-4">Shipping Method</h2>
 

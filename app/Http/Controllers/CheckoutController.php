@@ -36,7 +36,10 @@ class CheckoutController extends Controller
         $shippingFee = $shippingMethods->first() ? $shippingMethods->first()->fee : 0;
         $total = $subtotal + $shippingFee;
 
-        return view('checkout.index', compact('cartItems', 'subtotal', 'shippingMethods', 'shippingFee', 'total'));
+        // Pass user's saved addresses
+        $addresses = auth()->user()->addresses;
+
+        return view('checkout.index', compact('cartItems', 'subtotal', 'shippingMethods', 'shippingFee', 'total', 'addresses'));
     }
 
     /**
@@ -61,6 +64,19 @@ class CheckoutController extends Controller
         DB::beginTransaction();
 
         try {
+            if ($request->has('save_address')) {
+                $user = $request->user();
+                $isFirst = $user->addresses()->count() === 0;
+                $user->addresses()->create([
+                    'phone_number' => $request->phone_number,
+                    'address' => $request->address,
+                    'city' => $request->city,
+                    'state' => $request->state_province,
+                    'zip_code' => $request->zip_code,
+                    'is_default' => $isFirst
+                ]);
+            }
+
             $order = Order::create([
                 'user_id' => $request->user()->id,
                 'order_date' => now(),
