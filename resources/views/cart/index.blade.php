@@ -60,7 +60,7 @@
             </div>
         @endif
     </div>
-    @include('cart.partials.scripts')
+
 </body>
 
 </html>
