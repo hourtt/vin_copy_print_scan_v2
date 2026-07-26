@@ -12,9 +12,17 @@ class OrdersController extends Controller
      */
     public function index(Request $request)
     {
-        //* Get all orders that belong to the authenticated user and display them. */
-        $orders = Order::whereBelongsTo($request->user())->paginate(10);
-        return view('orders.index', compact('orders'));
+        $orders = Order::whereBelongsTo($request->user())
+            ->with(['items.product', 'shippingMethod'])
+            ->latest('order_date')
+            ->paginate(10);
+
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => route('dashboard')],
+            ['label' => 'My Orders'],
+        ];
+
+        return view('orders.index', compact('orders', 'breadcrumbs'));
     }
 
     /**
@@ -36,17 +44,14 @@ class OrdersController extends Controller
     /**
      * Display the specified orders.
      */
-    public function show(string $id, Request $request)
+    public function show(Order $order)
     {
-        //* Find the order that belongs to the authenticated user and display it. If the order does not belong to the user, it will throw a 404 error. */
-        $order = Order::whereBelongsTo($request->user())
-            ->where('order_number', $id)
-            ->with([
-                'items.product.colors',
-                'items.product.paperSizes',
-                'shippingMethod',
-            ])
-            ->findOrFail($id);
+        abort_if($order->user_id !== auth()->id(), 403, 'Unauthorized access to this order.');
+
+        $order->load([
+            'items.product.images',
+            'shippingMethod',
+        ]);
 
         return view('orders.show', compact('order'));
     }

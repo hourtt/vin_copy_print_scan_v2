@@ -14,7 +14,7 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
-    Route::get('orders/{id}', [OrdersController::class, 'show'])->name('orders.show');
+    Route::get('orders/{order}', [OrdersController::class, 'show'])->name('orders.show');
 
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 

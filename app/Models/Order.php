@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -54,6 +55,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
+        'order_number',
         'user_id',
         'order_date',
         'shipped_time',
@@ -138,5 +140,34 @@ class Order extends Model
     public function getStatusLabelAttribute(): string
     {
         return self::STATUS_LABELS[$this->status] ?? ucfirst($this->status);
+    }
+
+    /**
+     * Convert the UTC created_at timestamp to local time for display.
+     */
+    public function getLocalCreatedAtAttribute()
+    {
+        return $this->created_at ? $this->created_at->timezone('Asia/Phnom_Penh') : null;
+    }
+
+    /**
+     * Convert the UTC order_date timestamp to local time for display.
+     */
+    public function getLocalOrderDateAttribute()
+    {
+        return $this->order_date ? $this->order_date->timezone('Asia/Phnom_Penh') : null;
+    }
+
+    /**
+     * Auto-generate order number on creation.
+     */
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+            if (empty($order->order_number)) {
+                // Generates a readable unique string like ORD-20260726-8921
+                $order->order_number = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(4));
+            }
+        });
     }
 }
