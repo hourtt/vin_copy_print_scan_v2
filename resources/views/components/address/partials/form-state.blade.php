@@ -7,7 +7,7 @@
                             <input type="tel" name="phone_number" placeholder=" "
                             x-model="formData.phone_number" required
                             pattern="[0-9\+\-\s]+" minlength="8" maxlength="20"
-                            @input="formatPhone()"
+                            @input="formatPhone($event)"
                             class="block px-3 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-white rounded-md border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 peer" />
                             <label
                                 class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-3 bg-white px-1 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">

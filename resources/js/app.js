@@ -91,6 +91,287 @@ document.addEventListener("alpine:init", () => {
             this.startAutoplay();
         },
     }));
-});
 
+    Alpine.data('cartItemHandler', (initialQty, productId) => ({
+        qty: initialQty,
+        loading: false,
+        async updateCart() {
+            if (this.qty < 1) return;
+            this.loading = true;
+            try {
+                let formData = new FormData(this.$refs.updateForm);
+                formData.set('quantity', this.qty);
+                let response = await fetch(this.$refs.updateForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (response.ok) {
+                    let html = await response.text();
+                    let doc = new DOMParser().parseFromString(html, 'text/html');
+                    
+                    // Update Order Summary
+                    let newSummary = doc.querySelector('#order-summary-card');
+                    if (newSummary) document.querySelector('#order-summary-card').innerHTML = newSummary.innerHTML;
+                    
+                    // Update Item Price
+                    let newItemPrice = doc.querySelector('#item-price-' + productId);
+                    if (newItemPrice) document.querySelector('#item-price-' + productId).innerHTML = newItemPrice.innerHTML;
+                    
+                    // Update Nav Badge globally
+                    let inputs = doc.querySelectorAll('input[name=\'quantity\']');
+                    let newCount = 0;
+                    inputs.forEach(input => newCount += parseInt(input.value || 0));
+                    window.dispatchEvent(new CustomEvent('cart-updated', { detail: { count: newCount } }));
+                }
+            } catch(e) {
+                // Ignore errors silently in production
+            } finally {
+                this.loading = false;
+            }
+        }
+    }));
+
+    Alpine.data("addressManager", (addressesData = [], updateUrl = "", csrfToken = "", userName = "") => ({
+        addresses: addressesData,
+        viewState: 'EMPTY',
+        selectedAddressId: null,
+        editingId: null,
+        addressToDelete: null,
+        formData: {
+            phone_number: '',
+            address: '',
+            city: '',
+            state: '',
+            zip_code: ''
+        },
+        init() {
+            this.updateViewState();
+        },
+        formatPhone(event) {
+            const input = event ? event.target : null;
+            let cursorPosition = input ? input.selectionStart : 0;
+            const originalValue = this.formData.phone_number;
+            const valueBeforeCursor = originalValue.substring(0, cursorPosition);
+            const digitsBeforeCursor = valueBeforeCursor.replace(/\D/g, '').length;
+
+            let cleaned = originalValue.replace(/\D/g, '').substring(0, 10);
+            let match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+            let formatted = '';
+            
+            if (match) {
+                formatted = !match[2] ? match[1] : match[1] + ' ' + match[2] + (match[3] ? ' ' + match[3] : '');
+            }
+            this.formData.phone_number = formatted;
+
+            if (input) {
+                let newCursorPosition = 0;
+                let digitCount = 0;
+                for (let i = 0; i < formatted.length; i++) {
+                    if (digitCount === digitsBeforeCursor) break;
+                    if (/\d/.test(formatted[i])) digitCount++;
+                    newCursorPosition++;
+                }
+                this.$nextTick(() => {
+                    input.setSelectionRange(newCursorPosition, newCursorPosition);
+                });
+            }
+        },
+        updateViewState() {
+            if (this.addresses.length > 0) {
+                this.viewState = 'LIST';
+                if (!this.selectedAddressId || !this.addresses.find(a => a.id === this.selectedAddressId)) {
+                    this.selectedAddressId = this.addresses[0].id;
+                }
+            } else {
+                this.viewState = 'EMPTY';
+                this.selectedAddressId = null;
+            }
+        },
+        openForm(address = null) {
+            if (address) {
+                this.editingId = address.id;
+                this.formData = { ...address };
+                this.formatPhone();
+            } else {
+                this.editingId = null;
+                this.formData = {
+                    phone_number: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip_code: ''
+                };
+            }
+            this.viewState = 'FORM';
+        },
+        goBack() {
+            if (this.addresses.length === 0) {
+                this.viewState = 'EMPTY';
+            } else {
+                this.viewState = 'LIST';
+            }
+        },
+        closeModalAndReset() {
+            window.closeModal('modal-address');
+            setTimeout(() => {
+                this.goBack();
+            }, 300);
+        },
+        promptDelete(id) {
+            this.addressToDelete = id;
+            this.viewState = 'DELETE_CONFIRM';
+        },
+        executeDelete() {
+            if (!this.addressToDelete) return;
+
+            fetch(updateUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    inline_field: 'address',
+                    address_id: this.addressToDelete,
+                    delete: true
+                })
+            })
+            .then(async res => {
+                if (!res.ok) {
+                    let errMsg = `HTTP ${res.status} ${res.statusText}`;
+                    try {
+                        const errData = await res.json();
+                        errMsg = errData.message || errMsg;
+                    } catch (e) {}
+                    throw new Error(errMsg);
+                }
+                
+                this.addresses = this.addresses.filter(a => a.id !== this.addressToDelete);
+                this.addressToDelete = null;
+                this.selectedAddressId = null;
+                this.updateViewState();
+            })
+            .catch(error => {
+                console.error('Error deleting address:', error.message);
+                alert('An error occurred while trying to delete the address. Please try again.');
+            });
+        },
+        saveAddress() {
+            fetch(updateUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    inline_field: 'address',
+                    address_id: this.editingId,
+                    phone_number: this.formData.phone_number.replace(/\D/g, ''),
+                    address: this.formData.address,
+                    city: this.formData.city,
+                    state: this.formData.state,
+                    zip_code: this.formData.zip_code
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to save to database');
+                return response.json();
+            })
+            .then(data => {
+                const updatedAddress = {
+                    name: userName,
+                    ...data.address
+                };
+
+                if (this.editingId) {
+                    const index = this.addresses.findIndex(a => a.id === this.editingId);
+                    if (index !== -1) this.addresses[index] = updatedAddress;
+                } else {
+                    this.addresses.push(updatedAddress);
+                }
+
+                this.selectedAddressId = updatedAddress.id;
+                this.updateViewState();
+            })
+            .catch(error => {
+                alert('Error saving address to database. Please check your console or fillable model attributes.');
+                console.error(error);
+            });
+        },
+        confirmAddress() {
+            if (this.selectedAddressId) {
+                window.closeModal('modal-address');
+            }
+        }
+    }));
+    Alpine.data("phoneMask", (initialValue = "") => ({
+        displayPhone: "",
+        init() {
+            this.formatInitial(initialValue);
+        },
+        formatInitial(val) {
+            if (!val) return;
+            let cleaned = val.replace(/\D/g, "").substring(0, 10);
+            let match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+            if (match) {
+                this.displayPhone = !match[2]
+                    ? match[1]
+                    : match[1] +
+                      " " +
+                      match[2] +
+                      (match[3] ? " " + match[3] : "");
+            }
+        },
+        formatPhone(event) {
+            const input = event.target;
+            let cursorPosition = input.selectionStart;
+            const originalValue = this.displayPhone;
+            const valueBeforeCursor = originalValue.substring(
+                0,
+                cursorPosition,
+            );
+            const digitsBeforeCursor = valueBeforeCursor.replace(
+                /\D/g,
+                "",
+            ).length;
+
+            let cleaned = originalValue.replace(/\D/g, "").substring(0, 10);
+            let match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+            let formatted = "";
+
+            if (match) {
+                formatted = !match[2]
+                    ? match[1]
+                    : match[1] +
+                      " " +
+                      match[2] +
+                      (match[3] ? " " + match[3] : "");
+            }
+
+            this.displayPhone = formatted;
+
+            let newCursorPosition = 0;
+            let digitCount = 0;
+            for (let i = 0; i < formatted.length; i++) {
+                if (digitCount === digitsBeforeCursor) {
+                    break;
+                }
+                if (/\d/.test(formatted[i])) {
+                    digitCount++;
+                }
+                newCursorPosition++;
+            }
+
+            this.$nextTick(() => {
+                input.setSelectionRange(newCursorPosition, newCursorPosition);
+            });
+        },
+        get rawPhone() {
+            return this.displayPhone.replace(/\D/g, "");
+        },
+    }));
+});
 Alpine.start();

@@ -8,8 +8,18 @@
         <x-form.input type="email" name="email" label="Email" :required="true" :value="old('email', $user?->email)" />
     </div>
     
-    <div class="md:col-span-2">
-        <x-form.input type="tel" name="phone_number" label="Phone Number" :required="true" :value="old('phone_number', $user?->phone_number)" />
+    <div class="md:col-span-2" x-data="phoneMask('{{ old('phone_number', $user?->phone_number) }}')">
+        <label class="block text-sm font-medium mb-1">Phone Number <span class="text-red-500">*</span></label>
+        <input type="tel" 
+            x-model="displayPhone" 
+            @input="formatPhone($event)" 
+            required 
+            class="form-input" 
+            placeholder=" " 
+            pattern="[0-9\s]+" 
+            minlength="8" 
+            maxlength="20" />
+        <input type="hidden" name="phone_number" :value="rawPhone">
     </div>
     
     <div class="md:col-span-2">

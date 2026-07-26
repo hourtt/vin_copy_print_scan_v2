@@ -1,5 +1,20 @@
 {{-- Multi-state address modal with Empty, List, and Form views --}}
-<div x-data="addressManager()">
+    @php
+        $userAddresses = auth()->user()?->addresses ?? [];
+        $addressesJson = collect($userAddresses)->map(function($addr) {
+            return [
+                'id' => $addr->id,
+                'name' => auth()->user()->first_name . ' ' . auth()->user()->last_name,
+                'phone_number' => $addr->phone_number,
+                'address' => $addr->address,
+                'city' => $addr->city,
+                'state' => $addr->state,
+                'zip_code' => $addr->zip_code,
+                'is_default' => (bool)$addr->is_default
+            ];
+        })->toJson();
+    @endphp
+<div x-data="addressManager({{ $addressesJson }}, '{{ route('profile.update') }}', '{{ csrf_token() }}', '{{ auth()->user()?->first_name }} {{ auth()->user()?->last_name }}')">
     <x-profiles.modal id="modal-address">
         <x-slot name="headerTitle">
             <span x-text="viewState === 'FORM' ? (editingId ? 'Edit Address' : 'Add New Address') : 'Delivery Addresses'"></span>
@@ -35,7 +50,4 @@
             @include('components.address.partials.delete-confirm-state')
         </div>
     </x-profiles.modal>
-    
-    <!-- Alpine.js Logic -->
-    @include('components.address.partials.script')
 </div>
