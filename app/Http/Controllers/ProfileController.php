@@ -22,10 +22,14 @@ class ProfileController extends Controller
         $recentOrderCount = $user->orders()->count();
         $activeVoucherCount = 0; // Placeholder — no user-voucher relationship yet
 
+        $defaultAddress = $user->addresses()->where('is_default', true)->first() 
+                        ?? $user->addresses()->latest()->first();
+
         return view('profile.edit', [
             'user' => $user,
             'recentOrderCount' => $recentOrderCount,
             'activeVoucherCount' => $activeVoucherCount,
+            'defaultAddress' => $defaultAddress,
         ]);
     }
 
@@ -53,7 +57,18 @@ class ProfileController extends Controller
                 return response()->json(['success' => true, 'message' => 'Address deleted']);
             }
 
-            $validatedAddress = $request->only(['phone_number', 'address', 'city', 'state', 'zip_code']);
+            $validatedAddress = $request->validate([
+                'phone_number' => 'required|string|max:20',
+                'address' => 'required|string|max:500',
+                'city' => 'required|string|max:255',
+                'state' => 'required|string|max:255',
+                'zip_code' => 'required|string|max:20',
+                'is_default' => 'nullable|boolean',
+            ]);
+
+            // Convert to boolean since it might come as 'on', 'true', 1, or boolean
+            $isDefault = filter_var($request->input('is_default'), FILTER_VALIDATE_BOOLEAN);
+            $validatedAddress['is_default'] = $isDefault;
 
             if ($addressId) {
                 $address = $user->addresses()->findOrFail($addressId);
@@ -62,7 +77,12 @@ class ProfileController extends Controller
                 $address = $user->addresses()->create($validatedAddress);
                 if ($user->addresses()->count() === 1) {
                     $address->update(['is_default' => true]);
+                    $isDefault = true;
                 }
+            }
+
+            if ($isDefault) {
+                $user->addresses()->where('id', '!=', $address->id)->update(['is_default' => false]);
             }
 
             return response()->json([

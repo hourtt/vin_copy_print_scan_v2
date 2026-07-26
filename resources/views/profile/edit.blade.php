@@ -1,5 +1,8 @@
 <x-app-layout>
-    <div class="flex flex-col md:flex-row min-h-screen bg-gray-50" x-data="{ activeTab: 'general' }">
+    <div class="flex flex-col md:flex-row min-h-screen bg-gray-50" x-data="{ 
+        activeTab: 'general',
+        defaultAddressHtml: {{ \Illuminate\Support\Js::from($defaultAddress ? $defaultAddress->address . '<br>' . $defaultAddress->city . ($defaultAddress->state ? ', ' . $defaultAddress->state : '') . ' ' . $defaultAddress->zip_code : '') }}
+    }" @update-default-address.window="defaultAddressHtml = $event.detail">
 
         {{-- 
              PANEL 1: FAR-LEFT GLOBAL NAV
@@ -267,16 +270,16 @@
                     <div class="px-6 py-5 border-b border-gray-100 last:border-0 flex flex-col md:flex-row gap-4">
                         <div class="md:w-1/3 text-sm font-medium text-gray-700 md:mt-1">Default Address</div>
                         <div class="flex-1 text-sm text-gray-900 leading-relaxed">
-                            @if (Auth::user()->address)
-                                {{ Auth::user()->address }}<br>
-                                {{ Auth::user()->city }}{{ Auth::user()->state ? ', ' . Auth::user()->state : '' }} {{ Auth::user()->zip_code }}
-                            @else
+                            <template x-if="defaultAddressHtml">
+                                <div x-html="defaultAddressHtml"></div>
+                            </template>
+                            <template x-if="!defaultAddressHtml">
                                 <span class="text-gray-400 italic">No address saved</span>
-                            @endif
+                            </template>
                         </div>
                         <div class="md:text-right">
                             <button type="button" class="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors md:mt-1"
-                                onclick="openModal('modal-address')">{{ Auth::user()->address ? 'Edit' : 'Add' }}</button>
+                                onclick="openModal('modal-address')"><span x-text="defaultAddressHtml ? 'Edit' : 'Add'"></span></button>
                         </div>
                     </div>
 

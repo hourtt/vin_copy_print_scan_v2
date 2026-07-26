@@ -138,6 +138,7 @@ document.addEventListener("alpine:init", () => {
         selectedAddressId: null,
         editingId: null,
         addressToDelete: null,
+        errors: {},
         formData: {
             phone_number: '',
             address: '',
@@ -191,7 +192,7 @@ document.addEventListener("alpine:init", () => {
         openForm(address = null) {
             if (address) {
                 this.editingId = address.id;
-                this.formData = { ...address };
+                this.formData = { ...address, is_default: Boolean(address.is_default) };
                 this.formatPhone();
             } else {
                 this.editingId = null;
@@ -200,7 +201,8 @@ document.addEventListener("alpine:init", () => {
                     address: '',
                     city: '',
                     state: '',
-                    zip_code: ''
+                    zip_code: '',
+                    is_default: false
                 };
             }
             this.viewState = 'FORM';
@@ -259,6 +261,7 @@ document.addEventListener("alpine:init", () => {
             });
         },
         saveAddress() {
+            this.errors = {}; // Clear any previous error state
             fetch(updateUrl, {
                 method: 'PATCH',
                 headers: {
@@ -273,11 +276,24 @@ document.addEventListener("alpine:init", () => {
                     address: this.formData.address,
                     city: this.formData.city,
                     state: this.formData.state,
-                    zip_code: this.formData.zip_code
+                    zip_code: this.formData.zip_code,
+                    is_default: this.formData.is_default
                 })
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to save to database');
+            .then(async response => {
+                if (!response.ok) {
+                    let errMsg = 'Failed to save to database';
+                    try {
+                        const errData = await response.json();
+                        if (errData.errors) {
+                            this.errors = errData.errors;
+                            errMsg = 'Please fix the errors below.';
+                        } else if (errData.message) {
+                            errMsg = errData.message;
+                        }
+                    } catch(e) {}
+                    throw new Error(errMsg);
+                }
                 return response.json();
             })
             .then(data => {
@@ -293,17 +309,60 @@ document.addEventListener("alpine:init", () => {
                     this.addresses.push(updatedAddress);
                 }
 
+                if (updatedAddress.is_default) {
+                    this.addresses.forEach(a => {
+                        if (a.id !== updatedAddress.id) a.is_default = false;
+                    });
+                }
+
                 this.selectedAddressId = updatedAddress.id;
                 this.updateViewState();
             })
             .catch(error => {
-                alert('Error saving address to database. Please check your console or fillable model attributes.');
+                alert('Validation Error:\n' + error.message);
                 console.error(error);
             });
         },
         confirmAddress() {
             if (this.selectedAddressId) {
-                window.closeModal('modal-address');
+                let address = this.addresses.find(a => a.id === this.selectedAddressId);
+                if (address) {
+                    fetch(this.updateUrl, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': this.csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            inline_field: 'address',
+                            address_id: address.id,
+                            phone_number: address.phone_number,
+                            address: address.address,
+                            city: address.city,
+                            state: address.state,
+                            zip_code: address.zip_code,
+                            is_default: true
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.addresses.forEach(a => a.is_default = (a.id === address.id));
+                            let html = address.address + '<br>' + address.city + (address.state ? ', ' + address.state : '') + ' ' + address.zip_code;
+                            window.dispatchEvent(new CustomEvent('update-default-address', { detail: html }));
+                            window.closeModal('modal-address');
+                        } else {
+                            alert(data.message || 'Error updating default address');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Failed to update default address.');
+                    });
+                } else {
+                    window.closeModal('modal-address');
+                }
             }
         }
     }));

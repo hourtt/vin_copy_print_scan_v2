@@ -13,6 +13,9 @@
                                 class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-3 bg-white px-1 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
                                 Phone Number
                             </label>
+                            <template x-if="errors.phone_number">
+                                <p class="text-red-500 text-xs mt-1" x-text="errors.phone_number[0]"></p>
+                            </template>
                         </div>
 
                         {{-- Street Address --}}
@@ -24,6 +27,9 @@
                                 class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-3 bg-white px-1 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
                                 Street Address
                             </label>
+                            <template x-if="errors.address">
+                                <p class="text-red-500 text-xs mt-1" x-text="errors.address[0]"></p>
+                            </template>
                         </div>
 
                         {{-- City + State row --}}
@@ -36,6 +42,9 @@
                                     class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-3 bg-white px-1 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
                                     City
                                 </label>
+                                <template x-if="errors.city">
+                                    <p class="text-red-500 text-xs mt-1" x-text="errors.city[0]"></p>
+                                </template>
                             </div>
                             <div class="relative w-full">
                                 <input type="text" name="state" placeholder=" " required
@@ -45,6 +54,9 @@
                                     class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-3 bg-white px-1 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
                                     State
                                 </label>
+                                <template x-if="errors.state">
+                                    <p class="text-red-500 text-xs mt-1" x-text="errors.state[0]"></p>
+                                </template>
                             </div>
                         </div>
 
@@ -56,6 +68,18 @@
                             <label
                                 class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-3 bg-white px-1 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
                                 Zip Code
+                            </label>
+                            <template x-if="errors.zip_code">
+                                <p class="text-red-500 text-xs mt-1" x-text="errors.zip_code[0]"></p>
+                            </template>
+                        </div>
+                        
+                        {{-- Set as Default --}}
+                        <div class="flex items-center mt-4">
+                            <input type="checkbox" id="is_default" name="is_default" x-model="formData.is_default"
+                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="is_default" class="ml-2 block text-sm text-gray-900">
+                                Set as default address
                             </label>
                         </div>
                     </div>
