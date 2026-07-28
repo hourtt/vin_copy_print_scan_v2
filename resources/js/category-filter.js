@@ -162,8 +162,7 @@ function setParamAndUpdate(key, value, pushState = true) {
     updateView(params, pushState);
 }
 
-// 4. Turbo Lifecycle Event Listeners
-document.addEventListener("turbo:load", () => {
+function initCategoryFilter() {
     // Setup ARIA announcer if missing
     let announcer = document.getElementById("aria-announcer");
     if (!announcer) {
@@ -185,8 +184,9 @@ document.addEventListener("turbo:load", () => {
     if (productGroups) productGroups.style.transition = "opacity 150ms ease";
     if (skeletonGrid) skeletonGrid.style.display = "none";
 
-    // Bind inputs - DOM is fresh after Turbo navigation so duplicate listeners aren't a concern here
-    if (searchInput) {
+    // Bind inputs - Using dataset.bound to prevent duplicate listeners on initial load
+    if (searchInput && !searchInput.dataset.bound) {
+        searchInput.dataset.bound = "true";
         searchInput.addEventListener("input", (e) => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
@@ -197,19 +197,33 @@ document.addEventListener("turbo:load", () => {
 
     if (catPills.length > 0) {
         catPills.forEach((pill) => {
-            pill.addEventListener("click", (e) => {
-                const target = e.currentTarget;
-                setParamAndUpdate("cat", target.dataset.cat);
-            });
+            if (!pill.dataset.bound) {
+                pill.dataset.bound = "true";
+                pill.addEventListener("click", (e) => {
+                    const target = e.currentTarget;
+                    setParamAndUpdate("cat", target.dataset.cat);
+                });
+            }
         });
     }
 
-    if (sortSelect) {
+    if (sortSelect && !sortSelect.dataset.bound) {
+        sortSelect.dataset.bound = "true";
         sortSelect.addEventListener("change", (e) => {
             setParamAndUpdate("sort", e.target.value);
         });
     }
-});
+}
+
+// 4. Lifecycle Event Listeners
+document.addEventListener("turbo:load", initCategoryFilter);
+
+// Initial page load fallback
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCategoryFilter);
+} else {
+    initCategoryFilter();
+}
 
 // Bind popstate globally ONCE (not inside turbo:load)
 window.addEventListener("popstate", (e) => {
