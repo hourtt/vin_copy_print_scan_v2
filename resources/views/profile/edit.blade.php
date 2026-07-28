@@ -97,10 +97,10 @@
             </div>
 
             <div class="flex md:flex-col gap-1 p-4 overflow-x-auto md:overflow-visible">
-                <button :class="activeTab === 'general' ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'" @click="activeTab = 'general'" type="button" class="px-4 py-2.5 text-left text-sm font-medium rounded-lg whitespace-nowrap transition-colors">General Profile</button>
+                <button :class="{ 'bg-gray-100 text-gray-900': activeTab === 'general', 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': activeTab !== 'general' }" @click="activeTab = 'general'" type="button" class="px-4 py-2.5 text-left text-sm font-medium rounded-lg whitespace-nowrap transition-colors">General Profile</button>
                 <button type="button" onclick="openModal('modal-address')" class="px-4 py-2.5 text-left text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 whitespace-nowrap transition-colors">Address Book</button>
                 <button type="button" onclick="openModal('modal-payment')" class="px-4 py-2.5 text-left text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 whitespace-nowrap transition-colors">Payment Methods</button>
-                <button :class="activeTab === 'security' ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'" @click="activeTab = 'security'" type="button" class="px-4 py-2.5 text-left text-sm font-medium rounded-lg whitespace-nowrap transition-colors">Login &amp; Security</button>
+                <button :class="{ 'bg-gray-100 text-gray-900': activeTab === 'security', 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': activeTab !== 'security' }" @click="activeTab = 'security'" type="button" class="px-4 py-2.5 text-left text-sm font-medium rounded-lg whitespace-nowrap transition-colors">Login &amp; Security</button>
                 <button type="button" class="px-4 py-2.5 text-left text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 whitespace-nowrap transition-colors">Notification Preferences</button>
             </div>
         </nav>
@@ -192,7 +192,11 @@
                                 <div class="flex flex-col sm:flex-row gap-4 w-full">
                                     <div class="flex-1 flex flex-col gap-1.5">
                                         <label class="text-sm font-medium text-gray-700" for="ie-first-name">First Name</label>
-                                        <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm @error('first_name') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        <input @class([
+                                                'w-full px-3 py-2 border rounded-md text-sm transition-colors',
+                                                'border-red-500 focus:ring-red-500 focus:border-red-500 focus:ring-2' => $errors->has('first_name'),
+                                                'border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500' => !$errors->has('first_name'),
+                                            ])
                                             id="ie-first-name" type="text" name="first_name"
                                             value="{{ old('first_name', Auth::user()->first_name) }}"
                                             autocomplete="given-name" required>
@@ -202,7 +206,11 @@
                                     </div>
                                     <div class="flex-1 flex flex-col gap-1.5">
                                         <label class="text-sm font-medium text-gray-700" for="ie-last-name">Last Name</label>
-                                        <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm @error('last_name') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        <input @class([
+                                                'w-full px-3 py-2 border rounded-md text-sm transition-colors',
+                                                'border-red-500 focus:ring-red-500 focus:border-red-500 focus:ring-2' => $errors->has('last_name'),
+                                                'border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500' => !$errors->has('last_name'),
+                                            ])
                                             id="ie-last-name" type="text" name="last_name"
                                             value="{{ old('last_name', Auth::user()->last_name) }}"
                                             autocomplete="family-name" required>
@@ -243,7 +251,11 @@
                                 <div class="w-full sm:max-w-md">
                                     <div class="flex flex-col gap-1.5">
                                         <label class="text-sm font-medium text-gray-700" for="ie-email">Email Address</label>
-                                        <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm @error('email') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        <input @class([
+                                                'w-full px-3 py-2 border rounded-md text-sm transition-colors',
+                                                'border-red-500 focus:ring-red-500 focus:border-red-500 focus:ring-2' => $errors->has('email'),
+                                                'border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500' => !$errors->has('email'),
+                                            ])
                                             id="ie-email" type="email" name="email"
                                             value="{{ old('email', Auth::user()->email) }}" autocomplete="email"
                                             required>
@@ -333,69 +345,6 @@
         </main>
     </div>
 
-
-    {{-- MODAL — Edit Profile Information (Retained for legacy if needed, but styling updated) --}}
-    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm opacity-0 invisible [&.active]:opacity-100 [&.active]:visible transition-all duration-300 group" id="modal-profile-info" role="dialog" aria-modal="true"
-        aria-labelledby="modal-profile-info-title">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0 group-[.active]:scale-100 group-[.active]:opacity-100 flex flex-col max-h-full">
-            <div class="flex items-center justify-between p-6 border-b border-gray-100">
-                <h2 class="text-xl font-bold text-gray-900" id="modal-profile-info-title">Edit Profile</h2>
-                <button class="text-gray-400 hover:text-gray-600 transition-colors" onclick="closeModal('modal-profile-info')" aria-label="Close">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
-            </div>
-            <div class="p-6 overflow-y-auto">
-                @if (session('status') === 'profile-updated')
-                    <div class="mb-6 p-4 rounded-lg bg-green-50 text-green-700 flex items-center gap-3 text-sm font-medium">
-                        <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Profile updated successfully!
-                    </div>
-                @endif
-
-                <form method="post" action="{{ route('profile.update') }}" id="form-profile-info" class="flex flex-col gap-5">
-                    @csrf
-                    @method('patch')
-
-                    <div>
-                        <x-floating-input id="first_name" name="first_name" type="text" label="First Name"
-                            :value="old('first_name', Auth::user()->first_name)" required autofocus autocomplete="first_name" />
-                        <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
-                    </div>
-
-                    <div>
-                        <x-floating-input id="last_name" name="last_name" type="text" label="Last Name"
-                            :value="old('last_name', Auth::user()->last_name)" required autocomplete="last_name" />
-                        <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
-                    </div>
-
-                    <div>
-                        <x-floating-input id="email" name="email" type="email" label="Email"
-                            :value="old('email', Auth::user()->email)" required autocomplete="username" />
-                        <x-input-error class="mt-2" :messages="$errors->get('email')" />
-                    </div>
-
-                    <div class="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
-                        <button type="button" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
-                            onclick="closeModal('modal-profile-info')">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">Save Changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
     {{-- 
          MODAL — Payment Method (Coming Soon)
      --}}
@@ -423,8 +372,7 @@
     {{-- MODAL — Address Management (Full CRUD) --}}
     <x-address.address-modal />
 
-
-    {{--  INLINE EDITING + MODAL JAVASCRIPT --}}
+    {{--  JAVASCRIPT --}}
     @push('scripts')
         @vite(['resources/js/profile.js'])
 
