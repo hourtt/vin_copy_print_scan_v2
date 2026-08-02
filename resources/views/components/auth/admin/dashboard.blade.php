@@ -225,6 +225,18 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
+                        {{-- ✅ Declared once above the loop, not re-created on every iteration --}}
+                        @php
+                            $statusStyles = [
+                                'completed'        => 'bg-green-50 text-green-700 border-green-200',
+                                'active'           => 'bg-green-50 text-green-700 border-green-200',
+                                'processing'       => 'bg-blue-50 text-blue-700 border-blue-200',
+                                'scheduled'        => 'bg-blue-50 text-blue-700 border-blue-200',
+                                'pending'          => 'bg-orange-50 text-orange-700 border-orange-200',
+                                'draft'            => 'bg-orange-50 text-orange-700 border-orange-200',
+                                'cancelled'        => 'bg-red-50 text-red-700 border-red-200',
+                            ];
+                        @endphp
                         @forelse($recentOrders ?? [] as $order)
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -249,25 +261,15 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $order->product->category->name ?? 'N/A' }}</td>
+                                    {{ $order->product->category->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $order->user->name ?? 'Guest' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     ${{ number_format($order->total_price, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @php
-                                        $statusStyles = [
-                                            'completed' => 'bg-green-50 text-green-700 border-green-200',
-                                            'active' => 'bg-green-50 text-green-700 border-green-200',
-                                            'processing' => 'bg-blue-50 text-blue-700 border-blue-200',
-                                            'scheduled' => 'bg-blue-50 text-blue-700 border-blue-200',
-                                            'pending' => 'bg-orange-50 text-orange-700 border-orange-200',
-                                            'draft' => 'bg-orange-50 text-orange-700 border-orange-200',
-                                            'cancelled' => 'bg-red-50 text-red-700 border-red-200',
-                                        ];
-                                        $statusKey = strtolower($order->status ?? '');
-                                        $statusStyle =
-                                            $statusStyles[$statusKey] ?? 'bg-gray-50 text-gray-700 border-gray-200';
+                                        $statusKey   = strtolower($order->status ?? '');
+                                        $statusStyle = $statusStyles[$statusKey] ?? 'bg-gray-50 text-gray-700 border-gray-200';
                                     @endphp
                                     <span
                                         class="px-2.5 py-1 text-xs font-medium rounded-full border {{ $statusStyle }}">
@@ -275,7 +277,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('admin.orders.show', $order->id) }}"
+                                    <a href="{{ route('admin.sales.show', $order->id) }}"
                                         class="text-indigo-600 hover:text-indigo-900">Details</a>
                                 </td>
                             </tr>
