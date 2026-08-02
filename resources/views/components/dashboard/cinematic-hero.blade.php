@@ -30,12 +30,12 @@
                     <!-- Primary Action -->
                     <a href="{{ route('services') }}"
                         class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors">
-                        Our Services
+                        សេវាកម្មរបស់យើងខ្ញុំ
                     </a>
                     <!-- Secondary Action -->
                     <a href="{{ route('product-catalog.index') }}"
                         class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm">
-                        Product Catalog
+                        កាតាឡុកផលិតផល
                     </a>
                 </div>
 

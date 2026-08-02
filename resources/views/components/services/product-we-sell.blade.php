@@ -5,12 +5,12 @@
             <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-semibold mb-3 sm:mb-4">អ្វីដែលយើងលក់</p>
             <h2
                 class="font-sans text-[clamp(1.5rem,3vw+0.5rem,2.75rem)] text-[#1a1a2e] tracking-normal leading-[1.65] max-w-[560px] mb-4">
-                <span class="block pb-1 sm:pb-2">ឧបករណ៍ និងសម្ភារៈប្រើប្រាស់</span>
-                <span class="block">ត្រៀមរួចជាស្រេចសម្រាប់យកទៅផ្ទះ។</span>
+                <span class="block pb-1 sm:pb-2">ពួកយើងមានលក់នូវ៖</span>
+                <span class="block">ម៉ាស៊ីនព្រីន, កូពី, ទឹកថ្នាំ និងធូន័រគ្រប់ប្រភេទទៅតាមតម្រូវការរបស់លោកអ្នក។</span>
             </h2>
             <p class="text-[#1a1a2e]/70 text-[clamp(0.875rem,1.1vw,1rem)] leading-[1.75] max-w-xl">
-                ស្វែងរកកាតាឡុកពេញលេញរបស់យើងតាមអ៊ីនធឺណិត ឬមកកាន់បន្ទប់តាំងបង្ហាញរបស់យើង
-                ដើម្បីមើលម៉ូដែលនីមួយៗដំណើរការផ្ទាល់មុនពេលអ្នកទិញ។
+                ស្វែងរកកាតាឡុកផលិតផលរបស់យើងតាមរយៈគេហទំព័រឬមកកាន់ហាងរបស់យើង
+                ដើម្បីមើលម៉ូដែលនីមួយៗមុនពេលអ្នកទិញ។
             </p>
         </div>
         <div class="flex flex-col gap-24">
@@ -23,7 +23,7 @@
                         'desc' => 'ពីម៉ាស៊ីនបោះពុម្ពខ្នាតតូចសម្រាប់ប្រើនៅផ្ទះ រហូតដល់ម៉ាស៊ីនប្រើប្រាស់ក្នុងការិយាល័យធំៗ យើងមានជម្រើសទាំងអស់ ព្រមជាមួយដំបូន្មានពីអ្នកជំនាញ ដើម្បីជួយអ្នកស្វែងរកម៉ូដែលដ៏ស័ក្តិសមបំផុត។',
                         'items' => [
                             'សម្រាប់ផ្ទះ & ការិយាល័យតូច ម៉ូដែលឡាស៊ែរនិងទឹកថ្នាំខ្នាតតូច ពីម៉ាកល្បីៗ',
-                            'ការិយាល័យ & ក្រុមការងារ ម៉ាស៊ីនបោះពុម្ពល្បឿនលឿនសងខាង ដែលមានការភ្ជាប់បណ្តាញ',
+                            'ការិយាល័យ & ក្រុមការងារ ម៉ាស៊ីនបោះពុម្ពល្បឿនលឿនសងខាង ដែលអាចធ្វើការព្រីនតាមរយៈខ្សែ LAN និង ឥតខ្សែបានផងដែរ។',
                             'រួមបញ្ចូលគ្នា បោះពុម្ព ស្កេន ថតចម្លង និងហ្វាក់ ក្នុងម៉ាស៊ីនតែមួយ',
                             'ខ្នាតធំ ទំហំ A3 និងធំជាងនេះ សម្រាប់ផ្ទាំងរូបភាព ប្លង់ និងបដា',
                         ],
@@ -43,9 +43,9 @@
                     ],
                     [
                         'id' => 'toners',
-                        'title' => 'បន្តការបោះពុម្ព<br>ដោយគ្មានការរំខាន។',
+                        'title' => 'បន្តការបោះពុម្ព<br>ដោយទំនុកចិត្ត។',
                         'subtitle' => '02 ទឹកថ្នាំ',
-                        'desc' => 'យើងមានស្តុកប្រអប់ទឹកថ្នាំ OEM ដើម និងជម្រើសទឹកថ្នាំដែលអាចប្រើជំនួសបានដែលមានទិន្នផលខ្ពស់ សម្រាប់ម៉ាកធំៗទាំងអស់ - ដូច្នេះអ្នកមិនបារម្ភពីការអស់ទឹកថ្នាំខុសពេលនោះទេ។',
+                        'desc' => 'យើងមានស្តុកប្រអប់ទឹកថ្នាំ OEM និងជម្រើសទឹកថ្នាំដែលអាចប្រើជំនួសបានដែលមានគុណភាពពស់ សម្រាប់ម៉ាកល្បីៗទាំងអស់។',
                         'items' => [
                             'ប្រអប់ទឹកថ្នាំ OEM HP, Canon, Epson, Brother, Samsung, Ricoh & ច្រើនទៀត',
                             'ទឹកថ្នាំប្រើជំនួសបាន គុណភាពត្រូវបានសាកល្បងត្រឹមត្រូវ ក្នុងតម្លៃទាបជាង OEM ឆ្ងាយ',
@@ -89,10 +89,7 @@
                             'label_class' => 'text-[#6b5a3e]/60'
                         ],
                         'reverse' => false,
-                        'secondary_btn' => [
-                            'text' => 'ឆែកមើលចំនួនក្នុងហាង',
-                            'url' => '#visit'
-                        ],
+                        'secondary_btn' => null,
                     ],
                 ];
             @endphp
@@ -112,7 +109,7 @@
                     
                     {{-- Content --}}
                     <div class="{{ $section['reverse'] ? 'lg:order-1 order-2' : '' }}">
-                        <span class="text-xs tracking-[0.12em] uppercase text-[#305CDE] mb-3 block font-medium">{{ $section['subtitle'] }}</span>
+                        <span class="text-xl tracking-[0.12em] uppercase text-[#305CDE] mb-3 block font-medium">{{ $section['subtitle'] }}</span>
                         <h2 class="font-sans text-[clamp(1.35rem,2.5vw+0.5rem,2.25rem)] text-[#1a1a2e] tracking-normal leading-[1.65] mb-4 sm:mb-6">{!! $section['title'] !!}</h2>
                         <p class="text-[#1a1a2e]/70 text-[clamp(0.875rem,1.1vw,1rem)] leading-[1.75] mb-6">{{ $section['desc'] }}</p>
                         <ul class="flex flex-col gap-3 mb-8">
@@ -128,11 +125,7 @@
                                 {{ $section['btn_text'] }}
                                 <x-icons.arrow-right class="w-4 h-4" />
                             </a>
-                            @if ($section['secondary_btn'])
-                                <a href="{{ $section['secondary_btn']['url'] }}" class="inline-flex items-center gap-2 px-6 py-3 border border-[#1a1a2e]/20 text-[#1a1a2e] text-sm font-semibold rounded-xl hover:bg-[#f8f9fa] transition-colors duration-200">
-                                    {{ $section['secondary_btn']['text'] }}
-                                </a>
-                            @endif
+                            
                         </div>
                     </div>
                 </div>
