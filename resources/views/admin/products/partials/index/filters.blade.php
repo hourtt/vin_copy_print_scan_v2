@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <select name="category" class="w-full sm:w-48 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <select name="category" class="w-full sm:w-48 border border-gray-200 rounded-lg px-3 py-2 mt-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <option value="">All Categories</option>
             @foreach($categories as $cat)
                 <option value="{{ $cat->id }}" @selected(request('category') == $cat->id)>
@@ -21,14 +21,14 @@
             @endforeach
         </select>
 
-        <select name="status" class="w-full sm:w-40 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <select name="status" class="w-full sm:w-40 border border-gray-200 rounded-lg px-3 py-2 mt-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <option value="">All Status</option>
             <option value="in_stock" @selected(request('status') === 'in_stock')>In Stock</option>
             <option value="low_stock" @selected(request('status') === 'low_stock')>Low Stock</option>
             <option value="out_of_stock" @selected(request('status') === 'out_of_stock')>Out of Stock</option>
         </select>
 
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap sm:flex-nowrap mt-3">
             <button type="submit" class="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">
                 Filter
             </button>
