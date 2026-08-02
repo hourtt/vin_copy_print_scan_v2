@@ -22,17 +22,24 @@ class CartService
 
         $sessionCart = Session::get('cart', []);
         $items = collect();
-        foreach ($sessionCart as $productId => $details) {
-            $product = Product::find($productId);
-            if ($product) {
-                $item = new CartItem([
-                    'product_id' => $productId,
-                    'quantity' => $details['quantity'],
-                ]);
-                $item->setRelation('product', $product);
-                $items->push($item);
+
+        if (!empty($sessionCart)) {
+            // Single query: fetch all products at once instead of N individual finds
+            $products = Product::whereIn('id', array_keys($sessionCart))->get()->keyBy('id');
+
+            foreach ($sessionCart as $productId => $details) {
+                $product = $products->get($productId);
+                if ($product) {
+                    $item = new CartItem([
+                        'product_id' => $productId,
+                        'quantity'   => $details['quantity'],
+                    ]);
+                    $item->setRelation('product', $product);
+                    $items->push($item);
+                }
             }
         }
+
         return $items;
     }
 

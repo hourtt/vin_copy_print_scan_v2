@@ -15,6 +15,9 @@ class StripeController extends Controller
             abort(403);
         }
 
+        //  Eager-load items.product to prevent N+1 inside the foreach loop
+        $order->load('items.product');
+
         Stripe::setApiKey(config('payments.stripe.secret'));
         $lineItems = [];
         foreach ($order->items as $item) {
@@ -81,7 +84,8 @@ class StripeController extends Controller
             $orderId = $session->metadata->order_id ?? null;
 
             if ($orderId) {
-                $order = Order::find($orderId);
+                //  Eager-load items.product to prevent N+1 inside the foreach loop
+                $order = Order::with('items.product')->find($orderId);
                 if ($order && $order->status === 'pending') {
                     $order->update(['status' => 'processing']);
                     

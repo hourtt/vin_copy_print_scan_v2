@@ -48,13 +48,15 @@ class CheckoutController extends Controller
     public function store(StoreCheckoutRequest $request)
     {
         $validated = $request->validated();
-        
-        $cartItems = $this->cartService->getCartItems();
+
+        //  Single fetch with product eager-loaded — reused throughout the entire method
+        $cartItems = $this->cartService->getCartItems()->loadMissing('product');
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
 
-        $subtotal = $this->cartService->getSubtotal();
+        //  Compute subtotal in PHP from the already-loaded collection (no extra DB call)
+        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->product->price);
         $shippingMethod = ShippingMethod::find($request->shipping_method_id);
         $shippingFee = $shippingMethod ? $shippingMethod->fee : 0;
         $total = $subtotal + $shippingFee;
@@ -94,7 +96,7 @@ class CheckoutController extends Controller
                 'status' => 'pending', // Pending payment
             ]);
 
-            $cartItems = $this->cartService->getCartItems()->loadMissing('product');
+            //  Reuse the already-loaded $cartItems collection — no third DB call
             foreach ($cartItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -113,7 +115,8 @@ class CheckoutController extends Controller
 
             // Handle payment method
             if ($request->payment_method === 'cod') {
-                // Stock decrement happens here for COD
+                //  Eager-load items.product before the loop — prevents N+1 on decrement
+                $order->load('items.product');
                 foreach ($order->items as $orderItem) {
                     $orderItem->product->decrement('stock', $orderItem->quantity);
                 }

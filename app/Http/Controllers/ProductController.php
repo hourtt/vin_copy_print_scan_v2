@@ -105,8 +105,12 @@ class ProductController extends Controller
 
     public function admin_index()
     {
-        $products = Product::with('category', 'voucher')->paginate(20);
-        $category = cache()->remember('categories.all', 3600, fn() => Category::all());
+        //  Removed unused $products paginator (was fetching 20 products the view never rendered)
+        // Fetch what the dashboard table actually shows: the 10 most recent orders
+        $recentOrders = Order::with('user', 'items.product.category')
+            ->latest()
+            ->take(10)
+            ->get();
 
         $now = Carbon::now();
 
@@ -115,32 +119,35 @@ class ProductController extends Controller
         $previousMonthStart = $now->copy()->subMonth()->startOfMonth();
         $previousMonthEnd = $now->copy()->subMonth()->endOfMonth();
 
-        $currentHourStart = $now->copy()->startOfHour();
-        $currentHourEnd = $now->copy()->endOfHour();
-        $previousHourStart = $now->copy()->subHour()->startOfHour();
-        $previousHourEnd = $now->copy()->subHour()->endOfHour();
+        //  All 8 stat queries cached as plain scalars — safe with file, redis, or any driver.
+        // Cache key includes the month so it naturally invalidates each new month.
+        $cacheKey = 'admin.dashboard.stats.' . $now->format('Y-m');
+        $stats = cache()->remember($cacheKey, now()->addMinutes(5), function () use ($currentMonthStart, $currentMonthEnd, $previousMonthStart, $previousMonthEnd) {
+            return [
+                'totalRevenue' => (float) (Order::where('status', 'delivered')->sum('total') ?? 0),
+                'currentRevenue' => (float) (Order::where('status', 'delivered')->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->sum('total') ?? 0),
+                'previousRevenue' => (float) (Order::where('status', 'delivered')->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->sum('total') ?? 0),
+                'totalOrders' => (int) Order::count(),
+                'currentOrders' => (int) Order::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count(),
+                'previousOrders' => (int) Order::whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count(),
+                'activeCustomers' => (int) User::where('role', 'user')->count(),
+                'currentCustomers' => (int) User::where('role', 'user')->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count(),
+                'previousCustomers' => (int) User::where('role', 'user')->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count(),
+            ];
+        });
 
-        $totalRevenue = Order::where('status', 'delivered')->sum('total') ?? 0;
-        $currentRevenue = Order::where('status', 'delivered')->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->sum('total') ?? 0;
-        $previousRevenue = Order::where('status', 'delivered')->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->sum('total') ?? 0;
-        $revenueGrowth = $this->calculatePercentageChange($currentRevenue, $previousRevenue);
-
-        $totalOrders = Order::count() ?? 0;
-        $currentOrders = Order::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count();
-        $previousOrders = Order::whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count();
-        $orderGrowth = $this->calculatePercentageChange($currentOrders, $previousOrders);
-
-        $activeCustomers = User::where('role', 'user')->count() ?? 0;
-        $currentCustomers = User::where('role', 'user')->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count();
-        $previousCustomers = User::where('role', 'user')->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count();
-        $customerGrowth = $this->calculatePercentageChange($currentCustomers, $previousCustomers);
-
+        $totalRevenue = $stats['totalRevenue'];
+        $totalOrders = $stats['totalOrders'];
+        $activeCustomers = $stats['activeCustomers'];
         $activeIssues = 0;
+
+        $revenueGrowth = $this->calculatePercentageChange($stats['currentRevenue'], $stats['previousRevenue']);
+        $orderGrowth = $this->calculatePercentageChange($stats['currentOrders'], $stats['previousOrders']);
+        $customerGrowth = $this->calculatePercentageChange($stats['currentCustomers'], $stats['previousCustomers']);
         $issueGrowth = $this->calculatePercentageChange(0, 0);
 
         return view('components.auth.admin.dashboard', compact(
-            'products',
-            'category',
+            'recentOrders',
             'totalRevenue',
             'totalOrders',
             'activeCustomers',

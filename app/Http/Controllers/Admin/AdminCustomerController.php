@@ -48,8 +48,13 @@ class AdminCustomerController extends Controller
             ->latest()
             ->paginate(10);
 
-        $lifetimeSpend  = $user->orders()->sum('total');
-        $totalOrders    = $user->orders()->count();
+        //  Single query: both aggregates resolved in one SELECT with withSum + withCount
+        $user = User::withSum('orders', 'total')
+            ->withCount('orders')
+            ->find($user->id);
+
+        $lifetimeSpend = $user->orders_sum_total ?? 0;
+        $totalOrders = $user->orders_count ?? 0;
 
         return view('admin.customers.show', compact('user', 'orders', 'lifetimeSpend', 'totalOrders'));
     }
