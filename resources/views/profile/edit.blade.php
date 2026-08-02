@@ -14,21 +14,14 @@
         {{-- PANEL 3: MAIN CONTENT AREA --}}
         <main class="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto w-full max-w-full">
             <div x-show="activeTab === 'general'" x-transition class="max-w-4xl mx-auto w-full">
-                
                 <x-profiles.header-avatar />
-                
                 <x-profiles.activity-overview :recentOrderCount="$recentOrderCount ?? 0" :activeVoucherCount="$activeVoucherCount ?? 0" />
-                
                 <x-profiles.personal-info-card />
-                
                 <x-profiles.shipping-billing-card />
-                
                 <x-profiles.security-integrations-card />
-
             </div>
 
-            <div x-show="activeTab === 'security'" x-transition style="display: none;"
-                class="max-w-4xl mx-auto w-full">
+            <div x-show="activeTab === 'security'" x-transition style="display: none;" class="max-w-4xl mx-auto w-full">
                 @include('profile.security.index')
             </div>
         </main>
@@ -63,7 +56,6 @@
     {{--  JAVASCRIPT --}}
     @push('scripts')
         @vite(['resources/js/profile.js'])
-
         <script>
             // Auto-open modals if there are validation errors (password modal, etc.)
             @if ($errors->updatePassword->isNotEmpty())
