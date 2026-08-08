@@ -73,14 +73,14 @@
                         <div class="relative flex-1">
                             <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#6c757d] text-sm">$</span>
                             <input type="number" name="min_price" placeholder="Min" value="{{ request('min_price') }}"
-                                min="0"
+                                min="10" step="10"
                                 class="w-full pl-6 pr-2 py-2 border border-[#dee2e6] rounded text-sm focus:border-[#0056b3] focus:ring-1 focus:ring-[#0056b3] outline-none transition-colors">
                         </div>
                         <span class="text-[#6c757d] font-medium">-</span>
                         <div class="relative flex-1">
                             <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#6c757d] text-sm">$</span>
                             <input type="number" name="max_price" placeholder="Max" value="{{ request('max_price') }}"
-                                min="0"
+                                min="10" step="10"
                                 class="w-full pl-6 pr-2 py-2 border border-[#dee2e6] rounded text-sm focus:border-[#0056b3] focus:ring-1 focus:ring-[#0056b3] outline-none transition-colors">
                         </div>
                     </div>
@@ -115,18 +115,13 @@
                     {{ $products->total() }} products
                 </div>
 
-                <x-sort-dropdown
-                    id="catalog-sort-select"
-                    :options="[
-                        'recommended' => 'Recommended',
-                        'newest'      => 'Newest',
-                        'price_asc'   => 'Price: Low → High',
-                        'price_desc'  => 'Price: High → Low',
-                    ]"
-                    :selected="request('sort', 'recommended')"
-                    label="Sort catalog products"
-                    formId="filter-form"
-                />
+                <x-sort-dropdown id="catalog-sort-select" :options="[
+                    'recommended' => 'Recommended',
+                    'newest' => 'Newest',
+                    'price_asc' => 'Price: Low → High',
+                    'price_desc' => 'Price: High → Low',
+                ]" :selected="request('sort', 'recommended')"
+                    label="Sort catalog products" formId="filter-form" />
             </div>
 
             <!-- Product Grid Grouped by Category -->
@@ -232,16 +227,16 @@
                     <div class="flex items-center gap-4">
                         <div class="relative flex-1">
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-sm">$</span>
-                            <input type="number" name="min_price" placeholder="Min"
-                                value="{{ request('min_price') }}" min="0"
-                                class="w-full pl-7 pr-3 py-2.5 border border-[#dee2e6] rounded-lg text-sm focus:border-[#0056b3] focus:ring-1 focus:ring-[#0056b3] outline-none transition-colors">
+                            <input type="number" name="min_price" id="filter-min-price" placeholder="Min"
+                                value="{{ request('min_price') }}" min="10" step="10"
+                                class="w-full pl-6 pr-2 py-2 border border-[#dee2e6] rounded text-sm focus:border-[#0056b3] focus:ring-1 focus:ring-[#0056b3] outline-none transition-colors">
                         </div>
                         <span class="text-[#6c757d] font-medium">-</span>
                         <div class="relative flex-1">
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#6c757d] text-sm">$</span>
-                            <input type="number" name="max_price" placeholder="Max"
-                                value="{{ request('max_price') }}" min="0"
-                                class="w-full pl-7 pr-3 py-2.5 border border-[#dee2e6] rounded-lg text-sm focus:border-[#0056b3] focus:ring-1 focus:ring-[#0056b3] outline-none transition-colors">
+                            <input type="number" name="max_price" id="filter-max-price" placeholder="Max"
+                                value="{{ request('max_price') }}" min="10" step="10"
+                                class="w-full pl-6 pr-2 py-2 border border-[#dee2e6] rounded text-sm focus:border-[#0056b3] focus:ring-1 focus:ring-[#0056b3] outline-none transition-colors">
                         </div>
                     </div>
                 </div>
@@ -259,15 +254,18 @@
                 Clear All
             </button>
             @auth
-                <button type="button" onclick="document.getElementById('mobile-filter-form').submit();"
-                    class="w-full py-3 px-4 bg-[#212529] hover:bg-black border border-[#212529] rounded-lg text-sm font-medium transition-colors text-white text-center shadow-sm">
-                    Apply Filters
+                <button type="button" data-action="apply-price-filter"
+                    class="w-full mt-4 py-2 px-4 bg-[#dee2e6]/50 hover:bg-[#dee2e6] border border-[#dee2e6] rounded text-sm font-medium transition-colors cursor-pointer text-[#212529]">
+                    Apply Price
                 </button>
+                <p id="price-filter-error" class="hidden mt-2 text-xs text-red-600">
+                    Please filter the product before the apply the filter
+                </p>
             @else
-                <button type="button"
-                    class="w-full py-3 px-4 bg-[#e9ecef] border border-[#dee2e6] rounded-lg text-sm font-medium transition-colors text-[#6c757d] text-center cursor-not-allowed"
+                <button type="submit"
+                    class="w-full mt-4 py-2 px-4 bg-[#dee2e6]/30 border border-[#dee2e6]/50 rounded text-sm font-medium text-[#6c757d] cursor-not-allowed"
                     disabled>
-                    Sign In to Apply
+                    Sign in to Apply Price
                 </button>
             @endauth
         </div>
