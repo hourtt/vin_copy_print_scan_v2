@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -106,6 +107,16 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
             'notify_new_device_login' => 'boolean',
         ];
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => trim("{$this->first_name} {$this->last_name}"),
+        );
     }
 
     /**
