@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-
+use App\Services\CartService;
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -26,7 +26,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        app(\App\Services\CartService::class)->mergeSessionToDb();
+        app(CartService::class)->mergeSessionToDb();
 
         $request->session()->regenerate();
 
