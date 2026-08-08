@@ -53,7 +53,6 @@
                     </div>
                 </div>
 
-                <!-- Right Column (Sidebar Panels) -->
                 <div class="lg:col-span-4 space-y-6">
                     @include('cart.partials.sidebar', ['subtotal' => $subtotal])
                 </div>
