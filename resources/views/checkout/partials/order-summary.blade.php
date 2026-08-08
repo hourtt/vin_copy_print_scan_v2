@@ -9,16 +9,16 @@
         <div class="summary-item">
             <div class="summary-item-img">
                 @if($item->product->image)
-                    <img src="{{ Storage::url($item->product->image) }}" alt="{{ $item->product->name }}" onerror="this.src='https://via.placeholder.com/60x60?text=Item'" loading="lazy">
+                    <img src="{{ Storage::url($item->product?->image) }}" alt="{{ $item->product?->name }}" onerror="this.src='https://via.placeholder.com/60x60?text=Item'" loading="lazy">
                 @else
                     <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-xs">No Image</div>
                 @endif
             </div>
             <div class="summary-item-details">
-                <h4 class="summary-item-title">{{ $item->product->name }}</h4>
+                <h4 class="summary-item-title">{{ $item->product?->name }}</h4>
                 <div class="summary-item-qty">Qty: {{ $item->quantity }}</div>
             </div>
-            <div class="summary-item-price">${{ number_format($item->product->price * $item->quantity, 2) }}</div>
+            <div class="summary-item-price">${{ number_format(($item->product?->price ?? 0) * $item->quantity, 2) }}</div>
         </div>
         @endforeach
     </div>
@@ -26,22 +26,22 @@
     <div class="summary-totals">
         <div class="totals-row">
             <span>Subtotal</span>
-            <span x-text="`$` + subtotal.toFixed(2)">$325.00</span>
+            <span x-text="`$` + subtotal.toFixed(2)">${{ number_format($subtotal ?? 0, 2) }}</span>
         </div>
         
         <div class="totals-row">
             <span>Shipping <span x-show="deliveryMethod === 'delivery'">(Standard)</span><span x-show="deliveryMethod === 'pickup'">(Pickup)</span></span>
-            <span x-text="`$` + shippingCost.toFixed(2)">$15.00</span>
+            <span x-text="`$` + shippingCost.toFixed(2)">${{ number_format($shippingFee ?? 0, 2) }}</span>
         </div>
 
         <div class="totals-row">
             <span>Tax (Estimated)</span>
-            <span x-text="`$` + tax.toFixed(2)">$27.20</span>
+            <span x-text="`$` + tax.toFixed(2)">${{ number_format($tax ?? 0, 2) }}</span>
         </div>
 
         <div class="totals-row grand-total">
             <span>Total</span>
-            <span class="grand-total-amount" x-text="`$` + total.toFixed(2)">$367.20</span>
+            <span class="grand-total-amount" x-text="`$` + total.toFixed(2)">${{ number_format($total ?? 0, 2) }}</span>
         </div>
     </div>
 
