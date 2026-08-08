@@ -111,11 +111,11 @@
                             {{ Auth::user()->last_name }}</h2>
                     </div>
                 </template>
-
                 <!-- Pending State -->
                 <template x-if="hasPendingUpload">
-                    <div>
-                        <h2 class="text-lg font-semibold text-gray-800 mb-3">Confirm New Profile Image</h2>
+                    <div class="flex flex-col gap-2">
+                        <h2 class="text-2xl font-bold text-gray-900">{{ Auth::user()->first_name }}
+                            {{ Auth::user()->last_name }}</h2>
                         <div class="flex flex-wrap gap-2">
                             <button type="button" @click="$refs.uploadForm.submit()"
                                 class="px-4 py-2 text-sm font-medium border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

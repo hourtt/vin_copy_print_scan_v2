@@ -8,8 +8,7 @@
         {{-- PANEL 1: FAR-LEFT GLOBAL NAV --}}
         <x-profiles.sidebar-nav />
 
-        {{-- PANEL 2: INNER-LEFT SETTINGS MENU --}}
-        <x-profiles.settings-nav />
+
 
         {{-- PANEL 3: MAIN CONTENT AREA --}}
         <main class="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto w-full max-w-full">
