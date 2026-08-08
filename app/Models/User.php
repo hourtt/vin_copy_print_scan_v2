@@ -89,6 +89,7 @@ class User extends Authenticatable
         'two_factor_recovery_codes',
         'two_factor_confirmed_at',
         'notify_new_device_login',
+        'profile_image',
     ];
 
     protected $hidden = [

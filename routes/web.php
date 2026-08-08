@@ -5,7 +5,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ImageController;
 
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
@@ -28,7 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/field/{field}', [ProfileController::class, 'updateField'])->name('profile.updateField');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    Route::post('/profile/image', [ImageController::class, 'upload'])->name('image.upload');
+    Route::delete('/profile/image', [ImageController::class, 'destroy'])->name('image.destroy');
 
 });
 
