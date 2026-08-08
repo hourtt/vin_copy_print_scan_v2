@@ -225,7 +225,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        {{-- ✅ Declared once above the loop, not re-created on every iteration --}}
+                        {{-- Declared once above the loop, not re-created on every iteration --}}
                         @php
                             $statusStyles = [
                                 'completed'        => 'bg-green-50 text-green-700 border-green-200',
@@ -244,8 +244,8 @@
                                         <div
                                             class="h-10 w-10 rounded-md bg-gray-100 flex items-center justify-center overflow-hidden">
                                             @if ($order->product?->image)
-                                                <img src="{{ asset('storage/' . $order->product->image) }}"
-                                                    alt="{{ $order->product->name }}"
+                                                <img src="{{ asset('storage/' . $order->product?->image) }}"
+                                                    alt="{{ $order->product?->name }}"
                                                     class="h-full w-full object-cover" loading="lazy">
                                             @else
                                                 <svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24"
@@ -257,13 +257,13 @@
                                             @endif
                                         </div>
                                         <span
-                                            class="text-sm font-medium text-gray-900">{{ $order->product->name ?? 'N/A' }}</span>
+                                            class="text-sm font-medium text-gray-900">{{ $order->product?->name ?? 'N/A' }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $order->product->category->name }}</td>
+                                    {{ $order->product?->category?->name ?? "N/A" }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $order->user->name ?? 'Guest' }}</td>
+                                    {{ $order->user?->name ?? "Guest" }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     ${{ number_format($order->total_price, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -273,10 +273,10 @@
                                     @endphp
                                     <span
                                         class="px-2.5 py-1 text-xs font-medium rounded-full border {{ $statusStyle }}">
-                                        {{ ucfirst($order->status ?? 'Unknown') }}
+                                        {{ ucfirst($order->status    ?? 'Unknown') }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <td class="px-6 py-4 text-right text-sm font-medium">
                                     <a href="{{ route('admin.sales.show', $order->id) }}"
                                         class="text-indigo-600 hover:text-indigo-900">Details</a>
                                 </td>

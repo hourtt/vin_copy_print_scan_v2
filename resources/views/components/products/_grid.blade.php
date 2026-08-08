@@ -40,13 +40,13 @@
                     class="product-card group bg-white border border-[#e4e4e7] rounded-2xl overflow-hidden flex flex-col shadow-sm hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 ease-in-out"
                     data-cat="{{ $product->category_id }}"
                     data-brand="{{ $product->brand_id ?? '' }}"
-                    data-name="{{ strtolower($product->name) }}"
+                    data-name="{{ strtolower($product?->name ?? '') }}"
                     data-price="{{ $product->price }}">
 
                     {{-- Image --}}
                     <div class="relative aspect-[4/3] bg-[#fafafa] flex items-center justify-center overflow-hidden border-b border-[#e4e4e7]">
                         @if ($product->image)
-                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}"
+                            <img src="{{ asset($product?->image) }}" alt="{{ $product?->name }}"
                                 loading="lazy"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         @else
@@ -65,8 +65,8 @@
                             {{ $subLabel }}
                         </div>
                         <div class="font-['Kantumruy Pro',serif] text-base sm:text-lg font-semibold text-[#27272a] leading-snug line-clamp-2"
-                            title="{{ $product->name }}">
-                            {{ $product->name }}
+                            title="{{ $product?->name }}">
+                            {{ $product?->name }}
                         </div>
 
                         @if (!empty($compatValue))

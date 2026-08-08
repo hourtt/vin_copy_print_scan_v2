@@ -1,7 +1,7 @@
 <li class="p-6 flex flex-col sm:flex-row sm:items-center gap-6 hover:bg-gray-50/50 transition-colors">
     <div class="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 border border-gray-100 rounded-lg overflow-hidden bg-gray-50">
         @if($item->product->image)
-            <img src="{{ Storage::url($item->product->image) }}" alt="{{ $item->product->name }}" class="w-full h-full object-center object-cover" loading="lazy">
+            <img src="{{ Storage::url($item->product?->image) }}" alt="{{ $item->product?->name }}" class="w-full h-full object-center object-cover" loading="lazy">
         @else
             <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">No Image</div>
         @endif
@@ -11,11 +11,11 @@
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="text-lg font-semibold text-gray-900">
-                    <a href="#" class="hover:text-indigo-600 transition-colors">{{ $item->product->name }}</a>
+                    <a href="#" class="hover:text-indigo-600 transition-colors">{{ $item->product?->name ?? 'Product Unavailable' }}</a>
                 </h3>
-                <p class="mt-1 text-sm text-gray-500">{{ $item->product->category->name ?? 'Uncategorized' }}</p>
+                <p class="mt-1 text-sm text-gray-500">{{ $item->product?->category?->name ?? 'Uncategorized' }}</p>
             </div>
-            <p id="item-price-{{ $item->product->id }}" class="text-lg font-bold text-gray-900">${{ number_format($item->product->price * $item->quantity, 2) }}</p>
+            <p id="item-price-{{ $item->product?->id }}" class="text-lg font-bold text-gray-900">${{ number_format(($item->product?->price ?? 0) * $item->quantity, 2) }}</p>
         </div>
         
         <div class="mt-6 flex items-center justify-between">

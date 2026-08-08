@@ -16,7 +16,7 @@
         </span>
 
         @if ($product->image)
-            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy"
+            <img src="{{ asset($product?->image) }}" alt="{{ $product?->name }}" loading="lazy"
                 class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500">
         @else
             <span class="text-slate-400 text-xs font-medium uppercase tracking-wider">No Image</span>
@@ -26,10 +26,10 @@
     <!-- Card Body -->
     <div class="flex flex-col flex-1">
         <span class="text-[11px] font-semibold text-blue-600 uppercase tracking-wider mb-1">
-            {{ $product->category->name ?? 'Category' }}
+            {{ $product?->category?->name ?? 'Category' }}
         </span>
-        <h3 class="text-sm font-medium text-slate-900 leading-snug mb-3 line-clamp-2 break-words" title="{{ $product->name }}">
-            {{ $product->name }}
+        <h3 class="text-sm font-medium text-slate-900 leading-snug mb-3 line-clamp-2 break-words" title="{{ $product?->name }}">
+            {{ $product?->name }}
         </h3>
 
         <div class="mt-auto flex items-end justify-between gap-2 pt-2">

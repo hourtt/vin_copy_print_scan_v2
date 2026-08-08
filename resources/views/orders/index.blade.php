@@ -78,8 +78,8 @@
                             <div
                                 class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg bg-gray-100 border border-gray-100 overflow-hidden flex items-center justify-center">
                                 @if ($item->product && $item->product->image)
-                                    <img src="{{ asset('storage/' . $item->product->image) }}"
-                                        alt="{{ $item->product->name ?? 'Product' }}"
+                                    <img src="{{ asset('storage/' . $item->product?->image) }}"
+                                        alt="{{ $item->product?->name ?? 'Product' }}"
                                         class="w-full h-full object-cover" loading="lazy">
                                 @else
                                     <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor"
@@ -93,7 +93,7 @@
                             {{-- Product Details --}}
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-medium text-gray-900 truncate">
-                                    {{ $item->product->name ?? 'Product Unavailable' }}
+                                    {{ $item->product?->name ?? 'Product Unavailable' }}
                                 </p>
                                 <p class="text-sm text-[#71717a] mt-0.5">
                                     Qty: {{ $item->quantity }}

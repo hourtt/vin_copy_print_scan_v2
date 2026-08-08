@@ -33,7 +33,7 @@
                         <div
                             class="relative aspect-[4/3] bg-[#fafafa] flex items-center justify-center overflow-hidden border-b border-[#e4e4e7]">
                             @if ($product->image)
-                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy"
+                                <img src="{{ asset($product?->image) }}" alt="{{ $product?->name }}" loading="lazy"
                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             @else
                                 <span class="text-sm text-[#000000]">No image</span>
@@ -60,11 +60,11 @@
                         {{-- Card Body --}}
                         <div class="flex flex-col flex-1 p-4 sm:p-5 gap-2">
                             <div class="text-xs font-bold capitalize tracking-wide text-[#3f3f46]">
-                                {{ $product->brand->name ?? ($product->category->name ?? 'Product') }}
+                                {{ $product?->brand?->name ?? ($product?->category?->name ?? 'Product') }}
                             </div>
                             <div class="font-['Kantumruy_Pro',serif] text-base sm:text-lg font-semibold text-[#27272a] leading-snug line-clamp-2"
-                                title="{{ $product->name }}">
-                                {{ $product->name }}
+                                title="{{ $product?->name }}">
+                                {{ $product?->name }}
                             </div>
 
                             {{-- Footer: Price + Action --}}
