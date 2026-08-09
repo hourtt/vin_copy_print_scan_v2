@@ -1,9 +1,6 @@
-{{-- ═══════════════════════════════════════════════════════════
-     MODAL — Logout Confirmation
-═══════════════════════════════════════════════════════════ --}}
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none [&.active]:opacity-100 [&.active]:pointer-events-auto transition-opacity duration-300 group" id="modal-logout" role="dialog" aria-modal="true" aria-labelledby="modal-logout-title">
     <div class="w-full max-w-sm bg-white rounded-xl shadow-2xl p-6 scale-95 opacity-0 group-[.active]:scale-100 group-[.active]:opacity-100 transition-all duration-300">
-        <h2 class="text-lg font-semibold text-gray-900" id="modal-logout-title">Logout</h2>
+        <h2 class="text-lg font-semibold text-gray-900" id="modal-logout-title">Log Out</h2>
         <p class="mt-2 text-gray-600">
             Are you sure you want to <span class="font-semibold text-gray-900">log out</span>?
         </p>
