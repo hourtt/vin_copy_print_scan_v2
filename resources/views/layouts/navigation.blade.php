@@ -75,7 +75,7 @@
                 @auth
                     {{-- Orders / Cart icon --}}
                     @if (Auth::user()->role === 'customer')
-                        <a href="{{ route('cart.index') }}" data-turbo="false" data-turbo-cache="false"
+                        <a href="{{ route('cart.index') }}"
                             class="relative hidden lg:flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-150 text-[#6B6B6B] hover:text-[#0D0D0B]"
                             aria-label="My Cart">
                             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"
@@ -236,7 +236,7 @@
                 </div>
                 <div class="space-y-0.5">
                     @if (Auth::user()->role === 'customer')
-                        <a href="{{ route('cart.index') }}" data-turbo="false" data-turbo-cache="false"
+                        <a href="{{ route('cart.index') }}"
                             class="relative flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
                             <span>My Cart</span>
                             <span x-show="cartCount > 0" x-text="cartCount" x-cloak
