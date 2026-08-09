@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-// * Guest Routes
 Route::get('/', [ProductController::class, 'index'])->name('dashboard');
 Route::get('/product-catalog', [ProductController::class, 'product_catalog_index'])->name('product-catalog.index');
 Route::get('/printers', [ProductController::class, 'printers_index'])->name('products.printers.index');

@@ -9,21 +9,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        $check = Auth::check();
+        if (!$check) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
+
+        if ($user->is_banned) {
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')
+                ->withErrors([
+                    'email' => 'Your account has been suspended. Please contact support.'
+                ]);
+        }
+
+        if ($user->role === 'admin') {
             return $next($request);
         }
 
-        if (Auth::check()) {
+        if ($user->role === 'customer') {
             return redirect()->route('dashboard');
         }
 
-        return redirect()->route('login');
+        abort(403);
+
     }
 }
