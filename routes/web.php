@@ -15,6 +15,9 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
     Route::get('orders/{order}', [OrdersController::class, 'show'])->name('orders.show');
+    Route::get('orders/{order}/invoice', [OrdersController::class, 'invoice'])->name('orders.invoice');
+    Route::post('orders/{order}/reorder', [OrdersController::class, 'reorder'])->name('orders.reorder');
+    Route::post('orders/{order}/cancel', [OrdersController::class, 'cancel'])->name('orders.cancel');
 
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
@@ -30,7 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/image', [ImageController::class, 'upload'])->name('image.upload');
     Route::delete('/profile/image', [ImageController::class, 'destroy'])->name('image.destroy');
-
 });
 
 require __DIR__ . '/authentication/admin.php';

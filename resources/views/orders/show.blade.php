@@ -108,18 +108,34 @@
 
                 {{-- Action Footer (Desktop/Tablet placed below items, Mobile can be anywhere) --}}
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <button class="flex-1 sm:flex-none inline-flex justify-center items-center px-5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-colors">
+                    <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="flex-1 sm:flex-none inline-flex justify-center items-center px-5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-colors">
                         <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         Download Invoice
-                    </button>
-                    <button class="flex-1 sm:flex-none inline-flex justify-center items-center px-5 py-2.5 bg-indigo-50 border border-indigo-200 rounded-lg text-sm font-medium text-indigo-700 hover:bg-indigo-100 transition-colors">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Reorder Items
-                    </button>
+                    </a>
+                    
+                    <form action="{{ route('orders.reorder', $order) }}" method="POST" class="flex-1 sm:flex-none flex">
+                        @csrf
+                        <button type="submit" class="w-full inline-flex justify-center items-center px-5 py-2.5 bg-indigo-50 border border-indigo-200 rounded-lg text-sm font-medium text-indigo-700 hover:bg-indigo-100 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Reorder Items
+                        </button>
+                    </form>
+
+                    @if(in_array($order->status, ['pending', 'processing']) && now()->diffInHours($order->created_at) <= 24)
+                        <form action="{{ route('orders.cancel', $order) }}" method="POST" class="flex-1 sm:flex-none flex" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                            @csrf
+                            <button type="submit" class="w-full inline-flex justify-center items-center px-5 py-2.5 bg-red-50 border border-red-200 rounded-lg text-sm font-medium text-red-700 hover:bg-red-100 transition-colors">
+                                <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Cancel Order
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
 
