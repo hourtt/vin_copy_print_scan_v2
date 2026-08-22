@@ -1,7 +1,4 @@
-@php
-    $initialCartCount = Auth::check() ? app(\App\Services\CartService::class)->getCartItems()->sum('quantity') : 0;
-@endphp
-<nav x-data="{ mobileMenuOpen: false, cartCount: {{ $initialCartCount }} }" @cart-updated.window="cartCount = $event.detail.count"
+<nav x-data="{ mobileMenuOpen: false }"
     class="sticky top-0 z-50 w-full bg-white border-b border-[#E5E5E2]">
     <div class="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16">
         <div class="relative flex items-center h-16 lg:h-[68px]">
@@ -9,9 +6,9 @@
             {{--  LEFT: Logo  --}}
             <div class="flex-shrink-0">
                 <a href="{{ Auth::check() ? Auth::user()->getRedirectRoute() : route('dashboard') }}"
-                    class="flex items-center gap-2.5 group" aria-label="Vin Copy Print Scan — Home">
-                    <img class="h-10 w-auto rounded-md" src="{{ asset('storage/images/logo-icon-only.webp') }}"
-                        alt="Vin Copy Print Scan logo" loading="lazy">
+                    class="flex items-center gap-2.5 group" aria-label="Vin Copy Print Scan V2 — Home">
+                    <img src="{{ asset('images/logo.png') }}" class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                        alt="Vin Copy Print Scan V2 logo" loading="lazy">
                 </a>
             </div>
 
@@ -73,30 +70,13 @@
             <div class="ml-auto flex items-center gap-5">
 
                 @auth
-                    {{-- Orders / Cart icon --}}
                     @if (Auth::user()->role === 'customer')
-                        <a href="{{ route('cart.index') }}"
-                            class="relative hidden lg:flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-150 text-[#6B6B6B] hover:text-[#0D0D0B]"
-                            aria-label="My Cart">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"
-                                stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            <span x-show="cartCount > 0" x-text="cartCount" x-cloak
-                                class="pt-[1px] absolute -top-1 -right-1 inline-flex items-center justify-center h-[18px] min-w-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold tabular-nums shadow-sm">
-                            </span>
-                        </a>
-
-                        <a href="{{ route('orders.index') }}"
+                        <a href="{{ route('profile.inquiries.index') }}"
                             class="hidden lg:flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-150 text-[#6B6B6B] hover:text-[#0D0D0B]"
-                            aria-label="My Orders">
+                            aria-label="My Inquiries">
                             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"
                                 stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                                <line x1="3" y1="6" x2="21" y2="6" />
-                                <path d="M16 10a4 4 0 01-8 0" />
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                             </svg>
                         </a>
                     @endif
@@ -236,12 +216,9 @@
                 </div>
                 <div class="space-y-0.5">
                     @if (Auth::user()->role === 'customer')
-                        <a href="{{ route('cart.index') }}"
-                            class="relative flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
-                            <span>My Cart</span>
-                            <span x-show="cartCount > 0" x-text="cartCount" x-cloak
-                                class="pt-[1px] inline-flex items-center justify-center h-[18px] min-w-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold tabular-nums shadow-sm">
-                            </span>
+                        <a href="{{ route('profile.inquiries.index') }}"
+                            class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
+                            My Inquiries
                         </a>
                     @endif
                     @if (Auth::user()->role === 'admin')

@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-    <title>{{ config('app.name', 'Vin Copy Print Scan') }}</title>
+    <title>{{ config('app.name', 'Vin Copy Print Scan V2') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -36,6 +36,9 @@
             {{ $slot }}
         </main>
     </div>
+    
+    <x-phone-number-prompt />
+    
     @stack('scripts')
 </body>
 
