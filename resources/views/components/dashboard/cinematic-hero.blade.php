@@ -10,7 +10,7 @@
                     class="mt-6 mb-6 leading-[1.08] tracking-[-0.03em] font-sans text-[clamp(2.6rem,5.5vw,4.25rem)] font-semibold text-[#0D0D0B]">
                     ស្វាគមន៏មកកាន់ហាង<br>
                     <em class="italic font-normal text-[clamp(1.8rem,4vw,3rem)]">
-                        Vin Copy Print Scan
+                        Vin Copy Print Scan V2
                     </em>
                 </h4>
 

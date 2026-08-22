@@ -37,14 +37,7 @@
                 ${{ number_format($product->price, 2) }}
             </span>
             
-            @auth
-                <x-add-to-cart-button :product="$product" :isAvailable="$stock['isAvailable'] ?? true" />
-            @else
-                <a href="{{ route('login') }}"
-                    class="inline-flex items-center justify-center min-h-[34px] px-2.5 py-1 border border-[#e4e4e7] bg-[#ffffff] text-[#27272a] text-xs font-semibold rounded-lg hover:border-[#3f3f46] hover:text-[#3f3f46] transition-all duration-200 whitespace-nowrap">
-                    Sign In
-                </a>
-            @endauth
+            <x-inquire-button :product="$product" :isAvailable="$stock['isAvailable'] ?? true" />
         </div>
     </div>
 </article>

@@ -9,7 +9,7 @@
         aria-hidden="true"></div>
     <div class="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8 w-full">
         <p class="inline-block text-[#305CDE] text-[clamp(0.875rem,1.1vw,1rem)] font-semibold mb-3 sm:mb-4">
-            ហេតុអ្វីជ្រើសរើស Vin Copy Print Scan</p>
+            ហេតុអ្វីជ្រើសរើស Vin Copy Print Scan V2</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             @php
