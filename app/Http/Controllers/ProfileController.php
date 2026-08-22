@@ -19,16 +19,14 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        $recentOrderCount = $user->orders()->count();
-        $activeVoucherCount = 0; // Placeholder — no user-voucher relationship yet
+        $recentInquiryCount = $user->inquiries()->count();
 
         $defaultAddress = $user->addresses()->where('is_default', true)->first() 
                         ?? $user->addresses()->latest()->first();
 
         return view('profile.edit', [
             'user' => $user,
-            'recentOrderCount' => $recentOrderCount,
-            'activeVoucherCount' => $activeVoucherCount,
+            'recentInquiryCount' => $recentInquiryCount,
             'defaultAddress' => $defaultAddress,
         ]);
     }

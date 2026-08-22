@@ -122,7 +122,7 @@ class AdminProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->load('category', 'brand', 'images', 'compatibleModels.brand', 'voucher', 'orderItems');
+        $product->load('category', 'brand', 'images', 'compatibleModels.brand');
         return view('admin.products.show', compact('product'));
     }
 
