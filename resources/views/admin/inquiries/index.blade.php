@@ -3,7 +3,7 @@
 
     <div class="space-y-6">
 
-        {{-- ── Filter Card ─────────────────────────────────────────────────── --}}
+        {{--  Filter Card  --}}
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5"
              x-data="{
                  dateFrom: '{{ $date_from ?? '' }}',
@@ -62,7 +62,7 @@
             </form>
         </div>
 
-        {{-- ── Export + Count Row ───────────────────────────────────────────── --}}
+        {{--  Export + Count Row  --}}
         <div class="flex items-center justify-between">
             <p class="text-sm text-gray-500">
                 {{ $inquiries->total() }} {{ Str::plural('inquiry', $inquiries->total()) }}
@@ -84,7 +84,7 @@
             </a>
         </div>
 
-        {{-- ── Table ───────────────────────────────────────────────────────── --}}
+        {{--  Table  --}}
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">

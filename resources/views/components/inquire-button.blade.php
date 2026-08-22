@@ -1,10 +1,4 @@
-{{--
-    <x-inquire-button :product="$product" :isAvailable="$stock > 0" />
 
-    Props:
-        $product     — App\Models\Product
-        $isAvailable — bool
---}}
 @props(['product', 'isAvailable' => true])
 
 @guest
@@ -16,7 +10,7 @@
 @else
     <div
         x-data="{
-            step: 'idle',     {{-- idle | lang-pick | loading | done --}}
+            step: 'idle', 
             pendingLang: null,
 
             open() {
@@ -60,7 +54,7 @@
         @keydown.escape.window="step === 'lang-pick' && (step = 'idle')"
         @phone-saved.window="if ($event.detail.productId === {{ $product->id }}) { step = 'lang-pick'; }"
     >
-        {{-- ── Main Inquire Button ──────────────────────────────────────────── --}}
+        {{--  Main Inquire Button  --}}
         <button
             @click="open()"
             :disabled="step === 'loading' || !{{ $isAvailable ? 'true' : 'false' }}"
@@ -84,7 +78,7 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
             </svg>
-            {{-- Done: checkmark --}}
+       
             <svg x-show="step === 'done'" x-cloak class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
@@ -92,7 +86,7 @@
             <span x-text="step === 'done' ? 'Sent!' : 'Inquire'"></span>
         </button>
 
-        {{-- ── Language Picker Dropdown ─────────────────────────────────────── --}}
+        {{--  Language Picker Dropdown  --}}
         <div
             x-show="step === 'lang-pick'"
             x-transition:enter="transition ease-out duration-150"

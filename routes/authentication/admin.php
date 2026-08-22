@@ -54,7 +54,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::patch('/customers/{user}/toggle-status', [AdminCustomerController::class, 'toggleStatus'])
         ->name('admin.customers.toggle-status');
 
-    // ── Inquiries (v2 — replaces Sales) ─────────────────────────────
+    //  Inquiries (v2 — replaces Sales) 
     Route::get('/inquiries', [AdminInquiryController::class, 'index'])
         ->name('admin.inquiries.index');
     Route::get('/inquiries/export', [AdminInquiryController::class, 'export'])

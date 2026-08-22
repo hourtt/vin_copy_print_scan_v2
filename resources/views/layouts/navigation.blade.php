@@ -7,7 +7,7 @@
             <div class="flex-shrink-0">
                 <a href="{{ Auth::check() ? Auth::user()->getRedirectRoute() : route('dashboard') }}"
                     class="flex items-center gap-2.5 group" aria-label="Vin Copy Print Scan V2 — Home">
-                    <img src="{{ asset('images/logo.png') }}" class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                    <img src="{{ asset('storage/images/logo-icon-only.webp') }}" class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         alt="Vin Copy Print Scan V2 logo" loading="lazy">
                 </a>
             </div>

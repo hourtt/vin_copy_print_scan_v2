@@ -33,7 +33,7 @@ class ShopSetting extends Model
         'group',
     ];
 
-    // ─ Static Helpers ─
+    //  Static Helpers 
 
     /**
      * Retrieve a setting value by key.

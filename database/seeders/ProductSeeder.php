@@ -45,7 +45,7 @@ class ProductSeeder extends Seeder
             ['category' => 'ink-cartridges', 'brand' => 'Epson', 'name' => 'Epson 003 Black Ink Bottle',    'price' => 12.00,  'stock' => 100,'featured' => true,  'specs' => ['Yield' => '7,500 pages', 'Color' => 'Black',     'Compatible Printers' => 'EcoTank L3110, L3150, L3250']],
             ['category' => 'ink-cartridges', 'brand' => 'Epson', 'name' => 'Epson 003 CMY Color Ink Set',   'price' => 38.00,  'stock' => 90, 'featured' => false, 'specs' => ['Yield' => '5,000 pages', 'Color' => 'CMY Set',   'Compatible Printers' => 'EcoTank L3110, L3150, L3250']],
 
-            //  Paper ─
+            //  Paper 
             ['category' => 'paper', 'brand' => null, 'name' => 'A4 80gsm Multipurpose Paper (500 sheets)',  'price' => 8.50,   'stock' => 200,'featured' => true,  'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '80 gsm', 'Sheets per Ream' => '500', 'Brightness' => '104%']],
             ['category' => 'paper', 'brand' => null, 'name' => 'A4 80gsm Multipurpose Paper (5 Reams)',     'price' => 39.00,  'stock' => 80, 'featured' => false, 'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '80 gsm', 'Total Sheets' => '2,500', 'Brightness' => '104%']],
             ['category' => 'paper', 'brand' => null, 'name' => 'A3 80gsm Printing Paper (500 sheets)',      'price' => 16.00,  'stock' => 60, 'featured' => false, 'specs' => ['Size' => 'A3 (297×420mm)', 'Weight' => '80 gsm', 'Sheets per Ream' => '500', 'Brightness' => '102%']],

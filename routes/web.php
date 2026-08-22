@@ -10,7 +10,7 @@ use App\Http\Controllers\ImageController;
 Route::middleware(['auth', 'customer'])->group(function () {
 
 
-    // ── Inquiry (replaces cart/checkout for v2 catalog flow) ──────────────
+     //  Inquiry (replaces cart/checkout for v2 catalog flow) 
     Route::post('/inquire/{product}', [InquiryController::class, 'store'])
          ->name('inquire.store');
     Route::get('/profile/inquiries', [InquiryController::class, 'history'])

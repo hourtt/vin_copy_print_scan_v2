@@ -26,25 +26,25 @@ class InquiryController extends Controller
     {
         $user = $request->user();
 
-        // ── Phone-number gate ──────────────────────────────────────────────
+        //  Phone-number gate 
         if (empty($user->phone_number)) {
             return response()->json(['needs_phone' => true]);
         }
 
-        // ── Validate language input ────────────────────────────────────────
+        //  Validate language input 
         $language = in_array($request->input('language'), ['en', 'km', 'zh'])
             ? $request->input('language')
             : 'en';
 
-        // ── Build prefill message ──────────────────────────────────────────
+        //  Build prefill message 
         $text = $this->buildMessage($user, $product, $language);
 
-        // ── Build Telegram deep-link ───────────────────────────────────────
+        //  Build Telegram deep-link 
         $username = config('services.telegram.owner_username');
         $telegramUrl = 'https://t.me/' . ltrim($username, '@')
                        . '?text=' . rawurlencode($text);
 
-        // ── Persist inquiry snapshot (best-effort — never block the redirect) ──
+        //  Persist inquiry snapshot (best-effort — never block the redirect) 
         try {
             Inquiry::create([
                 'user_id'                => $user->id,
@@ -80,9 +80,9 @@ class InquiryController extends Controller
         return view('profile.inquiries.index', compact('inquiries'));
     }
 
-    // ────────────────────────────────────────────────────────────────────────
+    // 
     // Private helpers
-    // ────────────────────────────────────────────────────────────────────────
+    // 
 
     /**
      * Build the Telegram prefill message in the selected language.

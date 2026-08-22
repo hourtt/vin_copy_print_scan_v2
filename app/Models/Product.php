@@ -94,7 +94,7 @@ class Product extends Model
         'sales_count' => 'integer',
     ];
 
-    // ─ Relationships 
+    //  Relationships 
 
     /**
      * One product belongs to one category.
@@ -135,7 +135,7 @@ class Product extends Model
 
 
 
-    // ─ Scopes 
+    //  Scopes 
 
     /**
      * Only return featured products.
@@ -178,7 +178,7 @@ class Product extends Model
         return $query->latest();
     }
 
-    // ─ Accessors / Helpers ─
+    //  Accessors / Helpers 
 
     /**
      * Get stock status logic formatted for UI.

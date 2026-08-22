@@ -129,7 +129,7 @@ class User extends Authenticatable
         return $this->role === 'admin' ? route('admin.dashboard') : route('dashboard');
     }
 
-    // ─ Relationships ─
+    //  Relationships 
 
     /**
      * All inquiries sent by this user.
