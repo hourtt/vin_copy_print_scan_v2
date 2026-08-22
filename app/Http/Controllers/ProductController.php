@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Inquiry;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -109,13 +109,6 @@ class ProductController extends Controller
 
     public function admin_index()
     {
-        //  Removed unused $products paginator (was fetching 20 products the view never rendered)
-        // Fetch what the dashboard table actually shows: the 10 most recent orders
-        $recentOrders = Order::with('user', 'items.product.category')
-            ->latest()
-            ->take(10)
-            ->get();
-
         $now = Carbon::now();
 
         $currentMonthStart = $now->copy()->startOfMonth();
@@ -123,43 +116,46 @@ class ProductController extends Controller
         $previousMonthStart = $now->copy()->subMonth()->startOfMonth();
         $previousMonthEnd = $now->copy()->subMonth()->endOfMonth();
 
-        //  All 8 stat queries cached as plain scalars — safe with file, redis, or any driver.
-        // Cache key includes the month so it naturally invalidates each new month.
+        // Cached stat queries
         $cacheKey = 'admin.dashboard.stats.' . $now->format('Y-m');
         $stats = cache()->remember($cacheKey, now()->addMinutes(5), function () use ($currentMonthStart, $currentMonthEnd, $previousMonthStart, $previousMonthEnd) {
             return [
-                'totalRevenue' => (float) (Order::where('status', 'delivered')->sum('total') ?? 0),
-                'currentRevenue' => (float) (Order::where('status', 'delivered')->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->sum('total') ?? 0),
-                'previousRevenue' => (float) (Order::where('status', 'delivered')->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->sum('total') ?? 0),
-                'totalOrders' => (int) Order::count(),
-                'currentOrders' => (int) Order::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count(),
-                'previousOrders' => (int) Order::whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count(),
-                'activeCustomers' => (int) User::where('role', 'user')->count(),
-                'currentCustomers' => (int) User::where('role', 'user')->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count(),
-                'previousCustomers' => (int) User::where('role', 'user')->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count(),
+                'totalInquiries' => (int) Inquiry::count(),
+                'currentInquiries' => (int) Inquiry::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count(),
+                'previousInquiries' => (int) Inquiry::whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count(),
+                'totalProducts' => (int) Product::count(),
+                'currentProducts' => (int) Product::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count(),
+                'previousProducts' => (int) Product::whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count(),
+                'activeCustomers'   => (int) User::where('role', 'customer')->count(),
+                'currentCustomers'  => (int) User::where('role', 'customer')->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->count(),
+                'previousCustomers' => (int) User::where('role', 'customer')->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])->count(),
+                'totalCategories' => (int) Category::count(),
             ];
         });
 
-        $totalRevenue = $stats['totalRevenue'];
-        $totalOrders = $stats['totalOrders'];
+        $totalInquiries = $stats['totalInquiries'];
+        $totalProducts = $stats['totalProducts'];
         $activeCustomers = $stats['activeCustomers'];
-        $activeIssues = 0;
+        $totalCategories = $stats['totalCategories'];
 
-        $revenueGrowth = $this->calculatePercentageChange($stats['currentRevenue'], $stats['previousRevenue']);
-        $orderGrowth = $this->calculatePercentageChange($stats['currentOrders'], $stats['previousOrders']);
+        $inquiryGrowth = $this->calculatePercentageChange($stats['currentInquiries'], $stats['previousInquiries']);
+        $productGrowth = $this->calculatePercentageChange($stats['currentProducts'], $stats['previousProducts']);
         $customerGrowth = $this->calculatePercentageChange($stats['currentCustomers'], $stats['previousCustomers']);
-        $issueGrowth = $this->calculatePercentageChange(0, 0);
+
+        $recentInquiries = Inquiry::with('user', 'product.category')
+            ->latest()
+            ->take(10)
+            ->get();
 
         return view('components.auth.admin.dashboard', compact(
-            'recentOrders',
-            'totalRevenue',
-            'totalOrders',
+            'recentInquiries',
+            'totalInquiries',
+            'totalProducts',
             'activeCustomers',
-            'activeIssues',
-            'revenueGrowth',
-            'orderGrowth',
-            'customerGrowth',
-            'issueGrowth'
+            'totalCategories',
+            'inquiryGrowth',
+            'productGrowth',
+            'customerGrowth'
         ));
     }
 
@@ -173,7 +169,7 @@ class ProductController extends Controller
         }
 
         // Strict category isolation — only Printers (category_id = 1)
-        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand', 'voucher'])
+        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand'])
             ->where('category_id', 1);
 
         if ($request->query('search')) {
@@ -246,7 +242,7 @@ class ProductController extends Controller
         }
 
         // Strict category isolation — only Toners (category_id = 2)
-        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand', 'voucher'])
+        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand'])
             ->where('category_id', 2);
 
         if ($request->query('search')) {
@@ -312,7 +308,7 @@ class ProductController extends Controller
             $items = $breadcrumbTrail->resolveForCategory('Ink', route('products.inks.index'));
         }
 
-        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand', 'voucher'])
+        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand'])
             ->whereHas('category', fn($q) => $q->where('slug', 'ink-cartridges'));
 
         if ($request->query('search')) {
@@ -379,7 +375,7 @@ class ProductController extends Controller
         }
 
         // Papers grid groups by category, so we need 'category' for AJAX too
-        $query = Product::with($isAjax ? ['brand', 'category'] : ['category', 'brand', 'voucher'])
+        $query = Product::with($isAjax ? ['brand', 'category'] : ['category', 'brand'])
             ->whereHas('category', fn($q) => $q->where('slug', 'paper'));
 
         if ($request->query('search')) {
