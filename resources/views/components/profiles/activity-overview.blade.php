@@ -15,7 +15,7 @@
             <span class="text-sm text-gray-500 ml-2">total inquiries sent</span>
         </div>
         <div class="md:text-right">
-            <a href="{{ route('inquire.history') }}"
+            <a href="{{ route('profile.inquiries.index') }}"
                 class="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors">View
                 History</a>
         </div>

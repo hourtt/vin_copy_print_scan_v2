@@ -10,7 +10,7 @@
             <span x-show="isSidebarExpanded">Home</span>
         </a>
 
-        <a href="{{ route('inquire.history') }}"
+        <a href="{{ route('profile.inquiries.index') }}"
             class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors whitespace-nowrap"
             title="Inquiries">
             <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"

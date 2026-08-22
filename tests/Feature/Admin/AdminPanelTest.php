@@ -122,9 +122,10 @@ class AdminPanelTest extends TestCase
         $this->assertDatabaseHas('products', ['name' => 'HP LaserJet Pro Max']);
 
         // Toggle featured
+        $initialFeatured = (bool) $product->is_featured;
         $responseToggle = $this->actingAs($this->admin)->patchJson(route('admin.products.toggle-featured', $product));
         $responseToggle->assertStatus(200);
-        $responseToggle->assertJson(['is_featured' => true]);
+        $responseToggle->assertJson(['is_featured' => !$initialFeatured]);
 
         // Archive / Soft delete
         $responseDelete = $this->actingAs($this->admin)->delete(route('admin.products.destroy', $product));

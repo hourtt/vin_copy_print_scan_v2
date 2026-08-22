@@ -99,4 +99,16 @@ class ProfileTest extends TestCase
 
         $this->assertNotNull($user->fresh());
     }
+
+    public function test_user_can_view_their_inquiries(): void
+    {
+        $user = User::factory()->create(['role' => 'customer']);
+
+        $response = $this
+            ->actingAs($user)
+            ->get(route('profile.inquiries.index'));
+
+        $response->assertOk();
+        $response->assertSee('My Inquiries');
+    }
 }
