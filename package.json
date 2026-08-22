@@ -1,5 +1,6 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
+    "name": "vin_copy_print_scan_v2",
     "private": true,
     "type": "module",
     "scripts": {
