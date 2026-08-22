@@ -23,9 +23,6 @@
                     <button @click="tab = 'shop'" :class="tab === 'shop' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
                         Store Config
                     </button>
-                    <button @click="tab = 'shipping'" :class="tab === 'shipping' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
-                        Shipping Methods
-                    </button>
                     <button @click="tab = 'profile'" :class="tab === 'profile' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
                         My Profile
                     </button>
@@ -76,64 +73,6 @@
                         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">Save Store Config</button>
                     </div>
                 </form>
-            </div>
-
-            {{-- Tab: Shipping Methods --}}
-            <div x-show="tab === 'shipping'" x-cloak class="space-y-4">
-                <div class="flex justify-between items-center bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900">Shipping Methods</h3>
-                        <p class="text-sm text-gray-500">Manage delivery options available at checkout.</p>
-                    </div>
-                    <a href="{{ route('admin.settings.shipping.create') }}" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
-                        Add Shipping Method
-                    </a>
-                </div>
-
-                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-500">Method</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-500">Est. Time</th>
-                                <th class="px-4 py-3 text-right font-semibold text-gray-500">Fee ($)</th>
-                                <th class="px-4 py-3 text-center font-semibold text-gray-500">Status</th>
-                                <th class="px-4 py-3 text-right font-semibold text-gray-500">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @forelse ($shippingMethods as $method)
-                                <tr>
-                                    <td class="px-4 py-3">
-                                        <p class="font-medium text-gray-900">{{ $method->name }}</p>
-                                        <p class="text-xs text-gray-500">{{ $method->description }}</p>
-                                    </td>
-                                    <td class="px-4 py-3 text-gray-600">{{ $method->estimated_days }} days</td>
-                                    <td class="px-4 py-3 text-right font-medium">${{ number_format($method->fee, 2) }}</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <div x-data="{ active: {{ $method->is_active ? 'true' : 'false' }} }">
-                                            <button @click="fetch('{{ route('admin.settings.shipping.toggle', $method) }}', { method: 'PATCH', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } }).then(r=>r.json()).then(d=>active=d.is_active)"
-                                                    :class="active ? 'bg-green-500' : 'bg-gray-200'" class="relative inline-flex h-5 w-9 items-center rounded-full transition-colors cursor-pointer">
-                                                <span :class="active ? 'translate-x-5' : 'translate-x-1'" class="inline-block h-3 w-3 transform rounded-full bg-white transition-transform"></span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-right">
-                                        <div class="flex items-center justify-end gap-2">
-                                            <a href="{{ route('admin.settings.shipping.edit', $method) }}" class="text-xs font-medium text-gray-700 bg-white border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50">Edit</a>
-                                            <form method="POST" action="{{ route('admin.settings.shipping.destroy', $method) }}" x-data @submit.prevent="if(confirm('Delete {{ $method->name }}?')) $el.submit()">
-                                                @csrf @method('DELETE')
-                                                <button type="submit" class="text-xs font-medium text-red-600 bg-white border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50">Delete</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">No shipping methods configured.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
             </div>
 
             {{-- Tab: My Profile --}}

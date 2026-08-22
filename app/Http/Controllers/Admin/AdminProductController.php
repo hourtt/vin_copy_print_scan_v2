@@ -30,8 +30,9 @@ class AdminProductController extends Controller
         }
 
         // Category filter
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
+        $categoryId = $request->input('category_id', $request->input('category'));
+        if (!empty($categoryId)) {
+            $query->where('category_id', $categoryId);
         }
 
         // Brand filter
@@ -40,8 +41,9 @@ class AdminProductController extends Controller
         }
 
         // Stock filter
-        if ($request->filled('stock_status')) {
-            match ($request->stock_status) {
+        $stockStatus = $request->input('stock_status', $request->input('status'));
+        if (!empty($stockStatus)) {
+            match ($stockStatus) {
                 'in_stock'    => $query->where('stock', '>', 0)->whereNull('deleted_at'),
                 'low_stock'   => $query->whereBetween('stock', [1, 5])->whereNull('deleted_at'),
                 'out_of_stock'=> $query->where('stock', 0)->whereNull('deleted_at'),

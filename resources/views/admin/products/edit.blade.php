@@ -5,7 +5,7 @@
           enctype="multipart/form-data"
           x-data="{
               newPreviews: [],
-              specs: {{ $product->specifications ? json_encode(collect($product->specifications)->map(fn($v,$k) => ['key'=>$k,'value'=>$v])->values()) : '[]' }},
+              specs: {{ $product->specifications ? json_encode(collect($product->specifications)->map(fn($v,$k) => is_array($v) && array_key_exists('key', $v) ? ['key' => $v['key'], 'value' => $v['value'] ?? ''] : ['key' => (string)$k, 'value' => (string)$v])->values()) : '[]' }},
               addSpec() { this.specs.push({ key: '', value: '' }); },
               removeSpec(i) { this.specs.splice(i, 1); },
               handleNewImages(files) {

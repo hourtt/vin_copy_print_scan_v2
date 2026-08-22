@@ -4,10 +4,14 @@
         <p class="text-sm text-gray-500">No specifications defined.</p>
     @else
         <dl class="divide-y divide-gray-100 border border-gray-100 rounded-lg">
-            @foreach ($product->specifications as $spec)
+            @foreach ($product->specifications as $key => $spec)
+                @php
+                    $label = is_array($spec) ? ($spec['key'] ?? $key) : $key;
+                    $value = is_array($spec) ? ($spec['value'] ?? '') : $spec;
+                @endphp
                 <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 hover:bg-gray-50 transition-colors">
-                    <dt class="text-sm font-medium text-gray-900">{{ $spec['key'] }}</dt>
-                    <dd class="mt-1 text-sm text-gray-600 sm:mt-0 sm:col-span-2">{{ $spec['value'] }}</dd>
+                    <dt class="text-sm font-medium text-gray-900">{{ $label }}</dt>
+                    <dd class="mt-1 text-sm text-gray-600 sm:mt-0 sm:col-span-2">{{ $value }}</dd>
                 </div>
             @endforeach
         </dl>

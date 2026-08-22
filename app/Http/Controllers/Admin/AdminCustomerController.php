@@ -10,9 +10,8 @@ class AdminCustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::where('role', 'user')
-            ->withCount('orders')
-            ->withSum('orders', 'total');
+        $query = User::where('role', 'customer')
+            ->withCount('inquiries');
 
         // Search by name or email
         if ($request->filled('search')) {
@@ -43,20 +42,14 @@ class AdminCustomerController extends Controller
         // Never allow viewing another admin through this panel
         abort_if($user->role === 'admin', 403, 'Unauthorized.');
 
-        $orders = $user->orders()
-            ->with('items.product')
+        $inquiries = $user->inquiries()
+            ->with('product')
             ->latest()
             ->paginate(10);
 
-        //  Single query: both aggregates resolved in one SELECT with withSum + withCount
-        $user = User::withSum('orders', 'total')
-            ->withCount('orders')
-            ->find($user->id);
+        $totalInquiries = $user->inquiries()->count();
 
-        $lifetimeSpend = $user->orders_sum_total ?? 0;
-        $totalOrders = $user->orders_count ?? 0;
-
-        return view('admin.customers.show', compact('user', 'orders', 'lifetimeSpend', 'totalOrders'));
+        return view('admin.customers.show', compact('user', 'inquiries', 'totalInquiries'));
     }
 
     public function toggleStatus(User $user)

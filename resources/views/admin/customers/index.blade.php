@@ -49,8 +49,7 @@
                             <tr>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Customer</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Phone</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Orders</th>
-                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Lifetime Spend</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Inquiries</th>
                                 <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
                                 <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
                             </tr>
@@ -70,8 +69,7 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-gray-600">{{ $customer->phone_number ?? '—' }}</td>
-                                    <td class="px-4 py-3 text-center text-gray-900 font-medium">{{ $customer->orders_count }}</td>
-                                    <td class="px-4 py-3 text-right font-medium text-green-700">${{ number_format($customer->orders_sum_total ?? 0, 2) }}</td>
+                                    <td class="px-4 py-3 text-center text-gray-900 font-medium">{{ $customer->inquiries_count ?? 0 }}</td>
                                     <td class="px-4 py-3 text-center">
                                         @if ($customer->is_banned)
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Banned</span>

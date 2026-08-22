@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShopSetting;
-use App\Models\ShippingMethod;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -16,11 +15,10 @@ class AdminSettingsController extends Controller
 {
     public function index()
     {
-        $admin           = Auth::user();
-        $shopSettings    = ShopSetting::pluck('value', 'key');
-        $shippingMethods = ShippingMethod::orderBy('name')->get();
+        $admin        = Auth::user();
+        $shopSettings = ShopSetting::pluck('value', 'key');
 
-        return view('admin.settings.index', compact('admin', 'shopSettings', 'shippingMethods'));
+        return view('admin.settings.index', compact('admin', 'shopSettings'));
     }
 
     public function updateShop(UpdateShopSettingsRequest $request)

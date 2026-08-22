@@ -38,10 +38,7 @@
         @endif
 
         {{-- Filters --}}
-        <form method="GET" action="{{ route('admin.products.index') }}"
-            class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-            @include('admin.products.partials.index.filters')
-        </form>
+        @include('admin.products.partials.index.filters')
 
         {{-- Product Table --}}
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">

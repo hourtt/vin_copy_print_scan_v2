@@ -68,73 +68,70 @@
                 </div>
             </div>
 
-            {{-- RIGHT: Order History --}}
+            {{-- RIGHT: Inquiry History --}}
             <div class="lg:col-span-2 space-y-5">
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4">
                     <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Orders</p>
-                        <p class="text-2xl font-bold text-gray-900 mt-1">{{ $totalOrders }}</p>
-                    </div>
-                    <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Lifetime Spend</p>
-                        <p class="text-2xl font-bold text-green-600 mt-1">${{ number_format($lifetimeSpend, 2) }}</p>
+                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Inquiries</p>
+                        <p class="text-2xl font-bold text-gray-900 mt-1">{{ $totalInquiries ?? 0 }}</p>
                     </div>
                 </div>
 
                 <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                     <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
-                        <h3 class="text-sm font-semibold text-gray-700">Order History</h3>
+                        <h3 class="text-sm font-semibold text-gray-700">Inquiry History</h3>
                     </div>
 
-                    @if ($orders->isEmpty())
+                    @if ($inquiries->isEmpty())
                         <div class="px-5 py-8 text-center text-gray-400 text-sm">
-                            This customer hasn't placed any orders yet.
+                            This customer hasn't submitted any inquiries yet.
                         </div>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Order</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Product</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Price</th>
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Date</th>
-                                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500">Status</th>
-                                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">Total</th>
-                                        <th class="px-4 py-2"></th>
+                                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100">
-                                    @foreach ($orders as $order)
-                                        @php
-                                            $badgeClass = match($order->status) {
-                                                'pending'          => 'bg-yellow-50 text-yellow-700',
-                                                'processing'       => 'bg-blue-50 text-blue-700',
-                                                'packed'           => 'bg-indigo-50 text-indigo-700',
-                                                'out_for_delivery' => 'bg-purple-50 text-purple-700',
-                                                'delivered'        => 'bg-green-50 text-green-700',
-                                                'cancelled'        => 'bg-red-50 text-red-700',
-                                                default            => 'bg-gray-100 text-gray-600',
-                                            };
-                                        @endphp
+                                    @foreach ($inquiries as $inquiry)
                                         <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="px-4 py-3 font-mono text-xs">#{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</td>
-                                            <td class="px-4 py-3 text-gray-600">{{ $order->created_at->format('d M Y') }}</td>
-                                            <td class="px-4 py-3 text-center">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium {{ $badgeClass }}">
-                                                    {{ $order->status_label }}
-                                                </span>
+                                            <td class="px-4 py-3">
+                                                <div class="font-medium text-gray-900 line-clamp-1 max-w-[240px]">{{ $inquiry->product_name_snapshot }}</div>
+                                                @if($inquiry->message)
+                                                    <div class="text-xs text-gray-500 line-clamp-1 mt-0.5">{{ $inquiry->message }}</div>
+                                                @endif
                                             </td>
-                                            <td class="px-4 py-3 text-right font-medium">${{ number_format($order->total, 2) }}</td>
+                                            <td class="px-4 py-3 text-gray-900 font-medium">
+                                                ${{ number_format($inquiry->product_price_snapshot, 2) }}
+                                            </td>
+                                            <td class="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                                                {{ $inquiry->created_at->format('d M Y, H:i') }}
+                                            </td>
                                             <td class="px-4 py-3 text-right">
-                                                <a href="{{ route('admin.sales.show', $order) }}" class="text-indigo-600 hover:text-indigo-800 text-xs font-medium">View</a>
+                                                @if ($inquiry->user_phone_snapshot)
+                                                    <a href="https://t.me/{{ ltrim($inquiry->user_phone_snapshot, '+') }}"
+                                                       target="_blank" rel="noopener noreferrer"
+                                                       class="inline-flex items-center gap-1 text-xs font-medium text-[#1D9E75] hover:underline">
+                                                        Reply
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('admin.inquiries.index', ['search' => $user->email]) }}"
+                                                       class="text-indigo-600 hover:text-indigo-800 text-xs font-medium">View</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
-                        @if ($orders->hasPages())
-                            <div class="px-4 py-3 border-t border-gray-100">{{ $orders->links() }}</div>
+                        @if ($inquiries->hasPages())
+                            <div class="px-4 py-3 border-t border-gray-100">{{ $inquiries->links() }}</div>
                         @endif
                     @endif
                 </div>
