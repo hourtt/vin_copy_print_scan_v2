@@ -45,8 +45,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        app(\App\Services\CartService::class)->mergeSessionToDb();
-
         return redirect($user->getRedirectRoute());
     }
 }

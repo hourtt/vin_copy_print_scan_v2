@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PrinterController;
-use App\Http\Controllers\StripeController;
-use App\Http\Controllers\AbaController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -27,8 +25,3 @@ Route::get('/toners', [ProductController::class, 'index'])->defaults('category',
 Route::get('/papers', [ProductController::class, 'index'])->defaults('category', 'papers')->name('api.papers.index');
 Route::get('/inks', [ProductController::class, 'index'])->defaults('category', 'ink')->name('api.ink.index');
 
-// Webhooks
-Route::get('/checkout/stripe/{order}', [StripeController::class, 'checkout'])->name('checkout.stripe');
-Route::get('/checkout/aba/{order}', [AbaController::class, 'checkout'])->name('checkout.aba');
-Route::post('/webhooks/stripe', [StripeController::class, 'webhook'])->name('api.webhooks.stripe');
-Route::post('/webhooks/aba', [AbaController::class, 'webhook'])->name('api.webhooks.aba');
