@@ -45,4 +45,8 @@ return [
         'embed_url' => env('GOOGLE_MAPS_EMBED'),
         'link' => env('GOOGLE_MAPS_LINK'),
     ],
+
+    'telegram' => [
+        'owner_username' => env('TELEGRAM_OWNER_USERNAME'),
+    ],
 ];
