@@ -16,8 +16,7 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             PrinterModelSeeder::class,
             ProductSeeder::class,
-            ShippingMethodSeeder::class,
-            VoucherSeeder::class,
+            ShopSettingSeeder::class,
         ]);
     }
 }

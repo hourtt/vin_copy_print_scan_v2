@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::dropIfExists('orders');
         Schema::dropIfExists('cart_items');
         Schema::dropIfExists('carts');
+        Schema::dropIfExists('voucher_categories');
         Schema::dropIfExists('voucher_products');
         Schema::dropIfExists('vouchers');
         Schema::dropIfExists('shipping_methods');

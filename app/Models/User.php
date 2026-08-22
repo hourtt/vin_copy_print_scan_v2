@@ -107,6 +107,7 @@ class User extends Authenticatable
             'two_factor_recovery_codes' => 'array',
             'two_factor_confirmed_at' => 'datetime',
             'notify_new_device_login' => 'boolean',
+            'is_banned' => 'boolean',
         ];
     }
 

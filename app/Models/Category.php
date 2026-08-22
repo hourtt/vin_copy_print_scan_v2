@@ -56,12 +56,4 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
-
-    /**
-     * Vouchers that apply to this category.
-     */
-    public function vouchers()
-    {
-        return $this->belongsToMany(Voucher::class, 'voucher_categories', 'category_id', 'voucher_id');
-    }
 }
