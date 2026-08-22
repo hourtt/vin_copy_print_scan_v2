@@ -41,7 +41,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Store Name</label>
-                            <input type="text" name="shop_name" value="{{ old('shop_name', $shopSettings['shop_name'] ?? 'Vin Copy Print Scan') }}" required
+                            <input type="text" name="shop_name" value="{{ old('shop_name', $shopSettings['shop_name'] ?? 'Vin Copy Print Scan V2') }}" required
                                    class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
