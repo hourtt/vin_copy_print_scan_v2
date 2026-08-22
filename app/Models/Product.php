@@ -133,21 +133,7 @@ class Product extends Model
         )->with('brand');
     }
 
-    /**
-     * Vouchers that can be applied to this product.
-     */
-    public function voucher()
-    {
-        return $this->belongsToMany(Voucher::class, 'voucher_products', 'product_id', 'voucher_id');
-    }
 
-    /**
-     * Order items that reference this product.
-     */
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
 
     // ─ Scopes 
 

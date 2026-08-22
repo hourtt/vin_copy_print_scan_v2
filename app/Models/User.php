@@ -131,19 +131,11 @@ class User extends Authenticatable
     // ─ Relationships ─
 
     /**
-     * All orders placed by this user.
+     * All inquiries sent by this user.
      */
-    public function orders()
+    public function inquiries()
     {
-        return $this->hasMany(Order::class);
-    }
-
-    /**
-     * The user's shopping cart.
-     */
-    public function cart()
-    {
-        return $this->hasOne(Cart::class);
+        return $this->hasMany(Inquiry::class);
     }
 
     /**
