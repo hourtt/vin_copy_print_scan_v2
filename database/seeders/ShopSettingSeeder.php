@@ -13,7 +13,7 @@ class ShopSettingSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            'shop_name'        => 'Vin Copy Print Scan',
+            'shop_name'        => 'Vin Copy Print Scan V2',
             'shop_email'       => 'contact@vincopy.com',
             'shop_phone'       => '+1 234 567 8900',
             'shop_address'     => "123 Print Street\nPrinting District, CA 90210",
