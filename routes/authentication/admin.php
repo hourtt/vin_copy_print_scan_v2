@@ -2,11 +2,9 @@
 
 use App\Http\Controllers\Admin\AdminCustomerController;
 use App\Http\Controllers\Admin\AdminProductController;
-use App\Http\Controllers\Admin\AdminSalesController;
-use App\Http\Controllers\Admin\AdminSettingsController;
-use App\Http\Controllers\Admin\AdminVoucherController;
 use App\Http\Controllers\Admin\AdminCategoryController;
-use App\Http\Controllers\Admin\AdminShippingController;
+use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\AdminInquiryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,25 +46,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/categories/{category}/products', [AdminCategoryController::class, 'products'])
         ->name('admin.categories.products');
 
-    // Sales / Orders
-    Route::get('/sales', [AdminSalesController::class, 'index'])->name('admin.sales.index');
-    Route::get('/sales/{order}', [AdminSalesController::class, 'show'])->name('admin.sales.show');
-    Route::patch('/sales/{order}/status', [AdminSalesController::class, 'updateStatus'])->name('admin.sales.update-status');
-    Route::patch('/sales/{order}/tracking', [AdminSalesController::class, 'updateTracking'])->name('admin.sales.update-tracking');
 
-    // Vouchers
-    Route::resource('/vouchers', AdminVoucherController::class)
-        ->except(['show'])
-        ->names([
-            'index'   => 'admin.vouchers.index',
-            'create'  => 'admin.vouchers.create',
-            'store'   => 'admin.vouchers.store',
-            'edit'    => 'admin.vouchers.edit',
-            'update'  => 'admin.vouchers.update',
-            'destroy' => 'admin.vouchers.destroy',
-        ]);
-    Route::patch('/vouchers/{voucher}/toggle', [AdminVoucherController::class, 'toggle'])
-        ->name('admin.vouchers.toggle');
 
     // Customers
     Route::get('/customers', [AdminCustomerController::class, 'index'])->name('admin.customers.index');
@@ -74,23 +54,17 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::patch('/customers/{user}/toggle-status', [AdminCustomerController::class, 'toggleStatus'])
         ->name('admin.customers.toggle-status');
 
+    // ── Inquiries (v2 — replaces Sales) ─────────────────────────────
+    Route::get('/inquiries', [AdminInquiryController::class, 'index'])
+        ->name('admin.inquiries.index');
+    Route::get('/inquiries/export', [AdminInquiryController::class, 'export'])
+        ->name('admin.inquiries.export');
+
     // Settings
     Route::get('/settings', [AdminSettingsController::class, 'index'])->name('admin.settings.index');
     Route::patch('/settings/shop', [AdminSettingsController::class, 'updateShop'])->name('admin.settings.update-shop');
     Route::patch('/settings/admin', [AdminSettingsController::class, 'updateAdmin'])->name('admin.settings.update-admin');
     Route::patch('/settings/password', [AdminSettingsController::class, 'updatePassword'])->name('admin.settings.update-password');
 
-    // Shipping Methods (full CRUD within settings)
-    Route::resource('/settings/shipping', AdminShippingController::class)
-        ->except(['show'])
-        ->names([
-            'index'   => 'admin.settings.shipping.index',
-            'create'  => 'admin.settings.shipping.create',
-            'store'   => 'admin.settings.shipping.store',
-            'edit'    => 'admin.settings.shipping.edit',
-            'update'  => 'admin.settings.shipping.update',
-            'destroy' => 'admin.settings.shipping.destroy',
-        ]);
-    Route::patch('/settings/shipping/{shippingMethod}/toggle', [AdminShippingController::class, 'toggle'])
-        ->name('admin.settings.shipping.toggle');
+
 });
