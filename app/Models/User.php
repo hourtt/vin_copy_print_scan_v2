@@ -4,8 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -126,7 +124,7 @@ class User extends Authenticatable
      */
     public function getRedirectRoute(): string
     {
-        return $this->role === 'admin' ? route('admin.dashboard') : route('dashboard');
+        return $this->role === 'admin' ? 'admin.dashbaord' : 'dashboard';
     }
 
     //  Relationships 
@@ -153,11 +151,6 @@ class User extends Authenticatable
     public function securityActivityLogs()
     {
         return $this->hasMany(SecurityActivityLog::class);
-    }
-
-    public function addresses()
-    {
-        return $this->hasMany(Address::class);
     }
 
     /**

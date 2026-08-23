@@ -1,10 +1,8 @@
 <x-app-layout>
     <div class="flex flex-col md:flex-row min-h-screen bg-gray-50" x-data="{
         activeTab: 'general',
-        isSidebarExpanded: true,
-        defaultAddressHtml: {{ \Illuminate\Support\Js::from($defaultAddress ? $defaultAddress->address . '<br>' . $defaultAddress->city . ($defaultAddress->state ? ', ' . $defaultAddress->state : '') . ' ' . $defaultAddress->zip_code : '') }}
-    }"
-        @update-default-address.window="defaultAddressHtml = $event.detail">
+        isSidebarExpanded: true
+    }">
 
         {{-- PANEL 1: FAR-LEFT GLOBAL NAV --}}
         <x-profiles.sidebar-nav />
@@ -87,9 +85,6 @@
         </div>
     </x-profiles.modal>
 
-    {{-- MODAL — Address Management (Full CRUD) --}}
-    <x-address.address-modal />
-
     {{--  JAVASCRIPT --}}
     @push('scripts')
         @vite(['resources/js/profile.js'])
@@ -102,11 +97,6 @@
             // Auto-open if session status indicates recent update via the old modal flow
             @if (session('status') === 'password-updated')
                 document.addEventListener('DOMContentLoaded', () => openModal('modal-password'));
-            @endif
-
-            // Auto-open address modal after address save
-            @if (session('inline_field') === 'address')
-                document.addEventListener('DOMContentLoaded', () => openModal('modal-address'));
             @endif
         </script>
     @endpush
