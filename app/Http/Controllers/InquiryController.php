@@ -42,25 +42,25 @@ class InquiryController extends Controller
         //  Build Telegram deep-link 
         $username = config('services.telegram.owner_username');
         $telegramUrl = 'https://t.me/' . ltrim($username, '@')
-                       . '?text=' . rawurlencode($text);
+            . '?text=' . rawurlencode($text);
 
         //  Persist inquiry snapshot (best-effort — never block the redirect) 
         try {
             Inquiry::create([
-                'user_id'                => $user->id,
-                'product_id'             => $product->id,
-                'product_name_snapshot'  => $product->name,
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'product_name_snapshot' => $product->name,
                 'product_price_snapshot' => $product->discount_price ?? $product->price,
-                'user_name_snapshot'     => trim("{$user->first_name} {$user->last_name}"),
-                'user_email_snapshot'    => $user->email,
-                'user_phone_snapshot'    => $user->phone_number,
-                'language'               => $language,
+                'user_name_snapshot' => trim("{$user->first_name} {$user->last_name}"),
+                'user_email_snapshot' => $user->email,
+                'user_phone_snapshot' => $user->phone_number,
+                'language' => $language,
             ]);
         } catch (\Throwable $e) {
             \Log::error('Inquiry persistence failed', [
-                'user_id'    => $user->id,
+                'user_id' => $user->id,
                 'product_id' => $product->id,
-                'error'      => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
 
@@ -89,11 +89,11 @@ class InquiryController extends Controller
      */
     private function buildMessage(User $user, Product $product, string $language): string
     {
-        $name    = trim("{$user->first_name} {$user->last_name}");
-        $phone   = $user->phone_number;
-        $email   = $user->email;
-        $pName   = $product->name;
-        $price   = number_format($product->discount_price ?? $product->price, 2);
+        $name = trim("{$user->first_name} {$user->last_name}");
+        $phone = $user->phone_number;
+        $email = $user->email;
+        $pName = $product->name;
+        $price = number_format($product->discount_price ?? $product->price, 2);
 
         return match ($language) {
             'km' => implode("\n", [
@@ -101,18 +101,21 @@ class InquiryController extends Controller
                 "លេខទូរស័ព្ទ: {$phone}",
                 "អ៊ីមែល: {$email}",
                 "ខ្ញុំចាប់អារម្មណ៍លើ: {$pName} (\${$price})",
+                "ខ្ញុំចង់ដឹងបន្ថែមពីព័ត៌មានផលិតផលនេះ និងបញ្ជាក់ពីភាពអាចរកបានរបស់វា មុនពេលធ្វើការកុម្ម៉ង់ជាមួយអ្នក។",
             ]),
             'zh' => implode("\n", [
-                "你好！我是 {$name}。",
-                "电话: {$phone}",
-                "邮箱: {$email}",
-                "我对以下产品感兴趣：{$pName}（\${$price}）",
+                "你好，我是 {$name}。",
+                "电话：{$phone}",
+                "邮箱：{$email}",
+                "我看中了这个产品：{$pName}（\${$price}）",
+                "想多了解一下，看看现在还有没有货，麻烦回复一下，谢谢！",
             ]),
             default => implode("\n", [
                 "Hi! I'm {$name}.",
                 "Phone: {$phone}",
                 "Email: {$email}",
                 "I'm interested in: {$pName} (\${$price})",
+                "I would like to know more information about this product and confirm its availability before and making order with you.",
             ]),
         };
     }

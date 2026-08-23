@@ -87,6 +87,9 @@ class ProfileController extends Controller
                     Rule::unique('users')->ignore($user->id),
                 ],
             ],
+            'phone_number' => [
+                'phone_number' => ['required', 'string', 'max:20'],
+            ],
             default => abort(422, 'Unknown field group.'),
         };
 
@@ -109,6 +112,7 @@ class ProfileController extends Controller
                     'first_name' => $user->first_name,
                     'last_name' => $user->last_name,
                     'email' => $user->email,
+                    'phone_number' => $user->phone_number,
                 ],
             ]);
         }
