@@ -4,7 +4,7 @@
 @guest
     {{-- Guest: redirect to login --}}
     <a href="{{ route('login') }}"
-       class="inline-flex items-center justify-center min-h-[36px] px-4 py-2 border border-[#e4e4e7] bg-white text-[#27272a] text-xs sm:text-sm font-semibold rounded-lg hover:border-[#1D9E75] hover:text-[#1D9E75] transition-all duration-200">
+       class="inline-flex items-center justify-center min-h-[36px] px-4 py-2 border border-[#e4e4e7] bg-white text-[#27272a] text-xs sm:text-sm font-semibold rounded-lg hover:border-[#2563EB] hover:text-[#2563EB] transition-all duration-200">
         Sign in to Inquire
     </a>
 @else
@@ -60,11 +60,11 @@
             :disabled="step === 'loading' || !{{ $isAvailable ? 'true' : 'false' }}"
             class="inline-flex items-center justify-center gap-1.5 min-h-[36px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200
                    {{ $isAvailable
-                       ? 'bg-[#1D9E75] text-white hover:brightness-95 active:scale-95'
+                       ? 'bg-[#2563EB] text-white hover:brightness-95 active:scale-95'
                        : 'bg-gray-100 text-gray-400 cursor-not-allowed' }}"
             :class="{
                 'opacity-60 cursor-wait': step === 'loading',
-                'bg-green-600': step === 'done',
+                'bg-blue-600': step === 'done',
             }"
         >
             {{-- Idle / Lang-pick: chat icon --}}
@@ -97,7 +97,7 @@
             x-transition:leave-end="opacity-0 scale-95 translate-y-1"
             x-cloak
             @click.outside="step = 'idle'"
-            class="absolute z-50 bottom-full mb-2 right-0 w-64 bg-white rounded-2xl border border-[#1D9E75]/30 shadow-[0_8px_32px_rgba(29,158,117,0.15)] overflow-hidden"
+            class="absolute z-50 bottom-full mb-2 right-0 w-64 bg-white rounded-2xl border border-[#2563EB]/30 shadow-[0_8px_32px_rgba(29,158,117,0.15)] overflow-hidden"
         >
             <div class="px-4 pt-3.5 pb-2">
                 <p class="text-[11px] font-semibold text-[#6B6B6B] uppercase tracking-wide">Inquire in</p>
@@ -105,19 +105,19 @@
             <div class="flex flex-col gap-0.5 px-2 pb-3">
                 {{-- English --}}
                 <button @click="choose('en')"
-                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[#27272a] hover:bg-[#1D9E75]/8 hover:text-[#1D9E75] transition-colors text-left">
+                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[#27272a] hover:bg-[#2563EB]/8 hover:text-[#2563EB] transition-colors text-left">
                     <span class="text-lg leading-none">🇺🇸</span>
                     <span>English</span>
                 </button>
                 {{-- Khmer --}}
                 <button @click="choose('km')"
-                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[#27272a] hover:bg-[#1D9E75]/8 hover:text-[#1D9E75] transition-colors text-left">
+                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[#27272a] hover:bg-[#2563EB]/8 hover:text-[#2563EB] transition-colors text-left">
                     <span class="text-lg leading-none">🇰🇭</span>
                     <span class="font-['Kantumruy_Pro',sans-serif]">ភាសាខ្មែរ</span>
                 </button>
                 {{-- Chinese --}}
                 <button @click="choose('zh')"
-                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[#27272a] hover:bg-[#1D9E75]/8 hover:text-[#1D9E75] transition-colors text-left">
+                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-[#27272a] hover:bg-[#2563EB]/8 hover:text-[#2563EB] transition-colors text-left">
                     <span class="text-lg leading-none">🇨🇳</span>
                     <span>中文</span>
                 </button>
@@ -125,3 +125,4 @@
         </div>
     </div>
 @endguest
+

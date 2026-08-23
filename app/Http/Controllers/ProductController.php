@@ -456,4 +456,10 @@ class ProductController extends Controller
 
         return redirect()->route('dashboard');
     }
+
+    public function show(Product $product)
+    {
+        $product->load(['category', 'brand', 'compatibleModels.brand', 'images']);
+        return view('products.show', compact('product'));
+    }
 }

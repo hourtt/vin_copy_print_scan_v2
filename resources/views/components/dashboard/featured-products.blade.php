@@ -79,7 +79,9 @@
                                     @endif
                                 </div>
 
-                                <x-inquire-button :product="$product" :isAvailable="$stock > 0" />
+                                <a href="{{ route('products.show', $product) }}" class="inline-flex items-center justify-center gap-1.5 min-h-[36px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 bg-[#2563EB] text-white hover:brightness-95 active:scale-95">
+                                    View Detail
+                                </a>
                             </div>
                         </div>
                     </article>

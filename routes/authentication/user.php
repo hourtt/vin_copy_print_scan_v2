@@ -9,5 +9,6 @@ Route::get('/printers', [ProductController::class, 'printers_index'])->name('pro
 Route::get('/toners', [ProductController::class, 'toners_index'])->name('products.toners.index');
 Route::get('/inks', [ProductController::class, 'inks_index'])->name('products.inks.index');
 Route::get('/papers', [ProductController::class, 'papers_index'])->name('products.papers.index');
+Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/breadcrumb/back', [ProductController::class, 'breadcrumbBack'])->name('breadcrumb.back');
 Route::view('/services', 'services.index')->name('services');
