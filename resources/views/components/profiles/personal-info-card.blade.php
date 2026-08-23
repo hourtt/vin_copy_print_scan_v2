@@ -81,7 +81,7 @@
         <div class="flex-1 text-sm text-gray-900 ie-display flex justify-between items-start w-full">
             <div>
                 <div id="ie-display-email" class="mt-1">{{ Auth::user()->email }}</div>
-                <div class="text-sm text-gray-500 mt-1">Phone not added</div>
+                <div class="text-sm text-gray-500 mt-1">{{ Auth::user()->phone_number ?: 'Phone not added' }}</div>
             </div>
             <button type="button"
                 class="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors mt-1"

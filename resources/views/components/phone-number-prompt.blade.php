@@ -16,9 +16,31 @@
                 });
             },
 
+            sanitizeInput() {
+                // Strip anything that isn't a digit as the user types
+                this.phoneNumber = this.phoneNumber.replace(/[^\d]/g, '');
+            },
+
+            validatePhone(number) {
+                // Cambodian mobile numbers: start with 0, followed by 8-9 more digits
+                // e.g. 012345678 (9 digits) or 0921234567 (10 digits)
+                if (!number) {
+                    return 'Please enter your phone number';
+                }
+                if (!number.startsWith('0')) {
+                    return 'Phone number must start with 0 (e.g. 012 345 678)';
+                }
+                if (!/^0\d{8,9}$/.test(number)) {
+                    return 'Please enter a valid Cambodian phone number';
+                }
+                return null;
+            },
+
             async save() {
-                if (!this.phoneNumber) {
-                    this.error = 'Please enter your phone number';
+                const validationError = this.validatePhone(this.phoneNumber);
+                if (validationError) {
+                    this.error = validationError;
+                    this.$refs.phoneInput.focus();
                     return;
                 }
 
@@ -43,7 +65,7 @@
 
                     // Success
                     $dispatch('close-modal', 'phone-prompt');
-                    
+
                     // Tell the correct inquire button to open its language picker
                     $dispatch('phone-saved', { productId: this.pendingProductId });
 
@@ -75,7 +97,9 @@
         <div class="space-y-4">
             <div>
                 <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                <input type="tel" id="phone" x-model="phoneNumber" x-ref="phoneInput" @keydown.enter="save()"
+                <input type="tel" id="phone" x-model="phoneNumber" x-ref="phoneInput"
+                       @input="sanitizeInput()" @keydown.enter="save()"
+                       inputmode="numeric" maxlength="10"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm"
                        placeholder="e.g. 012345678">
                 <p x-show="error" x-text="error" class="mt-2 text-sm text-red-600" x-cloak></p>
@@ -98,4 +122,3 @@
         </div>
     </div>
 </x-modal>
-
