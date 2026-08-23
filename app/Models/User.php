@@ -81,6 +81,7 @@ class User extends Authenticatable
         'last_name',
         'role',
         'email',
+        'phone_number',
         'password',
         'is_banned',
         'two_factor_secret',
