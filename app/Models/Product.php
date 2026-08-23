@@ -132,9 +132,6 @@ class Product extends Model
             'printer_model_id'
         )->with('brand');
     }
-
-
-
     //  Scopes 
 
     /**
