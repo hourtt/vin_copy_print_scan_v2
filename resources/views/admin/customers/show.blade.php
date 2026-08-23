@@ -56,7 +56,7 @@
                           x-data @submit.prevent="if(confirm('{{ $user->is_banned ? 'Unban this user? They will be able to log in again.' : 'Ban this user? They will be immediately logged out and prevented from accessing their account.' }}')) $el.submit()">
                         @csrf @method('PATCH')
                         @if ($user->is_banned)
-                            <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
+                            <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
                                 Restore Account Access
                             </button>
                         @else
@@ -117,7 +117,7 @@
                                                 @if ($inquiry->user_phone_snapshot)
                                                     <a href="https://t.me/{{ ltrim($inquiry->user_phone_snapshot, '+') }}"
                                                        target="_blank" rel="noopener noreferrer"
-                                                       class="inline-flex items-center gap-1 text-xs font-medium text-[#1D9E75] hover:underline">
+                                                       class="inline-flex items-center gap-1 text-xs font-medium text-[#2563EB] hover:underline">
                                                         Reply
                                                     </a>
                                                 @else
@@ -139,3 +139,4 @@
         </div>
     </div>
 </x-admin-layout>
+

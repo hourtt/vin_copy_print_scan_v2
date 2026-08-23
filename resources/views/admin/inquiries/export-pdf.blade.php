@@ -14,7 +14,7 @@
         }
         .header {
             padding: 18px 24px 14px;
-            border-bottom: 2px solid #1D9E75;
+            border-bottom: 2px solid #2563EB;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -52,7 +52,7 @@
             font-size: 9px;
             font-weight: 600;
             background: #e6f5f1;
-            color: #1D9E75;
+            color: #2563EB;
         }
         .footer {
             padding: 10px 24px;
@@ -125,3 +125,4 @@
     </div>
 </body>
 </html>
+

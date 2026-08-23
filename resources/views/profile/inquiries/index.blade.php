@@ -7,8 +7,8 @@
 
         @if($inquiries->isEmpty())
             <div class="bg-white rounded-2xl border border-[#E5E5E2] p-12 text-center">
-                <div class="w-14 h-14 rounded-2xl bg-[#1D9E75]/10 flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-7 h-7 text-[#1D9E75]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                <div class="w-14 h-14 rounded-2xl bg-[#2563EB]/10 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-7 h-7 text-[#2563EB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                               d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                     </svg>
@@ -16,7 +16,7 @@
                 <p class="text-[#6B6B6B] font-medium">No inquiries yet.</p>
                 <p class="text-sm text-[#9A9A96] mt-1">Browse our products and tap the Inquire button to get started.</p>
                 <a href="{{ route('dashboard') }}"
-                   class="inline-flex items-center gap-2 mt-6 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#1D9E75] hover:brightness-95 transition-all">
+                   class="inline-flex items-center gap-2 mt-6 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#2563EB] hover:brightness-95 transition-all">
                     Browse Products
                 </a>
             </div>
@@ -57,7 +57,7 @@
                                 <td class="px-5 py-4">
                                     @if($inquiry->product)
                                         <a href="{{ route('products.' . Str::plural(strtolower($inquiry->product->category->name ?? 'printers')) . '.index') }}"
-                                           class="text-xs font-medium text-[#1D9E75] hover:underline">
+                                           class="text-xs font-medium text-[#2563EB] hover:underline">
                                             View →
                                         </a>
                                     @else
@@ -78,3 +78,4 @@
         @endif
     </div>
 </x-app-layout>
+

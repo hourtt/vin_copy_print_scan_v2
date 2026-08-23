@@ -200,7 +200,7 @@
                                     @if ($inquiry->user_phone_snapshot)
                                         <a href="https://t.me/{{ ltrim($inquiry->user_phone_snapshot, '+') }}"
                                            target="_blank" rel="noopener noreferrer"
-                                           class="inline-flex items-center gap-1 text-xs font-medium text-[#1D9E75] hover:underline">
+                                           class="inline-flex items-center gap-1 text-xs font-medium text-[#2563EB] hover:underline">
                                             Reply
                                         </a>
                                     @else
@@ -223,3 +223,4 @@
 
     </div>
 </x-admin-layout>
+

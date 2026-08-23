@@ -35,7 +35,7 @@
         </div>
         <div class="md:text-right">
             <a href="https://t.me/{{ config('services.telegram.owner_username') }}" target="_blank" rel="noopener noreferrer"
-                class="inline-flex items-center text-sm font-medium text-white bg-[#1D9E75] hover:bg-[#15805e] px-4 py-2 rounded-lg transition-colors">
+                class="inline-flex items-center text-sm font-medium text-white bg-[#2563EB] hover:bg-[#1d4ed8] px-4 py-2 rounded-lg transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
@@ -44,3 +44,4 @@
         </div>
     </div>
 </div>
+

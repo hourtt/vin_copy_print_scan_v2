@@ -57,8 +57,8 @@
         class="p-6"
     >
         <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 rounded-full bg-[#1D9E75]/10 flex items-center justify-center shrink-0">
-                <svg class="w-6 h-6 text-[#1D9E75]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="w-12 h-12 rounded-full bg-[#2563EB]/10 flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6 text-[#2563EB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
             </div>
@@ -76,18 +76,18 @@
             <div>
                 <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
                 <input type="tel" id="phone" x-model="phoneNumber" x-ref="phoneInput" @keydown.enter="save()"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1D9E75] focus:ring-[#1D9E75] sm:text-sm"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm"
                        placeholder="e.g. 012345678">
                 <p x-show="error" x-text="error" class="mt-2 text-sm text-red-600" x-cloak></p>
             </div>
 
             <div class="flex justify-end gap-3 mt-6">
                 <button type="button" @click="$dispatch('close-modal', 'phone-prompt')"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D9E75]">
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2563EB]">
                     Cancel
                 </button>
                 <button type="button" @click="save()" :disabled="loading"
-                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-[#1D9E75] border border-transparent rounded-lg hover:bg-[#15805e] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D9E75] disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-[#2563EB] border border-transparent rounded-lg hover:bg-[#1d4ed8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2563EB] disabled:opacity-50 disabled:cursor-not-allowed">
                     <svg x-show="loading" class="w-4 h-4 mr-2 animate-spin" fill="none" viewBox="0 0 24 24" x-cloak>
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
@@ -98,3 +98,4 @@
         </div>
     </div>
 </x-modal>
+
