@@ -57,8 +57,8 @@
             {{-- PRODUCT DETAILS --}}
             <div class="flex flex-col">
                 <div class="mb-2">
-                    <span class="text-sm font-bold uppercase tracking-wide text-[#3f3f46]">
-                        {{ $product->brand?->name ?? ($product->category?->name ?? 'Product') }}
+                    <span class="text-sm capitalize tracking-wide text-[#3f3f46]">
+                        {{$product->category?->name}} / {{ $product->brand?->name }}
                     </span>
                 </div>
                 
@@ -80,7 +80,7 @@
                 {{-- SPECS / COMPATIBILITY --}}
                 @if(($product->specifications && count($product->specifications) > 0) || $product->compatibleModels->count() > 0)
                     <div class="mb-8 p-5 bg-gray-50 rounded-2xl border border-gray-100">
-                        <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Specifications</h3>
+                        <h3 class="text-sm font-bold text-gray-900 capitalize tracking-wider mb-4">Specifications</h3>
                         <dl class="space-y-3 text-sm">
                             @if($product->specifications)
                                 @foreach($product->specifications as $key => $val)
@@ -116,6 +116,7 @@
     {{-- FOOTER --}}
     @include('layouts.footer')
 
+    <x-phone-number-prompt />
 </body>
 
 </html>

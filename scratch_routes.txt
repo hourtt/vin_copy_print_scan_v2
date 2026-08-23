@@ -1,0 +1,124 @@
+
+ GET|HEAD / .. dashboard › ProductController@index
+ GET|HEAD admin/categories .. admin.categories.index › Admin\AdminCategoryController@index
+ POST admin/categories .. admin.categories.store › Admin\AdminCategoryController@store
+ GET|HEAD admin/categories/create .. admin.categories.create › Admin\AdminCategoryController@create
+ PUT|PATCH admin/categories/{category} .. admin.categories.update › Admin\AdminCategoryController@update
+ DELETE admin/categories/{category} .. admin.categories.destroy › Admin\AdminCategoryController@destroy
+ GET|HEAD admin/categories/{category}/edit .. admin.categories.edit › Admin\AdminCategoryController@edit
+ GET|HEAD admin/categories/{category}/products admin.categories.products › Admin\AdminCategoryController@prod…
+ GET|HEAD admin/customers .. admin.customers.index › Admin\AdminCustomerController@index
+ GET|HEAD admin/customers/{user} .. admin.customers.show › Admin\AdminCustomerController@show
+ PATCH admin/customers/{user}/toggle-status admin.customers.toggle-status › Admin\AdminCustomerController@…
+ GET|HEAD admin/dashboard .. admin.dashboard › ProductController@admin_index
+ GET|HEAD admin/inquiries .. admin.inquiries.index › Admin\AdminInquiryController@index
+ GET|HEAD admin/inquiries/export .. admin.inquiries.export › Admin\AdminInquiryController@export
+ GET|HEAD admin/products .. admin.products.index › Admin\AdminProductController@index
+ POST admin/products .. admin.products.store › Admin\AdminProductController@store
+ GET|HEAD admin/products/create .. admin.products.create › Admin\AdminProductController@create
+ GET|HEAD admin/products/{product} .. admin.products.show › Admin\AdminProductController@show
+ PUT|PATCH admin/products/{product} .. admin.products.update › Admin\AdminProductController@update
+ DELETE admin/products/{product} .. admin.products.destroy › Admin\AdminProductController@destroy
+ GET|HEAD admin/products/{product}/edit .. admin.products.edit › Admin\AdminProductController@edit
+ DELETE admin/products/{product}/images/{image} admin.products.images.destroy › Admin\AdminProductControlle…
+ POST admin/products/{product}/images/{image}/set-primary admin.products.images.set-primary › Admin\Admin…
+ PATCH admin/products/{product}/toggle-featured admin.products.toggle-featured › Admin\AdminProductControl…
+ GET|HEAD admin/settings .. admin.settings.index › Admin\AdminSettingsController@index
+ PATCH admin/settings/admin .. admin.settings.update-admin › Admin\AdminSettingsController@updateAdmin
+ PATCH admin/settings/password admin.settings.update-password › Admin\AdminSettingsController@updatePasswo…
+ PATCH admin/settings/shop .. admin.settings.update-shop › Admin\AdminSettingsController@updateShop
+ GET|HEAD api/categories .. categories.index › Api\CategoryController@index
+ GET|HEAD api/categories/{category} .. categories.show › Api\CategoryController@show
+ GET|HEAD api/inks .. api.ink.index › Api\ProductController@index
+ GET|HEAD api/papers .. api.papers.index › Api\ProductController@index
+ GET|HEAD api/printers .. printers.index › Api\PrinterController@index
+ GET|HEAD api/printers/{printer} .. printers.show › Api\PrinterController@show
+ GET|HEAD api/products .. products.index › Api\ProductController@index
+ GET|HEAD api/toners .. api.toners.index › Api\ProductController@index
+ GET|HEAD api/user .. routes/api.php:10
+ GET|HEAD auth/callback/{provider} .. socialite.callback › Security\SocialiteController@callback
+ DELETE auth/disconnect/{provider} .. socialite.disconnect › Security\SocialiteController@disconnect
+ GET|HEAD auth/redirect/{provider} .. socialite.redirect › Security\SocialiteController@redirect
+ GET|HEAD breadcrumb/back .. breadcrumb.back › ProductController@breadcrumbBack
+ GET|HEAD confirm-password .. password.confirm › Auth\ConfirmablePasswordController@show
+ POST confirm-password .. Auth\ConfirmablePasswordController@store
+ POST email/verification-notification verification.send › Auth\EmailVerificationNotificationController@st…
+ GET|HEAD forgot-password .. password.request › Auth\PasswordResetLinkController@create
+ POST forgot-password .. password.email › Auth\PasswordResetLinkController@store
+ GET|HEAD inks .. products.inks.index › ProductController@inks_index
+ POST inquire/{product} .. inquire.store › InquiryController@store
+ GET|HEAD login .. login › Auth\AuthenticatedSessionController@create
+ POST login .. Auth\AuthenticatedSessionController@store
+ POST logout .. logout › Auth\AuthenticatedSessionController@destroy
+ GET|HEAD papers .. products.papers.index › ProductController@papers_index
+ PUT password .. password.update › Auth\PasswordController@update
+ GET|HEAD printers .. products.printers.index › ProductController@printers_index
+ GET|HEAD product-catalog .. product-catalog.index › ProductController@product_catalog_index
+ GET|HEAD products/{product:slug} .. products.show › ProductController@show
+ GET|HEAD profile .. profile.edit › ProfileController@edit
+ PATCH profile .. profile.update › ProfileController@update
+ DELETE profile .. profile.destroy › ProfileController@destroy
+ PATCH profile/field/{field} .. profile.updateField › ProfileController@updateField
+ POST profile/image .. image.upload › ImageController@upload
+ DELETE profile/image .. image.destroy › ImageController@destroy
+ GET|HEAD profile/inquiries .. profile.inquiries.index › InquiryController@history
+ GET|HEAD profile/inquiries-history .. inquire.history › InquiryController@history
+ GET|HEAD register .. register › Auth\RegisteredUserController@create
+ POST register .. Auth\RegisteredUserController@store
+ POST reset-password .. password.store › Auth\NewPasswordController@store
+ GET|HEAD reset-password/{token} .. password.reset › Auth\NewPasswordController@create
+ GET|HEAD sanctum/csrf-cookie .. sanctum.csrf-cookie › Laravel\Sanctum › CsrfCookieController@show
+ GET|HEAD services .. services
+ GET|HEAD storage/{path} storage.local › vendor/laravel/framework/src/Illuminate/Filesystem/FilesystemService…
+ PUT storage/{path} storage.local.upload › vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem…
+ POST telescope/telescope-api/batches .. Laravel\Telescope › QueueBatchesController@index
+ GET|HEAD telescope/telescope-api/batches/{telescopeEntryId} . Laravel\Telescope › QueueBatchesController@show
+ POST telescope/telescope-api/cache .. Laravel\Telescope › CacheController@index
+ GET|HEAD telescope/telescope-api/cache/{telescopeEntryId} .. Laravel\Telescope › CacheController@show
+ POST telescope/telescope-api/client-requests .. Laravel\Telescope › ClientRequestController@index
+ GET|HEAD telescope/telescope-api/client-requests/{telescopeEntryId} Laravel\Telescope › ClientRequestControl…
+ POST telescope/telescope-api/commands .. Laravel\Telescope › CommandsController@index
+ GET|HEAD telescope/telescope-api/commands/{telescopeEntryId} .. Laravel\Telescope › CommandsController@show
+ POST telescope/telescope-api/dumps .. Laravel\Telescope › DumpController@index
+ DELETE telescope/telescope-api/entries .. Laravel\Telescope › EntriesController@destroy
+ POST telescope/telescope-api/events .. Laravel\Telescope › EventsController@index
+ GET|HEAD telescope/telescope-api/events/{telescopeEntryId} .. Laravel\Telescope › EventsController@show
+ POST telescope/telescope-api/exceptions .. Laravel\Telescope › ExceptionController@index
+ GET|HEAD telescope/telescope-api/exceptions/{telescopeEntryId} . Laravel\Telescope › ExceptionController@show
+ PUT telescope/telescope-api/exceptions/{telescopeEntryId} Laravel\Telescope › ExceptionController@update
+ POST telescope/telescope-api/gates .. Laravel\Telescope › GatesController@index
+ GET|HEAD telescope/telescope-api/gates/{telescopeEntryId} .. Laravel\Telescope › GatesController@show
+ POST telescope/telescope-api/jobs .. Laravel\Telescope › QueueController@index
+ GET|HEAD telescope/telescope-api/jobs/{telescopeEntryId} .. Laravel\Telescope › QueueController@show
+ POST telescope/telescope-api/logs .. Laravel\Telescope › LogController@index
+ GET|HEAD telescope/telescope-api/logs/{telescopeEntryId} .. Laravel\Telescope › LogController@show
+ POST telescope/telescope-api/mail .. Laravel\Telescope › MailController@index
+ GET|HEAD telescope/telescope-api/mail/{telescopeEntryId} .. Laravel\Telescope › MailController@show
+ GET|HEAD telescope/telescope-api/mail/{telescopeEntryId}/download Laravel\Telescope › MailEmlController@show
+ GET|HEAD telescope/telescope-api/mail/{telescopeEntryId}/preview Laravel\Telescope › MailHtmlController@show
+ POST telescope/telescope-api/models .. Laravel\Telescope › ModelsController@index
+ GET|HEAD telescope/telescope-api/models/{telescopeEntryId} .. Laravel\Telescope › ModelsController@show
+ GET|HEAD telescope/telescope-api/monitored-tags .. Laravel\Telescope › MonitoredTagController@index
+ POST telescope/telescope-api/monitored-tags .. Laravel\Telescope › MonitoredTagController@store
+ POST telescope/telescope-api/monitored-tags/delete .. Laravel\Telescope › MonitoredTagController@destroy
+ POST telescope/telescope-api/notifications .. Laravel\Telescope › NotificationsController@index
+ GET|HEAD telescope/telescope-api/notifications/{telescopeEntryId} Laravel\Telescope › NotificationsControlle…
+ POST telescope/telescope-api/queries .. Laravel\Telescope › QueriesController@index
+ GET|HEAD telescope/telescope-api/queries/{telescopeEntryId} .. Laravel\Telescope › QueriesController@show
+ POST telescope/telescope-api/redis .. Laravel\Telescope › RedisController@index
+ GET|HEAD telescope/telescope-api/redis/{telescopeEntryId} .. Laravel\Telescope › RedisController@show
+ POST telescope/telescope-api/requests .. Laravel\Telescope › RequestsController@index
+ GET|HEAD telescope/telescope-api/requests/{telescopeEntryId} .. Laravel\Telescope › RequestsController@show
+ POST telescope/telescope-api/schedule .. Laravel\Telescope › ScheduleController@index
+ GET|HEAD telescope/telescope-api/schedule/{telescopeEntryId} .. Laravel\Telescope › ScheduleController@show
+ POST telescope/telescope-api/toggle-recording .. Laravel\Telescope › RecordingController@toggle
+ POST telescope/telescope-api/views .. Laravel\Telescope › ViewsController@index
+ GET|HEAD telescope/telescope-api/views/{telescopeEntryId} .. Laravel\Telescope › ViewsController@show
+ GET|HEAD telescope/{view?} .. telescope › Laravel\Telescope › HomeController@index
+ GET|HEAD toners .. products.toners.index › ProductController@toners_index
+ GET|HEAD up .. vendor/laravel/framework/src/Illuminate/Foundation/Configuration/ApplicationBuilder.php:224
+ GET|HEAD verify-email .. verification.notice › Auth\EmailVerificationPromptController
+ GET|HEAD verify-email/{id}/{hash} .. verification.verify › Auth\VerifyEmailController
+
+ Showing [120] routes
+

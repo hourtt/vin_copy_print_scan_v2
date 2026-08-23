@@ -124,7 +124,7 @@ class User extends Authenticatable
      */
     public function getRedirectRoute(): string
     {
-        return $this->role === 'admin' ? 'admin.dashbaord' : 'dashboard';
+        return $this->role === 'admin' ? '/admin/dashboard' : '/';
     }
 
     //  Relationships 
