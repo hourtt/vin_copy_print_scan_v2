@@ -3,7 +3,7 @@
     class="w-full bg-white border-r border-gray-200 flex md:flex-col flex-shrink-0 z-10 md:sticky md:top-0 md:h-screen md:min-h-screen overflow-y-auto transition-all duration-300">
 
     {{-- Toggle Button --}}
-    <div class="hidden md:flex items-center justify-end p-2 border-b border-gray-100">
+    <div class="hidden md:flex items-center p-2 border-b border-gray-100" :class="isSidebarExpanded ? 'justify-end' : 'justify-center'">
         <button type="button" @click="isSidebarExpanded = !isSidebarExpanded"
             class="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors">
             <svg x-show="isSidebarExpanded" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
