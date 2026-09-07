@@ -5,7 +5,9 @@
             Are you sure you want to <span class="font-semibold text-gray-900">log out</span>?
         </p>
         
-        <form method="POST" action="{{ route('logout') }}" class="flex justify-end gap-3 mt-6">
+        <form method="POST"
+            action="{{ Auth::guard('google')->check() ? route('google.logout') : route('logout') }}"
+            class="flex justify-end gap-3 mt-6">
             @csrf
             <button type="button" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-md font-medium transition-colors" onclick="closeLogoutModal()">Cancel</button>
             <button type="submit" class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-md font-medium transition-colors">Log Out</button>

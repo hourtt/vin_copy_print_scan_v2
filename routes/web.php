@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/image', [ImageController::class, 'destroy'])->name('image.destroy');
 });
 
+
 require __DIR__ . '/authentication/admin.php';
 require __DIR__ . '/authentication/user.php';
 require __DIR__ . '/auth.php';

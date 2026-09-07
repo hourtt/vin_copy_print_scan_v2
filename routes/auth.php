@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Security\SocialiteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GoogleAuthController;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -66,3 +67,18 @@ Route::get('auth/redirect/{provider}', [SocialiteController::class, 'redirect'])
     ->name('socialite.redirect');
 Route::get('auth/callback/{provider}', [SocialiteController::class, 'callback'])
     ->name('socialite.callback');
+
+
+
+// Route to redirect to Google's OAuth page
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+// Route to handle the callback from Google
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
+// Route to log out Google guard users
+Route::post('/auth/google/logout', [GoogleAuthController::class, 'logout'])->name('google.logout');
+
+// Google User Profile Routes
+Route::middleware('auth:google')->group(function () {
+    Route::get('/google-profile', [\App\Http\Controllers\GoogleUserProfileController::class, 'edit'])->name('google-profile.edit');
+    Route::patch('/google-profile', [\App\Http\Controllers\GoogleUserProfileController::class, 'update'])->name('google-profile.update');
+});

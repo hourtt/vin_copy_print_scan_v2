@@ -13,7 +13,7 @@
         "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
-        "laravel/socialite": "^5.28",
+        "laravel/socialite": "^5.30",
         "laravel/telescope": "^5.20",
         "laravel/tinker": "^3.0"
     },
