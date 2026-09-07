@@ -69,7 +69,7 @@
         <div>
             <div class="header-title">Inquiry Log</div>
             <div class="header-sub">
-                Vin Copy Print Scan V2
+                Vin Copy Print Scan
                 @if($date_from || $date_to)
                     &mdash; {{ $date_from ? 'From: '.$date_from : '' }} {{ $date_to ? ' To: '.$date_to : '' }}
                 @endif
@@ -121,7 +121,7 @@
     </div>
 
     <div class="footer">
-        Vin Copy Print Scan V2 &mdash; Confidential &mdash; {{ $generated }}
+        Vin Copy Print Scan &mdash; Confidential &mdash; {{ $generated }}
     </div>
 </body>
 </html>
