@@ -124,7 +124,7 @@ class SocialiteController extends Controller
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email' => $email,
-            'password' => bcrypt(Str::random(24)),
+            'password' => null,
             'email_verified_at' => now(),
         ]);
 
@@ -150,6 +150,13 @@ class SocialiteController extends Controller
         $connectedAccount = $user->connectedAccounts()->where('provider_name', $provider)->first();
 
         if ($connectedAccount) {
+            // Prevent unlinking if it's the only login method
+            if (is_null($user->password) && $user->connectedAccounts()->count() === 1) {
+                return redirect()->route('profile.edit')->withErrors([
+                    'error' => 'You must set a password in your account settings before disconnecting your only connected account.'
+                ]);
+            }
+
             $connectedAccount->delete();
 
             $user->securityActivityLogs()->create([

@@ -5,7 +5,6 @@
     }">
 
         {{-- PANEL 1: FAR-LEFT GLOBAL NAV --}}
-        <x-profiles.sidebar-nav />
 
 
 

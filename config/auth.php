@@ -43,10 +43,6 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'google' => [
-            'driver' => 'session',
-            'provider' => 'google_users',
-        ],
         'sanctum' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -74,10 +70,6 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => User::class
-        ],
-        'google_users' => [
-            'driver' => 'eloquent',
-            'model' => UserGoogleAuth::class,
         ],
     ],
 

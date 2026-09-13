@@ -1,21 +1,19 @@
 @php
-    $isGoogleUser = Auth::guard('google')->check();
-    $isWebUser    = Auth::guard('web')->check();
-    $isAuth       = $isGoogleUser || $isWebUser;
-    $user         = $isGoogleUser ? Auth::guard('google')->user() : ($isWebUser ? Auth::guard('web')->user() : null);
-    $homeRoute    = $isWebUser && $user ? $user->getRedirectRoute() : route('dashboard');
+    $isAuth = Auth::check();
+    $user = Auth::user();
+    $homeRoute = $isAuth && $user ? $user->getRedirectRoute() : route('dashboard');
 @endphp
 
-<nav x-data="{ mobileMenuOpen: false }"
-    class="sticky top-0 z-50 w-full bg-white border-b border-[#E5E5E2]">
+<nav x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 w-full bg-white border-b border-[#E5E5E2]">
     <div class="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16">
         <div class="relative flex items-center h-16 lg:h-[68px]">
 
             {{--  LEFT: Logo  --}}
             <div class="flex-shrink-0">
-                <a href="{{ $homeRoute }}"
-                    class="flex items-center gap-2.5 group" aria-label="Vin Copy Print Scan — Home">
-                    <img src="{{ asset('storage/images/logo-icon-only.webp') }}" class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                <a href="{{ $homeRoute }}" class="flex items-center gap-2.5 group"
+                    aria-label="Vin Copy Print Scan — Home">
+                    <img src="{{ asset('storage/images/logo-icon-only.webp') }}"
+                        class="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         alt="Vin Copy Print Scan logo" loading="lazy">
                 </a>
             </div>
@@ -79,13 +77,14 @@
 
                 @if ($isAuth)
                     {{-- Inquiries icon — only for web customers --}}
-                    @if ($isWebUser && $user && $user->role === 'customer')
+                    @if ($user && $user->role === 'customer')
                         <a href="{{ route('profile.inquiries.index') }}"
                             class="hidden lg:flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-150 text-[#6B6B6B] hover:text-[#0D0D0B]"
                             aria-label="My Inquiries">
                             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"
                                 stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                                <path
+                                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                             </svg>
                         </a>
                     @endif
@@ -94,18 +93,20 @@
                     <div x-data="{ accountOpen: false }" @click.outside="accountOpen = false" class="relative">
                         <button @click="accountOpen = !accountOpen"
                             class="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-150 focus:outline-none overflow-hidden"
-                            :class="accountOpen ? 'ring-2 ring-[#305CDE] ring-offset-1' : ''"
-                            aria-label="Account menu">
-                            @if ($isGoogleUser && $user && $user->avatar)
-                                <img src="{{ str_starts_with($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}"
-                                    class="w-8 h-8 rounded-full object-cover">
+                            :class="accountOpen ? 'ring-2 ring-[#305CDE] ring-offset-1' : ''" aria-label="Account menu">
+
+                            @if ($user && $user->profile_image)
+                                <img src="{{ str_starts_with($user->profile_image, 'http') ? $user->profile_image : asset('storage/' . $user->profile_image) }}"
+                                    alt="{{ $user->first_name }}" class="w-8 h-8 rounded-full object-cover">
                             @else
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75"
-                                    stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"
-                                    class="text-[#6B6B6B] hover:text-[#0D0D0B]">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
+                                <div
+                                    class="w-8 h-8 rounded-full flex items-center justify-center bg-[#305CDE] flex-shrink-0">
+                                    <span class="text-xs font-bold text-white uppercase">
+                                        @if ($user)
+                                            {{ substr($user->first_name, 0, 1) }}
+                                        @endif
+                                    </span>
+                                </div>
                             @endif
                         </button>
 
@@ -117,31 +118,35 @@
                             x-transition:leave-end="opacity-0 translate-y-1" x-cloak
                             class="absolute z-50 right-0 top-full mt-3 w-52 rounded-xl overflow-hidden bg-white border border-[#E5E5E2] shadow-[0_8px_24px_rgba(0,0,0,0.07)]">
                             <div class="px-4 py-3 border-b border-[#F0F0EE] flex items-center gap-3">
-                                @if ($isGoogleUser && $user && $user->avatar)
-                                    <img src="{{ str_starts_with($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}"
+                                @if ($user && $user->profile_image)
+                                    <img src="{{ str_starts_with($user->profile_image, 'http') ? $user->profile_image : asset('storage/' . $user->profile_image) }}"
+                                        alt="{{ $user->first_name }}"
                                         class="w-8 h-8 rounded-full object-cover flex-shrink-0">
+                                @else
+                                    <div
+                                        class="w-8 h-8 rounded-full flex items-center justify-center bg-[#305CDE] flex-shrink-0">
+                                        <span class="text-xs font-bold text-white uppercase">
+                                            @if ($user)
+                                                {{ substr($user->first_name, 0, 1) }}
+                                            @endif
+                                        </span>
+                                    </div>
                                 @endif
                                 <div class="min-w-0">
-                                    <div class="text-sm font-semibold font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B] truncate">
-                                        @if ($isGoogleUser && $user)
-                                            {{ $user->name }}
-                                        @elseif ($isWebUser && $user)
+                                    <div class="text-sm font-semibold font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
+                                        @if ($user)
                                             {{ $user->first_name }} {{ $user->last_name }}
                                         @endif
                                     </div>
-                                    <div class="text-xs mt-0.5 truncate text-[#9A9A96] font-['Kantumruy_Pro',sans-serif]">
+                                    <div
+                                        class="text-xs mt-0.5 truncate text-[#9A9A96] font-['Kantumruy_Pro',sans-serif]">
                                         {{ $user?->email }}
                                     </div>
                                 </div>
                             </div>
                             <div class="py-1.5">
-                                @if ($isWebUser && $user)
+                                @if ($user)
                                     <a href="{{ route('profile.edit') }}"
-                                        class="flex items-center px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B]">
-                                        Profile
-                                    </a>
-                                @elseif ($isGoogleUser && $user)
-                                    <a href="{{ route('google-profile.edit') }}"
                                         class="flex items-center px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B]">
                                         Profile
                                     </a>
@@ -235,25 +240,21 @@
         <div class="max-w-[1280px] mx-auto px-6 pb-5 pt-3 border-t border-[#E5E5E2]">
             @if ($isAuth)
                 <div class="flex items-center gap-3 mb-3 pt-3">
-                    @if ($isGoogleUser && $user && $user->avatar)
-                        <img src="{{ str_starts_with($user->avatar, 'http') ? $user->avatar : asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}"
-                            class="w-8 h-8 rounded-full object-cover flex-shrink-0">
+                    @if ($user && $user->profile_image)
+                        <img src="{{ str_starts_with($user->profile_image, 'http') ? $user->profile_image : asset('storage/' . $user->profile_image) }}"
+                            alt="{{ $user->first_name }}" class="w-8 h-8 rounded-full object-cover flex-shrink-0">
                     @else
                         <div class="w-8 h-8 rounded-full flex items-center justify-center bg-[#305CDE] flex-shrink-0">
-                            <span class="text-xs font-bold text-white">
-                                @if ($isGoogleUser && $user)
-                                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                                @elseif ($isWebUser && $user)
-                                    {{ strtoupper(substr($user->first_name, 0, 1)) }}
+                            <span class="text-xs font-bold text-white uppercase">
+                                @if ($user)
+                                    {{ substr($user->first_name, 0, 1) }}
                                 @endif
                             </span>
                         </div>
                     @endif
                     <div>
                         <div class="text-sm font-semibold font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">
-                            @if ($isGoogleUser && $user)
-                                {{ $user->name }}
-                            @elseif ($isWebUser && $user)
+                            @if ($user)
                                 {{ $user->first_name }} {{ $user->last_name }}
                             @endif
                         </div>
@@ -263,7 +264,7 @@
                     </div>
                 </div>
                 <div class="space-y-0.5">
-                    @if ($isWebUser && $user)
+                    @if ($user)
                         @if ($user->role === 'customer')
                             <a href="{{ route('profile.inquiries.index') }}"
                                 class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
@@ -276,9 +277,6 @@
                                 Dashboard</a>
                         @endif
                         <a href="{{ route('profile.edit') }}"
-                            class="block px-3 py-2.5 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Profile</a>
-                    @elseif ($isGoogleUser && $user)
-                        <a href="{{ route('google-profile.edit') }}"
                             class="block px-3 py-2.5 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Profile</a>
                     @endif
                     <button type="button" onclick="event.preventDefault(); openLogoutModal();"

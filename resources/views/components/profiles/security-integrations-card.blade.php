@@ -22,14 +22,14 @@
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                     fill="#EA4335" />
             </svg>
-            <span class="font-medium {{ Auth::user()->google_id ? 'text-green-600' : 'text-gray-500' }}">
-                {{ Auth::user()->google_id ? 'Connected' : 'Disconnected' }}
+            <span class="font-medium {{ Auth::user()->connectedAccounts()->where('provider_name', 'google')->exists() ? 'text-green-600' : 'text-gray-500' }}">
+                {{ Auth::user()->connectedAccounts()->where('provider_name', 'google')->exists() ? 'Connected' : 'Disconnected' }}
             </span>
         </div>
         <div class="md:text-right">
-            <a href="{{ route('google.redirect') }}"
+            <a href="{{ route('socialite.redirect', 'google') }}"
                 class="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors">
-                {{ Auth::user()->google_id ? 'Manage' : 'Link Account' }}
+                {{ Auth::user()->connectedAccounts()->where('provider_name', 'google')->exists() ? 'Manage' : 'Link Account' }}
             </a>
         </div>
     </div>
