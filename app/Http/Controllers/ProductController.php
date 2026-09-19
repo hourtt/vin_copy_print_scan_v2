@@ -20,7 +20,7 @@ class ProductController extends Controller
     public function index()
     {
         if (auth()->check() && auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect('/admin');
         }
 
         $featured = Product::with('category', 'brand')

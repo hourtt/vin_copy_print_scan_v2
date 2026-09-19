@@ -40,7 +40,7 @@ class UserMiddleware
         }
 
         if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect('/admin');
         }
 
         abort(403);
