@@ -26,17 +26,6 @@ class ProfileController extends Controller
             'recentInquiryCount' => $recentInquiryCount,
         ]);
     }
-
-    /**
-     * Update the user's profile information.
-     *
-     * This single PATCH /profile route handles both:
-     *   - The old modal form (all fields at once).
-     *   - The new inline editing forms (one field group at a time).
-     *
-     * A hidden <input name="inline_field"> in each inline form tells us
-     * which editor was used, so we can show the right success feedback.
-     */
     public function update(ProfileUpdateRequest $request)
     {
         $user = $request->user();

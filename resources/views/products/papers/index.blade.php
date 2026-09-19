@@ -74,7 +74,7 @@
         {{-- Product Grid Area --}}
         <div class="relative min-h-[400px]" id="grid-container">
             {{-- Skeleton Loader (Hidden by default) --}}
-            <div id="skeleton-grid" class="absolute inset-0 z-10 bg-white" style="display: none;">
+            <div id="skeleton-grid" class="absolute inset-0 z-10 bg-white">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 lg:gap-6 animate-pulse">
                     @for ($i = 0; $i < 8; $i++)
                         <div class="bg-gray-200 rounded-2xl h-[360px] w-full"></div>
@@ -83,7 +83,7 @@
             </div>
 
             {{-- Empty State (Hidden by default) --}}
-            <div id="empty-state" style="display: none;" class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center py-24 text-[#71717a] bg-white">
+            <div id="empty-state" class="d-none absolute inset-0 z-10 flex flex-col items-center justify-center text-center py-24 text-[#71717a] bg-white">
                 <p class="text-lg">No products found matching your filters.</p>
             </div>
 

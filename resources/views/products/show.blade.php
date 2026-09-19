@@ -59,7 +59,7 @@
             <div class="flex flex-col">
                 <div class="mb-2">
                     <span class="text-sm capitalize tracking-wide text-[#3f3f46]">
-                        {{$product->category?->name}} / {{ $product->brand?->name }}
+                        {{$product->category?->name}} / {{ $product->brand?->name ?? "Unknown"}}
                     </span>
                 </div>
                 

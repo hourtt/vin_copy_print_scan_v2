@@ -101,21 +101,21 @@ class InquiryController extends Controller
                 "លេខទូរស័ព្ទ: {$phone}",
                 "អ៊ីមែល: {$email}",
                 "ខ្ញុំចាប់អារម្មណ៍លើ: {$pName} (\${$price})",
-                "ខ្ញុំចង់ដឹងបន្ថែមពីព័ត៌មានផលិតផលនេះ និងបញ្ជាក់ពីភាពអាចរកបានរបស់វា មុនពេលធ្វើការកុម្ម៉ង់ជាមួយអ្នក។",
+                "ខ្ញុំចង់ដឹងលម្អិតបន្ថែមអំពីព័ត៌មានផលិតផលនេះ​, សុំសួរថាតើផលិតផលនេះនៅមានក្នុងស្តុកដែរឬទេមុនពេលធ្វើការកុម្ម៉ង់ជាមួយអ្នក, អរគុណ!",
             ]),
             'zh' => implode("\n", [
-                "你好，我是 {$name}。",
+                "您好，我是 {$name}。",
                 "电话：{$phone}",
                 "邮箱：{$email}",
                 "我看中了这个产品：{$pName}（\${$price}）",
-                "想多了解一下，看看现在还有没有货，麻烦回复一下，谢谢！",
+                "我想了解一下这个商品，请问现在有现货吗？想在下单前确认一下，谢谢！",
             ]),
             default => implode("\n", [
                 "Hi! I'm {$name}.",
                 "Phone: {$phone}",
                 "Email: {$email}",
                 "I'm interested in: {$pName} (\${$price})",
-                "I would like to know more information about this product and confirm its availability before and making order with you.",
+                "I would like to know more information about this product and confirm its availability before placing an order with you, thanks!",
             ]),
         };
     }
