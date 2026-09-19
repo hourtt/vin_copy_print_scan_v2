@@ -4,6 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -65,7 +68,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereZipCode($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser, HasName
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -125,7 +128,23 @@ class User extends Authenticatable
      */
     public function getRedirectRoute(): string
     {
-        return $this->role === 'admin' ? '/admin/dashboard' : '/';
+        return $this->role === 'admin' ? '/admin' : '/';
+    }
+
+    /**
+     * Determine if the user can access the Filament panel.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->role === 'admin' && ! $this->is_banned;
+    }
+
+    /**
+     * Get the name displayed in the Filament admin panel.
+     */
+    public function getFilamentName(): string
+    {
+        return trim("{$this->first_name} {$this->last_name}") ?: ($this->email ?? 'Admin');
     }
 
     //  Relationships 
