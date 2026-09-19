@@ -26,7 +26,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Brand|null $brand
  * @property-read \App\Models\Category $category
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Printer> $compatibleModels
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrinterModel> $compatibleModels
  * @property-read int|null $compatible_models_count
  * @property-read string $effective_price
  * @property-read bool $is_on_sale
@@ -126,7 +126,7 @@ class Product extends Model
     public function compatibleModels()
     {
         return $this->belongsToMany(
-            Printer::class,
+            PrinterModel::class,
             'product_compatible_models',
             'product_id',
             'printer_model_id'

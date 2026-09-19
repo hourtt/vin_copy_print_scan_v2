@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PrinterResource;
-use App\Models\Printer;
+use App\Models\PrinterModel as Printer;
 use Illuminate\Http\Request;
 
 class PrinterController extends Controller

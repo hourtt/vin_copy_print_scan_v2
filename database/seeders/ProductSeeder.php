@@ -8,7 +8,6 @@ use App\Models\PrinterModel;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-
 class ProductSeeder extends Seeder
 {
     /**
@@ -122,7 +121,7 @@ class ProductSeeder extends Seeder
                 continue;
             }
 
-            $printerModelIds = \App\Models\PrinterModel::whereIn('slug', $modelSlugs)->pluck('id')->toArray();
+            $printerModelIds = PrinterModel::whereIn('slug', $modelSlugs)->pluck('id')->toArray();
             if (! empty($printerModelIds)) {
                 $product->compatibleModels()->syncWithoutDetaching($printerModelIds);
             }
