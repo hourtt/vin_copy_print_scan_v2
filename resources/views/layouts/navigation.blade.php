@@ -272,7 +272,7 @@
                             </a>
                         @endif
                         @if ($user->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}"
+                            <a href="{{ route('filament.admin.pages.dashboard') }}"
                                 class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-indigo-600 hover:bg-[#ECEAE6] hover:text-indigo-800">Admin
                                 Dashboard</a>
                         @endif
