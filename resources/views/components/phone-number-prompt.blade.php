@@ -85,7 +85,7 @@
                 </svg>
             </div>
             <div>
-                <h3 class="font-serif text-xl font-bold text-[#0D0D0B]">One more step</h3>
+                <h3 class="text-xl font-bold text-[#0D0D0B]">One more step</h3>
                 <p class="text-sm text-[#6B6B6B]">Add your phone number to continue.</p>
             </div>
         </div>
