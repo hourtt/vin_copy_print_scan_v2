@@ -19,10 +19,11 @@ class PrinterResource extends JsonResource
             'id'         => $this->id,
             'brand_id'   => $this->brand_id,
             'brand'      => $this->brand,
-            'model_name' => $this->model_name,
-            'slug'       => $this->slug,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'model_name'          => $this->model_name,
+            'slug'                => $this->slug,
+            'compatible_products' => ProductResource::collection($this->whenLoaded('compatibleProducts')),
+            'created_at'          => $this->created_at,
+            'updated_at'          => $this->updated_at,
         ];
     }
 }

@@ -51,4 +51,12 @@ class InquiryResource extends Resource
             'edit' => EditInquiry::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->with([
+            'user:id,first_name,last_name,email',
+            'product:id,name,slug',
+        ]);
+    }
 }
