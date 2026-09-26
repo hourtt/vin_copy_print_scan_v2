@@ -6,16 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('products')
-            ->orderBy('sort_order')
-            ->get();
+        $data = Cache::remember('api_categories_with_count', 3600, function () {
+            $categories = Category::withCount('products')
+                ->orderBy('sort_order')
+                ->get();
 
-        return CategoryResource::collection($categories);
+            return CategoryResource::collection($categories)->resolve();
+        });
+
+        return response()->json(['data' => $data]);
     }
 
     /**

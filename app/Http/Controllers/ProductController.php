@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Services\BreadcrumbTrail;
 
@@ -23,32 +24,50 @@ class ProductController extends Controller
             return redirect('/admin');
         }
 
-        $featured = Product::with('category', 'brand')
-            ->where('is_featured', true)
-            ->inStock()
-            ->latest()
-            ->take(4)
-            ->get();
+        $curatedIds = Cache::remember('homepage_curated_product_ids', 3600, function () {
+            return [
+                'featured' => Product::where('is_featured', true)
+                    ->inStock()
+                    ->latest()
+                    ->take(4)
+                    ->pluck('id')
+                    ->all(),
 
-        $popular = Product::with('category', 'brand')
-            ->inStock()
-            ->orderByDesc('sales_count')
-            ->take(8)
-            ->get();
+                'popular' => Product::inStock()
+                    ->orderByDesc('sales_count')
+                    ->take(8)
+                    ->pluck('id')
+                    ->all(),
 
-        $newArrivals = Product::with('category', 'brand')
-            ->inStock()
-            ->latest()
-            ->take(8)
-            ->get();
+                'newArrivals' => Product::inStock()
+                    ->latest()
+                    ->take(8)
+                    ->pluck('id')
+                    ->all(),
 
-        $hotSale = Product::with('category', 'brand')
-            ->inStock()
-            ->whereNotNull('discount_price')
-            ->where('discount_price', '<', DB::raw('price'))
-            ->orderByDesc('sales_count')
-            ->take(8)
-            ->get();
+                'hotSale' => Product::inStock()
+                    ->whereNotNull('discount_price')
+                    ->whereColumn('discount_price', '<', 'price')
+                    ->orderByDesc('sales_count')
+                    ->take(8)
+                    ->pluck('id')
+                    ->all(),
+            ];
+        });
+
+        // Fast hydration using primary key lookup while preserving ordered IDs
+        $fetchOrdered = function (array $ids) {
+            if (empty($ids)) {
+                return collect();
+            }
+            $products = Product::with('category', 'brand')->whereIn('id', $ids)->get()->keyBy('id');
+            return collect($ids)->map(fn ($id) => $products->get($id))->filter()->values();
+        };
+
+        $featured    = $fetchOrdered($curatedIds['featured'] ?? []);
+        $popular     = $fetchOrdered($curatedIds['popular'] ?? []);
+        $newArrivals = $fetchOrdered($curatedIds['newArrivals'] ?? []);
+        $hotSale     = $fetchOrdered($curatedIds['hotSale'] ?? []);
 
         return view('dashboard', compact('featured', 'popular', 'newArrivals', 'hotSale'));
     }
@@ -89,7 +108,12 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(12)->withQueryString();
-        $categories = Category::select('id', 'name')->orderBy('name')->get();
+        $categoryIds = Cache::remember('catalog_category_ids', 86400, function () {
+            return Category::orderBy('name')->pluck('id')->all();
+        });
+        $categories = !empty($categoryIds)
+            ? Category::select('id', 'name')->whereIn('id', $categoryIds)->orderBy('name')->get()
+            : collect();
 
         return view('products-catalog.index', compact('products', 'categories', 'items'));
     }
@@ -157,12 +181,16 @@ class ProductController extends Controller
             ]);
         }
 
-        // Only run the brands query for full page loads (not AJAX)
-        $brands = Brand::whereHas(
-            'products',
-            fn($q) =>
-            $q->where('category_id', 1)
-        )->orderBy('name')->get();
+        // Only run the brands query for full page loads (cached for 24 hours)
+        $brandIds = Cache::remember('category_brand_ids_1', 86400, function () {
+            return Brand::whereHas(
+                'products',
+                fn($q) => $q->where('category_id', 1)
+            )->orderBy('name')->pluck('id')->all();
+        });
+        $brands = !empty($brandIds)
+            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
+            : collect();
 
         return view('products.printers.index', compact('products', 'brands', 'items'));
     }
@@ -224,12 +252,16 @@ class ProductController extends Controller
             ]);
         }
 
-        // Only run the brands query for full page loads (not AJAX)
-        $brands = Brand::whereHas(
-            'products',
-            fn($q) =>
-            $q->where('category_id', 2)
-        )->orderBy('name')->get();
+        // Only run the brands query for full page loads (cached for 24 hours)
+        $brandIds = Cache::remember('category_brand_ids_2', 86400, function () {
+            return Brand::whereHas(
+                'products',
+                fn($q) => $q->where('category_id', 2)
+            )->orderBy('name')->pluck('id')->all();
+        });
+        $brands = !empty($brandIds)
+            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
+            : collect();
 
         return view('products.toners.index', compact('products', 'brands', 'items'));
     }
@@ -290,12 +322,16 @@ class ProductController extends Controller
             ]);
         }
 
-        // Only run the brands query for full page loads (not AJAX)
-        $brands = Brand::whereHas(
-            'products',
-            fn($q) =>
-            $q->whereHas('category', fn($q2) => $q2->where('slug', 'ink-cartridges'))
-        )->orderBy('name')->get();
+        // Only run the brands query for full page loads (cached for 24 hours)
+        $brandIds = Cache::remember('category_brand_ids_inks', 86400, function () {
+            return Brand::whereHas(
+                'products',
+                fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', 'ink-cartridges'))
+            )->orderBy('name')->pluck('id')->all();
+        });
+        $brands = !empty($brandIds)
+            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
+            : collect();
 
         return view('products.inks.index', compact('products', 'brands', 'items'));
     }
@@ -360,12 +396,16 @@ class ProductController extends Controller
             ]);
         }
 
-        // Only run the brands query for full page loads (not AJAX)
-        $brands = Brand::whereHas(
-            'products',
-            fn($q) =>
-            $q->whereHas('category', fn($q2) => $q2->where('slug', 'paper'))
-        )->orderBy('name')->get();
+        // Only run the brands query for full page loads (cached for 24 hours)
+        $brandIds = Cache::remember('category_brand_ids_papers', 86400, function () {
+            return Brand::whereHas(
+                'products',
+                fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', 'paper'))
+            )->orderBy('name')->pluck('id')->all();
+        });
+        $brands = !empty($brandIds)
+            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
+            : collect();
 
         return view('products.papers.index', compact('products', 'brands', 'items'));
     }
