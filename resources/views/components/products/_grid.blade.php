@@ -45,8 +45,8 @@
 
                     {{-- Image --}}
                     <div class="relative aspect-[4/3] bg-[#fafafa] flex items-center justify-center overflow-hidden border-b border-[#e4e4e7]">
-                        @if ($product->image)
-                            <img src="{{ asset($product?->image) }}" alt="{{ $product?->name }}"
+                        @if ($product->image_url)
+                            <img src="{{ $product->image_url }}" alt="{{ $product?->name }}"
                                 loading="lazy"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         @else

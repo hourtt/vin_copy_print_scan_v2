@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -212,6 +213,15 @@ class Product extends Model
     public function getIsOnSaleAttribute(): bool
     {
         return $this->discount_price !== null && $this->discount_price < $this->price;
+    }
+
+    /**
+     * Full public URL for the product image (or null when none uploaded).
+     * Always use $product->image_url in Blade, never asset($product->image).
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image ? Storage::disk('public')->url($this->image) : null;
     }
 
     /**

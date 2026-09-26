@@ -33,8 +33,8 @@
             {{-- IMAGE GALLERY --}}
             <div class="flex flex-col gap-4">
                 <div class="aspect-[4/3] bg-[#fafafa] rounded-2xl overflow-hidden border border-[#e4e4e7] flex items-center justify-center relative">
-                    @if ($product->image)
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                    @if ($product->image_url)
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                     @else
                         <span class="text-gray-400">No image available</span>
                     @endif

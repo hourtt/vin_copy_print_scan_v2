@@ -15,8 +15,8 @@
             {{ $stock['label'] ?? 'In Stock' }}
         </span>
 
-        @if ($product->image)
-            <img src="{{ asset($product?->image) }}" alt="{{ $product?->name }}" loading="lazy"
+        @if ($product->image_url)
+            <img src="{{ $product->image_url }}" alt="{{ $product?->name }}" loading="lazy"
                 class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500">
         @else
             <span class="text-slate-400 text-xs font-medium uppercase tracking-wider">No Image</span>
