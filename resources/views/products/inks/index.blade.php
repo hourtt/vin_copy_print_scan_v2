@@ -102,6 +102,11 @@
                     'badgeCase'        => 'capitalize',
                 ])
             </div>
+
+            {{-- PAGINATION --}}
+            <div class="w-full flex items-center justify-center my-8 px-4">
+                <x-pagination :paginator="$products" />
+            </div>
         </div>
     </main>
 
