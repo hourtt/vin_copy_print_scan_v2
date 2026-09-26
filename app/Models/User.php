@@ -180,4 +180,12 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return $this->belongsToMany(Product::class, 'favorites')->withTimestamps();
     }
+
+    /**
+     * Send the password reset notification via background queue.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new \App\Notifications\QueuedResetPasswordNotification($token));
+    }
 }
