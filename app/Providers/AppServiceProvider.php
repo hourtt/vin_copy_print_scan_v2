@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
+use App\Models\Product;
+use App\Observers\CategoryObserver;
+use App\Observers\ProductObserver;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
             $component->placeholder('N/A');
         });
 
-        \App\Models\Product::observe(\App\Observers\ProductObserver::class);
-        \App\Models\Category::observe(\App\Observers\CategoryObserver::class);
+        Product::observe(ProductObserver::class);
+        Category::observe(CategoryObserver::class);
     }
 }

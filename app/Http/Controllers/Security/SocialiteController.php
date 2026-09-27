@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Security;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\ConnectedAccount;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -27,7 +28,7 @@ class SocialiteController extends Controller
         try {
             /** @var \Laravel\Socialite\Two\User $socialUser */
             $socialUser = Socialite::driver($provider)->user();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('login')->withErrors([
                 'error' => 'Unable to authenticate with ' . ucfirst($provider) . '. Please try again.'
             ]);
@@ -147,6 +148,7 @@ class SocialiteController extends Controller
     {
         $user = Auth::user();
 
+        /** @var ConnectedAccount|null $connectedAccount */
         $connectedAccount = $user->connectedAccounts()->where('provider_name', $provider)->first();
 
         if ($connectedAccount) {

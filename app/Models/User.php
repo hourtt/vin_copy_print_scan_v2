@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\QueuedResetPasswordNotification;
 
 /**
  * @property int $id
@@ -186,6 +187,6 @@ class User extends Authenticatable implements FilamentUser, HasName
      */
     public function sendPasswordResetNotification($token): void
     {
-        $this->notify(new \App\Notifications\QueuedResetPasswordNotification($token));
+        $this->notify(new QueuedResetPasswordNotification($token));
     }
 }

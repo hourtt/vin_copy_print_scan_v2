@@ -7,7 +7,9 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Throwable;
 
 class InquiryController extends Controller
 {
@@ -56,8 +58,8 @@ class InquiryController extends Controller
                 'user_phone_snapshot' => $user->phone_number,
                 'language' => $language,
             ]);
-        } catch (\Throwable $e) {
-            \Log::error('Inquiry persistence failed', [
+        } catch (Throwable $e) {
+            Log::error('Inquiry persistence failed', [
                 'user_id' => $user->id,
                 'product_id' => $product->id,
                 'error' => $e->getMessage(),
