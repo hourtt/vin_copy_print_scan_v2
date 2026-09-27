@@ -24,6 +24,11 @@ class ProductController extends Controller
             return redirect('/admin');
         }
 
+        // Release session lock early to prevent request stalling on single-threaded / multi-request server
+        if (session()->isStarted()) {
+            session()->save();
+        }
+
         $curatedIds = Cache::remember('homepage_curated_product_ids', 3600, function () {
             return [
                 'featured' => Product::where('is_featured', true)
@@ -55,19 +60,24 @@ class ProductController extends Controller
             ];
         });
 
-        // Fast hydration using primary key lookup while preserving ordered IDs
-        $fetchOrdered = function (array $ids) {
-            if (empty($ids)) {
-                return collect();
-            }
-            $products = Product::with('category', 'brand')->whereIn('id', $ids)->get()->keyBy('id');
-            return collect($ids)->map(fn ($id) => $products->get($id))->filter()->values();
-        };
+        // Batch-hydrate all unique IDs across all sections in a single unified query
+        $allIds = array_values(array_unique(array_merge(
+            $curatedIds['featured'] ?? [],
+            $curatedIds['popular'] ?? [],
+            $curatedIds['newArrivals'] ?? [],
+            $curatedIds['hotSale'] ?? []
+        )));
 
-        $featured    = $fetchOrdered($curatedIds['featured'] ?? []);
-        $popular     = $fetchOrdered($curatedIds['popular'] ?? []);
-        $newArrivals = $fetchOrdered($curatedIds['newArrivals'] ?? []);
-        $hotSale     = $fetchOrdered($curatedIds['hotSale'] ?? []);
+        $allProducts = !empty($allIds)
+            ? Product::with('category', 'brand')->whereIn('id', $allIds)->get()->keyBy('id')
+            : collect();
+
+        $mapOrdered = fn (array $ids) => collect($ids)->map(fn ($id) => $allProducts->get($id))->filter()->values();
+
+        $featured    = $mapOrdered($curatedIds['featured'] ?? []);
+        $popular     = $mapOrdered($curatedIds['popular'] ?? []);
+        $newArrivals = $mapOrdered($curatedIds['newArrivals'] ?? []);
+        $hotSale     = $mapOrdered($curatedIds['hotSale'] ?? []);
 
         return view('dashboard', compact('featured', 'popular', 'newArrivals', 'hotSale'));
     }
