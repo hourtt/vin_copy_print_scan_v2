@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index(ProductIndexRequest $request)
     {
         $validated = $request->validated();
-        
+
         $query = Product::with('category', 'brand');
 
         // Filter by category_id
@@ -40,10 +40,18 @@ class ProductController extends Controller
         // Sorting
         $sort = $validated['sort'] ?? 'newest';
         switch ($sort) {
-            case 'price-asc':  $query->orderBy('price', 'asc');        break;
-            case 'price-desc': $query->orderBy('price', 'desc');       break;
-            case 'name-asc':   $query->orderBy('name', 'asc');         break;
-            default:           $query->orderBy('created_at', 'desc');  break;
+            case 'price-asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price-desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name-asc':
+                $query->orderBy('name', 'asc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
         }
 
         // Pagination cap at 50 to prevent abuse
@@ -54,34 +62,11 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product): ProductResource
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $product->loadMissing(['category', 'brand', 'compatibleModels.brand', 'images']);
+        return new ProductResource($product);
     }
 }
