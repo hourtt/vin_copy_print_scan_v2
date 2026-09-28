@@ -238,4 +238,44 @@ class Product extends Model
         });
     }
 
+    /* Scope filtering */
+    public function scopeFilter($query, array $filters)
+    {
+
+        // Search
+        $query->when(
+            $filters['search'] ?? null,
+            fn($q, $search) =>
+                $q->where('name', 'like', "%{$search}%")
+        );
+
+        // Category ID
+        $query->when(
+            $filters['category_id'] ?? null,
+            fn($cid, $id) => $cid->where('category_id', $id)
+        );
+
+        // Category
+        $query->when(
+            $filters['category'] ?? null,
+            fn($c, $slug) => $c->whereHas('category', fn($cid) => $cid->where('slug', $slug))
+        );
+
+        // Brand ID
+        $query->when(
+            $filters['brand'] ?? null,
+            fn($b, $brand) => $b->where('brand', $brand)
+        );
+        match ($filters['sort'] ?? 'newest') {
+            'price-asc' => $query->orderBy('price', 'asc'),
+            'price-desc' => $query->orderBy('price', 'desc'),
+            'year-desc' => $query->orderBy('created_at', 'desc'),
+            'name-asc' => $query->orderBy('name', 'asc'),
+            'stock-desc' => $query->orderBy('stock', 'desc'),
+            default => $query->latest(),
+        };
+        return $query;
+    }
+
+
 }
