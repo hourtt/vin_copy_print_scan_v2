@@ -24,11 +24,6 @@ class ProductController extends Controller
             return redirect('/admin');
         }
 
-        // Release session lock early to prevent request stalling on single-threaded / multi-request server
-        if (session()->isStarted()) {
-            session()->save();
-        }
-
         $curatedIds = Cache::remember('homepage_curated_product_ids', 3600, function () {
             return [
                 'featured' => Product::where('is_featured', true)
@@ -72,12 +67,12 @@ class ProductController extends Controller
             ? Product::with('category', 'brand')->whereIn('id', $allIds)->get()->keyBy('id')
             : collect();
 
-        $mapOrdered = fn (array $ids) => collect($ids)->map(fn ($id) => $allProducts->get($id))->filter()->values();
+        $mapOrdered = fn(array $ids) => collect($ids)->map(fn($id) => $allProducts->get($id))->filter()->values();
 
-        $featured    = $mapOrdered($curatedIds['featured'] ?? []);
-        $popular     = $mapOrdered($curatedIds['popular'] ?? []);
+        $featured = $mapOrdered($curatedIds['featured'] ?? []);
+        $popular = $mapOrdered($curatedIds['popular'] ?? []);
         $newArrivals = $mapOrdered($curatedIds['newArrivals'] ?? []);
-        $hotSale     = $mapOrdered($curatedIds['hotSale'] ?? []);
+        $hotSale = $mapOrdered($curatedIds['hotSale'] ?? []);
 
         return view('dashboard', compact('featured', 'popular', 'newArrivals', 'hotSale'));
     }
@@ -118,306 +113,121 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(12)->withQueryString();
-        $categoryIds = Cache::remember('catalog_category_ids', 86400, function () {
-            return Category::orderBy('name')->pluck('id')->all();
+        $categoryIds = Cache::remember('catalog_category_ids_v2', 43200, function () {
+            return Category::orderBy('name')->pluck('id')->map(fn($id) => (int) $id)->all();
         });
         $categories = !empty($categoryIds)
-            ? Category::select('id', 'name')->whereIn('id', $categoryIds)->orderBy('name')->get()
+            ? Category::select('id', 'name')->whereIn('id', array_filter($categoryIds, 'is_int'))->orderBy('name')->get()
             : collect();
 
         return view('products-catalog.index', compact('products', 'categories', 'items'));
     }
 
-    public function printers_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
+    public function categoryIndex(Request $request, string $categorySlug, BreadcrumbTrail $breadcrumbTrail)
     {
-        // * For AJAX filter requests: minimal eager loading, skip $brands query
+        // 1. Resolve Category safely by slug or ID fallback
+        $category = Category::where('slug', $categorySlug)
+            ->orWhere(function ($q) use ($categorySlug) {
+                if (in_array($categorySlug, ['printers', 'printer']))
+                    $q->where('id', 1)->orWhere('slug', 'printers');
+                if (in_array($categorySlug, ['toners', 'toner']))
+                    $q->where('id', 2)->orWhere('slug', 'toners');
+                if (in_array($categorySlug, ['inks', 'ink']))
+                    $q->where('slug', 'ink-cartridges');
+                if (in_array($categorySlug, ['papers', 'paper']))
+                    $q->where('slug', 'paper');
+            })
+            ->firstOrFail();
+
         $isAjax = $request->ajax() || $request->wantsJson();
 
+        // 2. Resolve Breadcrumbs for full page loads
+        $items = null;
         if (!$isAjax) {
-            $items = $breadcrumbTrail->resolveForCategory('Printer', route('products.printers.index'));
+            $items = $breadcrumbTrail->resolveForCategory($category->name, url()->current());
         }
 
-        // Strict category isolation — only Printers (category_id = 1)
-        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand'])
-            ->where('category_id', 1);
+        // 3. Category flag detection
+        $isPaper = in_array($category->slug, ['paper', 'papers']);
+        $isInk = in_array($category->slug, ['ink-cartridges', 'ink', 'inks']);
 
-        if ($request->query('search')) {
-            $query->where('name', 'like', '%' . $request->query('search') . '%');
+        // 4. Build query with conditional eager loading
+        $eagerLoad = $isAjax && !$isPaper ? ['brand'] : ['category', 'brand'];
+
+        $query = Product::with($eagerLoad)->where('category_id', $category->id);
+
+        if (method_exists(Product::class, 'scopeFilter')) {
+            $query->filter($request->all());
+        } else {
+            if ($request->query('search')) {
+                $query->where('name', 'like', '%' . $request->query('search') . '%');
+            }
+            if ($request->query('cat') && $request->query('cat') !== 'all') {
+                $query->where('brand_id', $request->query('cat'));
+            }
+            $sort = $request->query('sort', 'default');
+            match ($sort) {
+                'price-asc' => $query->orderBy('price', 'asc'),
+                'price-desc' => $query->orderBy('price', 'desc'),
+                'year-desc' => $query->orderBy('created_at', 'desc'),
+                'name-asc' => $query->orderBy('name', 'asc'),
+                'stock-desc' => $query->orderBy('stock', 'desc'),
+                default => $query->latest(),
+            };
         }
 
-        // Pills are brand pills — filter by brand_id within this category
-        if ($request->query('cat') && $request->query('cat') !== 'all') {
-            $query->where('brand_id', $request->query('cat'));
-        }
+        $products = $query->paginate(20)->withQueryString();
 
-        $sort = $request->query('sort', 'default');
-        switch ($sort) {
-            case 'price-asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price-desc':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'year-desc':
-                $query->orderBy('created_at', 'desc');
-                break;
-            case 'name-asc':
-                $query->orderBy('name', 'asc');
-                break;
-            case 'stock-desc':
-                $query->orderBy('stock', 'desc');
-                break;
-            default:
-                $query->latest();
-                break;
-        }
-
-        $products = $query->paginate(20);
-
+        // 5. Handle AJAX response
         if ($isAjax) {
+            $gridConfig = [
+                'products' => $products,
+                'groupBy' => $isPaper ? 'category_id' : 'brand_id',
+                'headingRelation' => $isPaper ? 'category' : 'brand',
+                'headingFallback' => $isPaper ? 'Uncategorized' : 'Other',
+                'subLabelRelation' => $isPaper ? 'category' : 'brand',
+                'subLabelFallback' => $isPaper ? 'Paper' : ($isInk ? 'Ink' : ($category->id === 1 ? 'Printer' : 'Toner')),
+                'compatKey' => $isInk ? 'spec:Compatible Printers' : 'compatibility',
+                'emptyMessage' => "No {$category->name} found.",
+                'badgeCase' => $isInk ? 'capitalize' : 'uppercase',
+            ];
+
             return response()->json([
-                'html' => view('components.products._grid', [
-                    'products' => $products,
-                    'groupBy' => 'brand_id',
-                    'headingRelation' => 'brand',
-                    'headingFallback' => 'Other',
-                    'subLabelRelation' => 'brand',
-                    'subLabelFallback' => 'Printer',
-                    'compatKey' => 'compatibility',
-                    'emptyMessage' => 'No printers found.',
-                    'badgeCase' => 'uppercase',
-                ])->render(),
-                'count' => $products->total(), // total() avoids an extra COUNT query
+                'html' => view('components.products._grid', $gridConfig)->render(),
+                'count' => $products->total(),
             ]);
         }
 
-        // Only run the brands query for full page loads (cached for 24 hours)
-        $brandIds = Cache::remember('category_brand_ids_1', 86400, function () {
-            return Brand::whereHas(
-                'products',
-                fn($q) => $q->where('category_id', 1)
-            )->orderBy('name')->pluck('id')->all();
+        // 6. Cache brand IDs for full page loads (store only plain int IDs to avoid serialization issues)
+        $brandIds = Cache::remember("category_brand_ids_v2_{$category->id}", 43200, function () use ($category) {
+            return Brand::whereHas('products', fn($q) => $q->where('category_id', $category->id))
+                ->orderBy('name')
+                ->pluck('id')
+                ->map(fn($id) => (int) $id)
+                ->all();
         });
+
         $brands = !empty($brandIds)
-            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
+            ? Brand::whereIn('id', array_filter($brandIds, 'is_int'))->orderBy('name')->get()
             : collect();
 
-        return view('products.printers.index', compact('products', 'brands', 'items'));
-    }
-
-    public function toners_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
-    {
-        // * For AJAX filter requests: minimal eager loading, skip $brands query
-        $isAjax = $request->ajax() || $request->wantsJson();
-
-        if (!$isAjax) {
-            $items = $breadcrumbTrail->resolveForCategory('Toners', route('products.toners.index'));
-        }
-
-        // Strict category isolation — only Toners (category_id = 2)
-        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand'])
-            ->where('category_id', 2);
-
-        if ($request->query('search')) {
-            $query->where('name', 'like', '%' . $request->query('search') . '%');
-        }
-
-        // Pills are brand pills — filter by brand_id within this category
-        if ($request->query('cat') && $request->query('cat') !== 'all') {
-            $query->where('brand_id', $request->query('cat'));
-        }
-
-        $sort = $request->query('sort', 'default');
-        switch ($sort) {
-            case 'price-asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price-desc':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'name-asc':
-                $query->orderBy('name', 'asc');
-                break;
-            default:
-                $query->latest();
-                break;
-        }
-
-        $products = $query->paginate(20);
-
-        if ($isAjax) {
-            return response()->json([
-                'html' => view('components.products._grid', [
-                    'products' => $products,
-                    'groupBy' => 'brand_id',
-                    'headingRelation' => 'brand',
-                    'headingFallback' => 'Other',
-                    'subLabelRelation' => 'brand',
-                    'subLabelFallback' => 'Toner',
-                    'compatKey' => 'compatibility',
-                    'emptyMessage' => 'No toners found.',
-                    'badgeCase' => 'uppercase',
-                ])->render(),
-                'count' => $products->total(), // total() avoids an extra COUNT query
-            ]);
-        }
-
-        // Only run the brands query for full page loads (cached for 24 hours)
-        $brandIds = Cache::remember('category_brand_ids_2', 86400, function () {
-            return Brand::whereHas(
-                'products',
-                fn($q) => $q->where('category_id', 2)
-            )->orderBy('name')->pluck('id')->all();
+        // Load all categories for the sidebar filter (cache only IDs, hydrate fresh to avoid Collection deserialization issues)
+        $allCategoryIds = Cache::remember('all_active_category_ids_v2', 43200, function () {
+            return Category::orderBy('name')->pluck('id')->map(fn($id) => (int) $id)->all();
         });
-        $brands = !empty($brandIds)
-            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
+        $categories = !empty($allCategoryIds)
+            ? Category::select('id', 'name', 'slug')->whereIn('id', array_filter($allCategoryIds, 'is_int'))->orderBy('name')->get()
             : collect();
 
-        return view('products.toners.index', compact('products', 'brands', 'items'));
-    }
+        // 7. Route to individual view if it exists, otherwise fall back to common views
+        $viewName = match (true) {
+            view()->exists("products.{$category->slug}.index") => "products.{$category->slug}.index",
+            view()->exists("products.{$categorySlug}.index") => "products.{$categorySlug}.index",
+            view()->exists('products.index') => 'products.index',
+            default => 'products-catalog.index',
+        };
 
-    public function inks_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
-    {
-        // * For AJAX filter requests: minimal eager loading, skip $brands query
-        $isAjax = $request->ajax() || $request->wantsJson();
-
-        if (!$isAjax) {
-            $items = $breadcrumbTrail->resolveForCategory('Ink', route('products.inks.index'));
-        }
-
-        $query = Product::with($isAjax ? ['brand'] : ['category', 'brand'])
-            ->whereHas('category', fn($q) => $q->where('slug', 'ink-cartridges'));
-
-        if ($request->query('search')) {
-            $query->where('name', 'like', '%' . $request->query('search') . '%');
-        }
-
-        // Pills filter by brand_id
-        if ($request->query('cat') && $request->query('cat') !== 'all') {
-            $query->where('brand_id', $request->query('cat'));
-        }
-
-        $sort = $request->query('sort', 'default');
-        switch ($sort) {
-            case 'price-asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price-desc':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'name-asc':
-                $query->orderBy('name', 'asc');
-                break;
-            default:
-                $query->latest();
-                break;
-        }
-
-        $products = $query->paginate(20);
-
-        if ($isAjax) {
-            return response()->json([
-                'html' => view('components.products._grid', [
-                    'products' => $products,
-                    'groupBy' => 'brand_id',
-                    'headingRelation' => 'brand',
-                    'headingFallback' => 'Other',
-                    'subLabelRelation' => 'brand',
-                    'subLabelFallback' => 'Ink',
-                    'compatKey' => 'spec:Compatible Printers',
-                    'emptyMessage' => 'No ink cartridges found.',
-                    'badgeCase' => 'capitalize',
-                ])->render(),
-                'count' => $products->total(), // total() avoids an extra COUNT query
-            ]);
-        }
-
-        // Only run the brands query for full page loads (cached for 24 hours)
-        $brandIds = Cache::remember('category_brand_ids_inks', 86400, function () {
-            return Brand::whereHas(
-                'products',
-                fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', 'ink-cartridges'))
-            )->orderBy('name')->pluck('id')->all();
-        });
-        $brands = !empty($brandIds)
-            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
-            : collect();
-
-        return view('products.inks.index', compact('products', 'brands', 'items'));
-    }
-
-    public function papers_index(Request $request, BreadcrumbTrail $breadcrumbTrail)
-    {
-        // * For AJAX filter requests: minimal eager loading, skip $brands query
-        $isAjax = $request->ajax() || $request->wantsJson();
-
-        if (!$isAjax) {
-            $items = $breadcrumbTrail->resolveForCategory('Paper', route('products.papers.index'));
-        }
-
-        // Papers grid groups by category, so we need 'category' for AJAX too
-        $query = Product::with($isAjax ? ['brand', 'category'] : ['category', 'brand'])
-            ->whereHas('category', fn($q) => $q->where('slug', 'paper'));
-
-        if ($request->query('search')) {
-            $query->where('name', 'like', '%' . $request->query('search') . '%');
-        }
-
-        // Pills are now brand pills — filter by brand_id
-        if ($request->query('cat') && $request->query('cat') !== 'all') {
-            $query->where('brand_id', $request->query('cat'));
-        }
-
-        $sort = $request->query('sort', 'default');
-        switch ($sort) {
-            case 'price-asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price-desc':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'name-asc':
-                $query->orderBy('name', 'asc');
-                break;
-            case 'stock-desc':
-                $query->orderBy('stock', 'desc');
-                break;
-            default:
-                $query->latest();
-                break;
-        }
-
-        $products = $query->paginate(20);
-
-        if ($isAjax) {
-            return response()->json([
-                'html' => view('components.products._grid', [
-                    'products' => $products,
-                    'groupBy' => 'category_id',
-                    'headingRelation' => 'category',
-                    'headingFallback' => 'Uncategorized',
-                    'subLabelRelation' => 'category',
-                    'subLabelFallback' => 'Paper',
-                    'compatKey' => 'compatibility',
-                    'emptyMessage' => 'No paper products found.',
-                    'badgeCase' => 'uppercase',
-                ])->render(),
-                'count' => $products->total(), // total() avoids an extra COUNT query
-            ]);
-        }
-
-        // Only run the brands query for full page loads (cached for 24 hours)
-        $brandIds = Cache::remember('category_brand_ids_papers', 86400, function () {
-            return Brand::whereHas(
-                'products',
-                fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', 'paper'))
-            )->orderBy('name')->pluck('id')->all();
-        });
-        $brands = !empty($brandIds)
-            ? Brand::whereIn('id', $brandIds)->orderBy('name')->get()
-            : collect();
-
-        return view('products.papers.index', compact('products', 'brands', 'items'));
+        return view($viewName, compact('products', 'brands', 'items', 'category', 'categories'));
     }
 
     public function breadcrumbBack(Request $request, BreadcrumbTrail $breadcrumbTrail)
