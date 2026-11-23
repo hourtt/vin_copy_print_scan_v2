@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int $brand_id
  * @property string $model_name
  * @property string $slug
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Brand $brand
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $compatibleProducts
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Brand $brand
+ * @property-read Collection<int, Product> $compatibleProducts
  * @property-read int|null $compatible_products_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrinterModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrinterModel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrinterModel query()
@@ -24,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrinterModel whereModelName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrinterModel whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrinterModel whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class PrinterModel extends Model
@@ -39,6 +43,14 @@ class PrinterModel extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Accessor so $model->name returns model_name.
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->model_name ?? '';
     }
 
     /**

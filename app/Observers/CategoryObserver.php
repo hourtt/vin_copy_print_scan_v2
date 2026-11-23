@@ -28,13 +28,16 @@ class CategoryObserver
      */
     private function flushCategoryCaches(Category $category): void
     {
-        Cache::forget('homepage_curated_product_ids');
-        Cache::forget('homepage_curated_products');
-        Cache::forget('catalog_category_ids');
         Cache::forget('catalog_categories_list');
-        Cache::forget('api_categories_data');
-        Cache::forget('api_categories_with_count');
-        Cache::forget("category_brand_ids_{$category->id}");
+        Cache::forget('homepage_curated_products');
         Cache::forget("category_brands_{$category->id}");
+
+        // Clear legacy / fallback keys
+        Cache::forget('homepage_curated_product_ids');
+        Cache::forget('catalog_category_ids');
+        Cache::forget('catalog_category_ids_v2');
+        Cache::forget('all_active_category_ids_v2');
+        Cache::forget("category_brand_ids_{$category->id}");
+        Cache::forget("category_brand_ids_v2_{$category->id}");
     }
 }

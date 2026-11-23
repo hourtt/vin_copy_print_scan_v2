@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\ProductSort;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -22,50 +26,34 @@ use Illuminate\Support\Str;
  * @property string|null $image
  * @property array<array-key, mixed>|null $specifications
  * @property bool $is_featured
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Models\Brand|null $brand
- * @property-read \App\Models\Category $category
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrinterModel> $compatibleModels
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Brand|null $brand
+ * @property-read Category $category
+ * @property-read Collection<int, PrinterModel> $compatibleModels
  * @property-read int|null $compatible_models_count
  * @property-read string $effective_price
  * @property-read bool $is_on_sale
  * @property-read array $stock_status
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductImage> $images
+ * @property-read Collection<int, ProductImage> $images
  * @property-read int|null $images_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
+ * @property-read Collection<int, OrderItem> $orderItems
  * @property-read int|null $order_items_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voucher> $voucher
+ * @property-read Collection<int, Voucher> $voucher
  * @property-read int|null $voucher_count
+ *
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product featured()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product inStock()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product newArrivals()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Product newest()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product onSale()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product popular()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereBrandId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereDiscountPrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereIsFeatured($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereSalesCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereSpecifications($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereStock($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product withTrashed(bool $withTrashed = true)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Product withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Product filter(array $filters)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Product applySort(string|ProductSort|null $sort = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Product withDetailRelations()
+ *
  * @mixin \Eloquent
  */
 class Product extends Model
@@ -95,7 +83,7 @@ class Product extends Model
         'sales_count' => 'integer',
     ];
 
-    //  Relationships 
+    //  Relationships
 
     /**
      * One product belongs to one category.
@@ -133,12 +121,13 @@ class Product extends Model
             'printer_model_id'
         )->with('brand');
     }
-    //  Scopes 
+
+    //  Scopes
 
     /**
      * Only return featured products.
      */
-    public function scopeFeatured($query)
+    public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
     }
@@ -146,7 +135,7 @@ class Product extends Model
     /**
      * Only return in-stock products.
      */
-    public function scopeInStock($query)
+    public function scopeInStock(Builder $query): Builder
     {
         return $query->where('stock', '>', 0);
     }
@@ -154,7 +143,7 @@ class Product extends Model
     /**
      * Order by most sold (descending).
      */
-    public function scopePopular($query)
+    public function scopePopular(Builder $query): Builder
     {
         return $query->orderByDesc('sales_count');
     }
@@ -162,7 +151,7 @@ class Product extends Model
     /**
      * Only return products currently on sale.
      */
-    public function scopeOnSale($query)
+    public function scopeOnSale(Builder $query): Builder
     {
         return $query->whereNotNull('discount_price')
             ->whereColumn('discount_price', '<', 'price');
@@ -171,12 +160,98 @@ class Product extends Model
     /**
      * Order by newest first.
      */
-    public function scopeNewArrivals($query)
+    public function scopeNewArrivals(Builder $query): Builder
     {
         return $query->latest();
     }
 
-    //  Accessors / Helpers 
+    /**
+     * Alias for newest.
+     */
+    public function scopeNewest(Builder $query): Builder
+    {
+        return $query->latest();
+    }
+
+    /**
+     * Apply sorting via the ProductSort Enum.
+     */
+    public function scopeApplySort(Builder $query, string|ProductSort|null $sort = null): Builder
+    {
+        $sortEnum = $sort instanceof ProductSort
+            ? $sort
+            : ProductSort::fromString($sort);
+
+        return $sortEnum->apply($query);
+    }
+
+    /**
+     * Comprehensive filter scope for catalog and category pages.
+     */
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        // 1. Search with wildcard escaping
+        $query->when(
+            $filters['search'] ?? null,
+            function (Builder $q, string $search) {
+                $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $search);
+
+                return $q->where('name', 'like', "%{$escaped}%");
+            }
+        );
+
+        // 2. Category IDs array
+        $query->when(
+            ! empty($filters['categories']),
+            fn (Builder $q) => $q->whereIn('category_id', (array) $filters['categories'])
+        );
+
+        // 3. Single Category ID
+        $query->when(
+            ! empty($filters['category_id']),
+            fn (Builder $q) => $q->where('category_id', $filters['category_id'])
+        );
+
+        // 4. Category slug
+        $query->when(
+            $filters['category'] ?? null,
+            fn (Builder $q, string $slug) => $q->whereHas('category', fn (Builder $c) => $c->where('slug', $slug))
+        );
+
+        // 5. Brand filter (normalizes brand_id, brand, and cat parameter)
+        $brandId = $filters['brand_id'] ?? ($filters['brand'] ?? ($filters['cat'] ?? null));
+        if ($brandId !== null && $brandId !== 'all' && $brandId !== '') {
+            $query->where('brand_id', (int) $brandId);
+        }
+
+        // 6. Price range
+        if (isset($filters['min_price']) && is_numeric($filters['min_price'])) {
+            $query->where('price', '>=', (float) $filters['min_price']);
+        }
+        if (isset($filters['max_price']) && is_numeric($filters['max_price'])) {
+            $query->where('price', '<=', (float) $filters['max_price']);
+        }
+
+        // 7. Sort
+        $sort = $filters['sort'] ?? null;
+        $this->scopeApplySort($query, $sort);
+
+        return $query;
+    }
+
+    /**
+     * Eager load only the relationships needed for the product detail view.
+     */
+    public function scopeWithDetailRelations(Builder $query): Builder
+    {
+        return $query->with([
+            'category',
+            'brand',
+            'compatibleModels:id,brand_id,model_name',
+        ]);
+    }
+
+    //  Accessors / Helpers
 
     /**
      * Get stock status logic formatted for UI.
@@ -184,7 +259,7 @@ class Product extends Model
     public function getStockStatusAttribute(): array
     {
         $stock = (int) $this->stock;
-        $class = $stock <= 0 ? 'out-of-stock' : ($stock <= 5 ? "Low-stock" : "In-stock");
+        $class = $stock <= 0 ? 'out-of-stock' : ($stock <= 5 ? 'Low-stock' : 'In-stock');
 
         $badgeBg = match ($class) {
             'In-stock' => 'bg-green-100 text-green-800',
@@ -194,17 +269,18 @@ class Product extends Model
 
         return [
             'count' => $stock,
-            'label' => $stock <= 0 ? 'Out of stock' : ($stock <= 5 ? "Only {$stock} left" : "In stock"),
+            'label' => $stock <= 0 ? 'Out of stock' : ($stock <= 5 ? "Only {$stock} left" : 'In stock'),
             'badgeBg' => $badgeBg,
             'isAvailable' => $stock > 0,
         ];
     }
+
     /**
      * The price the customer actually pays (discount or regular).
      */
     public function getEffectivePriceAttribute(): string
     {
-        return $this->discount_price ?? $this->price;
+        return (string) ($this->discount_price ?? $this->price);
     }
 
     /**
@@ -237,45 +313,4 @@ class Product extends Model
             }
         });
     }
-
-    /* Scope filtering */
-    public function scopeFilter($query, array $filters)
-    {
-
-        // Search
-        $query->when(
-            $filters['search'] ?? null,
-            fn($q, $search) =>
-                $q->where('name', 'like', "%{$search}%")
-        );
-
-        // Category ID
-        $query->when(
-            $filters['category_id'] ?? null,
-            fn($cid, $id) => $cid->where('category_id', $id)
-        );
-
-        // Category
-        $query->when(
-            $filters['category'] ?? null,
-            fn($c, $slug) => $c->whereHas('category', fn($cid) => $cid->where('slug', $slug))
-        );
-
-        // Brand ID
-        $query->when(
-            $filters['brand'] ?? null,
-            fn($b, $brand) => $b->where('brand', $brand)
-        );
-        match ($filters['sort'] ?? 'newest') {
-            'price-asc' => $query->orderBy('price', 'asc'),
-            'price-desc' => $query->orderBy('price', 'desc'),
-            'year-desc' => $query->orderBy('created_at', 'desc'),
-            'name-asc' => $query->orderBy('name', 'asc'),
-            'stock-desc' => $query->orderBy('stock', 'desc'),
-            default => $query->latest(),
-        };
-        return $query;
-    }
-
-
 }

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Observers\BrandObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\ProductObserver;
 use Filament\Forms\Components\TextInput;
@@ -39,5 +41,6 @@ class AppServiceProvider extends ServiceProvider
 
         Product::observe(ProductObserver::class);
         Category::observe(CategoryObserver::class);
+        Brand::observe(BrandObserver::class);
     }
 }
