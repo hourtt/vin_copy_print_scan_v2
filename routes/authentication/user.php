@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Middleware\RedirectAdminFromHome;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [ProductController::class, 'index'])->name('dashboard');
-Route::get('/product-catalog', [ProductController::class, 'product_catalog_index'])->name('product-catalog.index');
+Route::get('/', [ProductController::class, 'index'])
+    ->middleware(RedirectAdminFromHome::class)
+    ->name('dashboard');
+Route::get('/product-catalog', [ProductController::class, 'catalogIndex'])->name('product-catalog.index');
 
 // Direct existing category routes to categoryIndex with slug defaults
 Route::get('/printers', [ProductController::class, 'categoryIndex'])
