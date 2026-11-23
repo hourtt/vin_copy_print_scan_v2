@@ -10,14 +10,18 @@ use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
+    public const CACHE_KEY = 'api_categories_with_count';
+
     /**
      * Display a listing of categories with product counts, cached.
+     * The cache is cleared by ProductObserver when products change.
      */
     public function index(): JsonResponse
     {
-        $data = Cache::remember('api_categories_with_count', 3600, function () {
+        $data = Cache::remember(self::CACHE_KEY, 3600, function () {
             $categories = Category::withCount('products')
                 ->orderBy('sort_order')
+                ->orderBy('id') // tiebreaker
                 ->get();
 
             return CategoryResource::collection($categories)->resolve();

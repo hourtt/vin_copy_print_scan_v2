@@ -11,17 +11,25 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class PrinterController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of printer models, optionally filtered by brand.
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        // Filtering the printers by brand id
-        $query = Printer::with('brand');
-        if ($request->has('brand_id')) {
-            $query->where('brand_id', $request->brand_id);
-        }
+        $validated = $request->validate([
+            'brand_id' => ['nullable', 'integer', 'exists:brands,id'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+        ]);
 
-        $printers = $query->orderBy('created_at', 'desc')->paginate(10);
+        $printers = Printer::query()
+            ->with('brand')
+            ->when(
+                $validated['brand_id'] ?? null,
+                fn ($q, $brandId) => $q->where('brand_id', $brandId)
+            )
+            ->orderByDesc('created_at')
+            ->orderByDesc('id') // tiebreaker for stable pagination
+            ->paginate($validated['per_page'] ?? 10)
+            ->withQueryString();
 
         return PrinterResource::collection($printers);
     }

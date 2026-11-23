@@ -5,144 +5,203 @@
     'label'    => 'Sort',
     'icon'     => 'list-filter',
     'formId'   => null,
+    'variant'  => 'default',
+    'searchable' => true,
 ])
 
 @php
     // Default fallback options when none are provided
-    $options = count($options) > 0 ? $options : [
+    $rawOptions = count($options) > 0 ? $options : [
         'recommended' => 'Recommended',
         'newest'      => 'Newest',
         'price-asc'   => 'Price: Low → High',
         'price-desc'  => 'Price: High → Low',
     ];
 
-    $selected ??= array_key_first($options);
+    // Normalize options so both associative array ['key' => 'Label'] and list of objects [['value' => '...', 'label' => '...']] work seamlessly
+    $normalizedOptions = [];
+    foreach ($rawOptions as $key => $opt) {
+        if (is_array($opt) && array_key_exists('value', $opt)) {
+            $normalizedOptions[] = [
+                'value' => (string) $opt['value'],
+                'label' => (string) ($opt['label'] ?? $opt['value']),
+                'key'   => $opt['key'] ?? null,
+            ];
+        } else {
+            $normalizedOptions[] = [
+                'value' => (string) $key,
+                'label' => (string) $opt,
+                'key'   => null,
+            ];
+        }
+    }
+
+    $selectedVal = (string) ($selected ?? ($normalizedOptions[0]['value'] ?? ''));
+    $initialOption = collect($normalizedOptions)->first(function ($opt) use ($selectedVal) {
+        return (string) ($opt['value'] ?? '') === $selectedVal;
+    }) ?? ($normalizedOptions[0] ?? ['label' => $label, 'value' => '', 'key' => null]);
 @endphp
 
-<div class="relative w-[240px]" 
+<div {{ $attributes->merge(['class' => 'relative transition-all w-[240px]' . ($variant === 'pill' ? ' shrink-0' : '')]) }}
+     :class="{ 'z-50': open, 'z-20': !open }"
      x-data="{ 
-        open: false, 
-        selected: '{{ $selected }}',
-        options: {{ json_encode($options) }},
-        formId: @js($formId),
-        selectOption(val) {
-            this.selected = val;
-            this.open = false;
-            const el = document.getElementById('{{ $id }}');
-            if (el) {
-                el.value = val;
-                el.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-            // If a formId is set, also update the hidden sort input and submit the form (GET mode)
-            if (this.formId) {
-                const form = document.getElementById(this.formId);
-                if (form) {
-                    let hiddenSort = form.querySelector('input[name=sort]');
-                    if (!hiddenSort) {
-                        hiddenSort = document.createElement('input');
-                        hiddenSort.type  = 'hidden';
-                        hiddenSort.name  = 'sort';
-                        form.appendChild(hiddenSort);
-                    }
-                    hiddenSort.value = val;
-                    form.submit();
-                }
-            }
-        },
-        focusNext() {
-            if (!this.open) { this.open = true; }
-            this.$nextTick(() => {
-                const items = Array.from(this.$refs.menu.querySelectorAll('[role=\'menuitemradio\']'));
-                if (items.length === 0) return;
-                let index = items.indexOf(document.activeElement);
-                index = (index + 1) % items.length;
-                items[index].focus();
-            });
-        },
-        focusPrev() {
-            if (!this.open) return;
-            const items = Array.from(this.$refs.menu.querySelectorAll('[role=\'menuitemradio\']'));
-            if (items.length === 0) return;
-            let index = items.indexOf(document.activeElement);
-            index = index <= 0 ? items.length - 1 : index - 1;
-            items[index].focus();
-        }
-     }"
-     @click.outside="open = false" 
-     @close.stop="open = false"
-     @keydown.escape.prevent.stop="open = false; $refs.trigger.focus()"
-     @popstate.window="setTimeout(() => { const el = document.getElementById('{{ $id }}'); if (el) selected = el.value; }, 50)">
+         open: false, 
+         search: '',
+         selected: {{ json_encode($initialOption) }},
+         options: {{ json_encode($normalizedOptions) }},
+         formId: @js($formId),
+         select(option) {
+             this.selected = option;
+             this.open = false;
+             this.search = '';
 
-    {{-- Hidden Select for native forms and external JS (AJAX change event) --}}
-    <select id="{{ $id }}" class="hidden" aria-label="{{ $label }}" {{ $attributes }}>
-        @foreach ($options as $value => $display)
-            <option value="{{ $value }}" @selected($value === $selected)>
-                {{ $display }}
+             const el = document.getElementById('{{ $id }}');
+             if (el) {
+                 el.value = option.value;
+                 el.dispatchEvent(new Event('change', { bubbles: true }));
+             }
+
+             // If a formId is set, also update the hidden sort input and submit the form (GET mode)
+             if (this.formId) {
+                 const form = document.getElementById(this.formId);
+                 if (form) {
+                     let hiddenSort = form.querySelector('input[name=sort]');
+                     if (!hiddenSort) {
+                         hiddenSort = document.createElement('input');
+                         hiddenSort.type  = 'hidden';
+                         hiddenSort.name  = 'sort';
+                         form.appendChild(hiddenSort);
+                     }
+                     hiddenSort.value = option.value;
+                     form.submit();
+                 }
+             }
+         },
+         getLabel(option) {
+             if (!option) return '';
+             if (option.key && this.$store && this.$store.i18n && typeof this.$store.i18n.t === 'function') {
+                 return this.$store.i18n.t(option.key);
+             }
+             return option.label || '';
+         },
+         get filteredOptions() {
+             if (!this.search) return this.options;
+             const q = this.search.toLowerCase();
+             return this.options.filter(o => this.getLabel(o).toLowerCase().includes(q));
+         }
+     }"
+     @click.outside="open = false; search = ''" 
+     @close.stop="open = false; search = ''"
+     @keydown.escape.prevent.stop="open = false; search = ''; $refs.trigger?.focus()"
+     @popstate.window="setTimeout(() => { 
+         const el = document.getElementById('{{ $id }}'); 
+         if (el) {
+             const match = options.find(o => String(o.value) === String(el.value));
+             if (match) selected = match;
+         }
+     }, 50)"
+     x-effect="if (open && $refs.searchInput) { setTimeout(() => $refs.searchInput.focus(), 60); }">
+
+    {{-- Hidden Select for native forms, SEO, and external JS (AJAX change event) --}}
+    <select id="{{ $id }}" class="hidden" aria-label="{{ $label }}">
+        @foreach ($normalizedOptions as $opt)
+            <option value="{{ $opt['value'] }}" @selected($opt['value'] === $selectedVal)>
+                {{ $opt['label'] }}
             </option>
         @endforeach
     </select>
 
     {{-- Trigger Button --}}
-    <button x-ref="trigger"
-            type="button"
-            @click="open = !open"
-            @keydown.down.prevent="focusNext()"
-            class="flex items-center justify-between w-full h-[44px] px-4 bg-white border border-gray-200 rounded-[10px] text-sm font-medium text-gray-700 transition-colors duration-200 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            aria-haspopup="listbox"
-            :aria-expanded="open.toString()">
-        
-        <div class="flex items-center gap-2">
-            @if($icon === 'list-filter')
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500">
-                    <path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/>
-                </svg>
-            @else
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500">
-                    <path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/>
-                </svg>
-            @endif
-            <span x-text="options[selected]"></span>
+    @if ($variant === 'pill')
+        <button x-ref="trigger"
+                type="button"
+                @click="open = !open"
+                class="flex items-center space-x-1.5 sm:space-x-2.5 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-150 focus:outline-none cursor-pointer select-none">
+            <span x-text="getLabel(selected) || '{{ $label }}'" class="whitespace-nowrap">{{ $initialOption['label'] ?? $label }}</span>
+            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200 transform"
+                 :class="{ 'rotate-180 text-gray-700': open }"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+    @else
+        <button x-ref="trigger"
+                type="button"
+                @click="open = !open"
+                class="w-full px-4 py-2.5 border rounded-xl bg-white border-gray-200 text-sm text-left flex items-center justify-between transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer select-none"
+                :class="{ 'ring-2 ring-blue-500 border-blue-500': open }"
+                aria-haspopup="listbox"
+                :aria-expanded="open.toString()">
+            <div class="flex items-center gap-2 truncate">
+                @if($icon === 'list-filter')
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 shrink-0">
+                        <path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/>
+                    </svg>
+                @endif
+                <span x-text="getLabel(selected) || '{{ $label }}'"
+                      class="block truncate text-gray-900 font-medium">
+                    {{ $initialOption['label'] ?? $label }}
+                </span>
+            </div>
+            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200 transform shrink-0 ml-2"
+                 :class="{ 'rotate-180 text-blue-600': open }"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+    @endif
+
+    {{-- Animated Dropdown Panel --}}
+    <div x-show="open"
+         x-cloak
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2 scale-95"
+         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+         x-transition:leave-end="opacity-0 -translate-y-2 scale-95"
+         class="absolute {{ $variant === 'pill' ? 'right-0 mt-3 w-48 sm:w-56 max-w-[calc(100vw-2rem)] shadow-2xl p-1.5 ring-1 ring-black/5' : 'left-0 right-0 mt-2 shadow-xl p-2 min-w-[240px]' }} bg-white rounded-2xl border border-gray-100 z-50 origin-top"
+         style="display: none;"
+         role="listbox">
+
+        @if ($searchable)
+            <div x-show="options.length > 6" class="p-1 mb-1 border-b border-gray-100">
+                <div class="relative">
+                    <svg class="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                    </svg>
+                    <input type="text"
+                           x-ref="searchInput"
+                           x-model="search"
+                           @click.stop
+                           placeholder="Search..."
+                           class="w-full pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition">
+                </div>
+            </div>
+        @endif
+
+        <div class="max-h-60 overflow-y-auto space-y-1">
+            <template x-for="option in filteredOptions" :key="option.value">
+                <button type="button"
+                        @click="select(option)"
+                        class="w-full flex items-center justify-between px-3.5 py-2.5 text-sm rounded-xl text-left transition-colors duration-150 cursor-pointer"
+                        :class="String(selected.value) === String(option.value)
+                            ? 'bg-blue-50 text-blue-600 font-semibold'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'">
+                    <span x-text="getLabel(option)"></span>
+                    <svg x-show="String(selected.value) === String(option.value)"
+                         class="w-4 h-4 text-blue-600 shrink-0 ml-2"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>
+                </button>
+            </template>
+            <div x-show="filteredOptions.length === 0" class="px-3 py-3 text-xs text-center text-gray-400">
+                No matching results
+            </div>
         </div>
 
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 transition-transform duration-200" :class="{'rotate-180': open}">
-            <path d="m6 9 6 6 6-6"/>
-        </svg>
-    </button>
-
-    {{-- Dropdown Menu --}}
-    <div x-show="open"
-         x-ref="menu"
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 -translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 -translate-y-2"
-         class="absolute z-50 right-0 mt-2 w-full min-w-[240px] rounded-[12px] bg-white border border-gray-200 shadow-[0_8px_24px_rgba(0,0,0,0.08)] py-2"
-         style="display: none;"
-         role="listbox"
-         aria-orientation="vertical"
-         @keydown.down.prevent="focusNext()"
-         @keydown.up.prevent="focusPrev()">
-        
-        <template x-for="(display, val) in options" :key="val">
-            <button type="button"
-                    role="menuitemradio"
-                    :aria-checked="selected === val"
-                    @click="selectOption(val)"
-                    @keydown.enter.prevent="selectOption(val)"
-                    class="group flex items-center justify-between w-full h-[42px] px-4 text-start text-[14px] transition-colors duration-200 ease-out focus:outline-none"
-                    :class="selected === val ? 'text-gray-900 font-semibold bg-gray-50' : 'text-gray-700 font-medium hover:bg-[#F3F4F6] hover:text-gray-900 focus:bg-[#F3F4F6]'">
-                
-                <span x-text="display"></span>
-
-                <svg x-show="selected === val" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-900">
-                    <polyline points="20 6 9 17 4 12"/>
-                </svg>
-            </button>
-        </template>
-        
-        {{-- Named slot for injecting extra items (category-specific options, badges, etc.) --}}
+        {{-- Named slot for injecting extra items --}}
         {{ $extra ?? '' }}
     </div>
 </div>

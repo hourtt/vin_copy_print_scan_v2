@@ -94,6 +94,10 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public const EFFECTIVE_PRICE_SQL =
+        'CASE WHEN products.discount_price IS NOT NULL AND products.discount_price < products.price
+          THEN products.discount_price ELSE products.price END';
+
     /**
      * One product belongs to one brand (nullable).
      */
