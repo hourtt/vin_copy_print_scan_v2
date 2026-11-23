@@ -65,9 +65,10 @@ class ProductController extends Controller
         $items = $this->breadcrumbTrail->resolveForCategory($category->name, url()->current());
         $brands = $this->catalogService->brandsForCategory($category);
         $categories = $this->catalogService->sidebarCategories();
+        $gridConfig = $this->gridPresenter->present($products, $category);
         $view = $this->catalogService->resolveView($category, $categorySlug);
 
-        return view($view, compact('products', 'brands', 'items', 'category', 'categories'));
+        return view($view, compact('products', 'brands', 'items', 'category', 'categories', 'gridConfig'));
     }
 
     /**

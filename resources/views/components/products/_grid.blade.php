@@ -17,14 +17,7 @@
 
             @foreach ($grouped as $product)
                 @php
-                    $stock      = (int) $product->stock;
-                    $stockClass = $stock <= 0 ? 'out-stock' : ($stock <= 5 ? 'low-stock' : 'in-stock');
-                    $stockLabel = $stock <= 0 ? 'Out of stock' : ($stock <= 5 ? "Only {$stock} left" : 'In stock');
-                    $badgeBg    = match ($stockClass) {
-                        'in-stock'  => 'bg-green-100 text-green-800',
-                        'low-stock' => 'bg-yellow-100 text-yellow-800',
-                        default     => 'bg-red-100 text-red-800',
-                    };
+                    $stockStatus = $product->stock_status;
                     if (str_starts_with($compatKey, 'spec:')) {
                         $specKey      = substr($compatKey, 5);
                         $compatValue  = $product->specifications[$specKey] ?? null;
@@ -54,8 +47,8 @@
                         @endif
 
                         {{-- Stock badge --}}
-                        <span class="absolute top-3 right-3 text-[0.65rem] font-semibold capitalize tracking-wide px-2 py-1 rounded-lg {{ $badgeCase }} {{ $badgeBg }}">
-                            {{ $stockLabel }}
+                        <span class="absolute top-3 right-3 text-[0.65rem] font-semibold capitalize tracking-wide px-2 py-1 rounded-lg {{ $badgeCase }} {{ $stockStatus['badgeBg'] }}">
+                            {{ $stockStatus['label'] }}
                         </span>
                     </div>
 
