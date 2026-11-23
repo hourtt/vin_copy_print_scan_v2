@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Services\Catalog\CatalogService;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Support\Collection;
 use Mockery;
 use Tests\TestCase;
 
@@ -61,5 +62,24 @@ class CatalogServiceTest extends TestCase
 
         $resolved2 = $service->resolveCategory('ink');
         $this->assertEquals('ink-cartridges', $resolved2->slug);
+    }
+
+    public function test_sidebar_categories_recovers_from_corrupted_or_incomplete_cache(): void
+    {
+        Category::firstOrCreate(['slug' => 'test-printers'], ['name' => 'Test Printers']);
+
+        $cache = app(CacheRepository::class);
+        $viewFactory = app(ViewFactory::class);
+        $service = new CatalogService($cache, $viewFactory);
+
+        // Intentionally pollute cache with corrupted non-array data
+        $key = (string) config('catalog.cache.keys.catalog_categories', 'catalog_categories_list');
+        $cache->put($key, 'invalid-non-array-data', 3600);
+
+        $categories = $service->sidebarCategories();
+
+        $this->assertInstanceOf(Collection::class, $categories);
+        $this->assertNotEmpty($categories);
+        $this->assertInstanceOf(Category::class, $categories->first());
     }
 }

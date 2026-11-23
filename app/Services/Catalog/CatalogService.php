@@ -62,11 +62,22 @@ class CatalogService
         $ttl = (int) config('catalog.cache.catalog_categories_ttl', 43200);
         $key = (string) config('catalog.cache.keys.catalog_categories', 'catalog_categories_list');
 
-        return $this->cache->remember($key, $ttl, function (): Collection {
-            return Category::select('id', 'name', 'slug')
+        $data = $this->cache->get($key);
+
+        // If not cached or corrupted (e.g. __PHP_Incomplete_Class), re-query and re-cache clean scalar arrays
+        if (! is_array($data)) {
+            $this->cache->forget($key);
+
+            $data = Category::select('id', 'name', 'slug')
                 ->orderBy('name')
-                ->get();
-        });
+                ->get()
+                ->map(fn (Category $c) => ['id' => $c->id, 'name' => $c->name, 'slug' => $c->slug])
+                ->all();
+
+            $this->cache->put($key, $data, $ttl);
+        }
+
+        return collect($data)->map(fn (array $item) => (new Category)->forceFill($item));
     }
 
     /**
@@ -79,11 +90,22 @@ class CatalogService
         $ttl = (int) config('catalog.cache.category_brands_ttl', 43200);
         $key = "category_brands_{$category->id}";
 
-        return $this->cache->remember($key, $ttl, function () use ($category): Collection {
-            return Brand::whereHas('products', fn ($q) => $q->where('category_id', $category->id))
+        $data = $this->cache->get($key);
+
+        // If not cached or corrupted (e.g. __PHP_Incomplete_Class), re-query and re-cache clean scalar arrays
+        if (! is_array($data)) {
+            $this->cache->forget($key);
+
+            $data = Brand::whereHas('products', fn ($q) => $q->where('category_id', $category->id))
                 ->orderBy('name')
-                ->get();
-        });
+                ->get()
+                ->map(fn (Brand $b) => ['id' => $b->id, 'name' => $b->name, 'slug' => $b->slug])
+                ->all();
+
+            $this->cache->put($key, $data, $ttl);
+        }
+
+        return collect($data)->map(fn (array $item) => (new Brand)->forceFill($item));
     }
 
     /**
