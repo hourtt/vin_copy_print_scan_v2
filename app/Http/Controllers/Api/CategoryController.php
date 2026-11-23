@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of categories with product counts, cached.
+     */
+    public function index(): JsonResponse
     {
         $data = Cache::remember('api_categories_with_count', 3600, function () {
             $categories = Category::withCount('products')
@@ -24,37 +27,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * Return a single category by ID or slug,
-     * with its products paginated.
+     * Return a single category by ID or slug with product count.
      */
-    public function show(Category $category)
+    public function show(Category $category): CategoryResource
     {
         // Category model handles ID/slug resolution via resolveRouteBinding
         $category->loadCount('products');
+
         return new CategoryResource($category);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
