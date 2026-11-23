@@ -2,11 +2,20 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Services\BreadcrumbTrail;
 use Tests\TestCase;
 
 class BreadcrumbTrailTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Category::updateOrCreate(['slug' => 'printers'], ['name' => 'Printer']);
+        Category::updateOrCreate(['slug' => 'paper'], ['name' => 'Paper']);
+    }
+
     public function test_example_a_navigation_and_multi_level_back_arrow(): void
     {
         $trail = app(BreadcrumbTrail::class);
