@@ -34,12 +34,12 @@ class UserForm
                     ->disabled(),
                 DateTimePicker::make('email_verified_at')
                     ->label('Email Verified At')
-                    ->displayFormat('M d, Y  h:i A')
+                    ->displayFormat('M d, Y - h:i A')
                     ->timezone('Asia/Phnom_Penh')
                     ->disabled(),
                 DateTimePicker::make('created_at')
                     ->label('Registered At')
-                    ->displayFormat('M d, Y • h:i A')
+                    ->displayFormat('M d, Y - h:i A')
                     ->timezone('Asia/Phnom_Penh')
                     ->disabled(),
             ]);

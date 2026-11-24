@@ -50,13 +50,13 @@ class UsersTable
                     ->alignCenter(),
                 TextColumn::make('email_verified_at')
                     ->label('Verified At')
-                    ->dateTime('M d, Y • h:i A', 'Asia/Phnom_Penh')
+                    ->dateTime('M d, Y - h:i A', 'Asia/Phnom_Penh')
                     ->sortable()
                     ->placeholder('Unverified')
                     ->alignCenter(),
                 TextColumn::make('created_at')
                     ->label('Registered')
-                    ->dateTime('M d, Y • h:i A', 'Asia/Phnom_Penh')
+                    ->dateTime('M d, Y - h:i A', 'Asia/Phnom_Penh')
                     ->sortable()
                     ->alignCenter(),
             ])
