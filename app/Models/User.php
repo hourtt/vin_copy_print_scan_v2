@@ -7,6 +7,7 @@ use App\Notifications\QueuedResetPasswordNotification;
 use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -73,7 +74,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -125,6 +126,39 @@ class User extends Authenticatable implements FilamentUser, HasName
         return Attribute::make(
             get: fn () => trim("{$this->first_name} {$this->last_name}"),
         );
+    }
+
+    /**
+     * Get avatar URL or SVG initial avatar if no image uploaded.
+     */
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->profile_image) {
+                    return str_starts_with($this->profile_image, 'http')
+                        ? $this->profile_image
+                        : asset("storage/{$this->profile_image}");
+                }
+
+                $initial = strtoupper(substr(trim((string) $this->first_name) ?: 'C', 0, 1));
+                $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">'
+                    . '<circle cx="40" cy="40" r="40" fill="#305CDE"/>'
+                    . '<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="34" font-weight="700" fill="#ffffff">'
+                    . htmlspecialchars($initial)
+                    . '</text></svg>';
+
+                return 'data:image/svg+xml;base64,' . base64_encode($svg);
+            },
+        );
+    }
+
+    /**
+     * Get the avatar URL displayed in the Filament admin panel.
+     */
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar_url;
     }
 
     /**

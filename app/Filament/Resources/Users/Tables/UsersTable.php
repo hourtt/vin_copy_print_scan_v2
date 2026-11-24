@@ -36,10 +36,11 @@ class UsersTable
                     ->searchable()
                     ->placeholder('N/A')
                     ->alignCenter(),
-                ImageColumn::make('profile_image')
+                ImageColumn::make('avatar')
                     ->label('Avatar')
                     ->circular()
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->getStateUsing(fn (User $record): string => $record->avatar_url),
                 IconColumn::make('is_banned')
                     ->label('Banned')
                     ->boolean()
@@ -64,7 +65,11 @@ class UsersTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->modalHeading(fn (User $record): string => "Customer Profile: {$record->first_name} {$record->last_name}")
+                    ->modalWidth('3xl')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
                 Action::make('toggleBan')
                     ->label(fn (User $record): string => $record->is_banned ? 'Unban Customer' : 'Ban Customer')
                     ->icon(fn (User $record): string => $record->is_banned ? 'heroicon-o-check-circle' : 'heroicon-o-no-symbol')
@@ -77,6 +82,8 @@ class UsersTable
                     ->action(function (User $record): void {
                         $record->update(['is_banned' => ! $record->is_banned]);
                     }),
-            ]);
+            ])
+            ->recordAction(null)
+            ->recordUrl(null);
     }
 }
