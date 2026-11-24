@@ -2,8 +2,10 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\Inquiries\Schemas\InquiryInfolist;
 use App\Models\Inquiry;
 use Filament\Actions\Action;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
@@ -48,18 +50,16 @@ class RecentInquiriesWidget extends TableWidget
 
                 TextColumn::make('created_at')
                     ->label('Date')
-                    ->dateTime('M d, Y • h:i A', 'Asia/Phnom_Penh')
+                    ->dateTime('M d, Y - h:i A', 'Asia/Phnom_Penh')
                     ->sortable(),
             ])
             ->recordActions([
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-m-eye')
-                    ->modalHeading(fn (Inquiry $record): string => 'Customer Inquiry #INQ-'.str_pad($record->id, 5, '0', STR_PAD_LEFT))
+                    ->modalHeading(fn (Inquiry $record): string => '#INQ-'.str_pad($record->id, 5, '0', STR_PAD_LEFT))
                     ->modalWidth('3xl')
-                    ->modalContent(fn (Inquiry $record) => view('filament.resources.inquiries.inquiry-detail', [
-                        'record' => $record,
-                    ]))
+                    ->schema(fn (Schema $schema): Schema => InquiryInfolist::configure($schema))
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Close'),
             ])

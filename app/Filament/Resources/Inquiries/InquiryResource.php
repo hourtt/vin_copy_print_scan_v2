@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Inquiries;
 
 use App\Filament\Resources\Inquiries\Pages\ListInquiries;
-use App\Filament\Resources\Inquiries\Schemas\InquiryForm;
+use App\Filament\Resources\Inquiries\Schemas\InquiryInfolist;
 use App\Filament\Resources\Inquiries\Tables\InquiriesTable;
 use App\Models\Inquiry;
 use BackedEnum;
@@ -43,7 +43,12 @@ class InquiryResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return InquiryForm::configure($schema);
+        return InquiryInfolist::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return InquiryInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -68,8 +73,8 @@ class InquiryResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->with([
-            'user:id,first_name,last_name,email',
-            'product:id,name,slug',
+            'user:id,first_name,last_name,email,phone_number,is_banned',
+            'product' => fn ($query) => $query->select('id', 'name', 'slug', 'image', 'price', 'discount_price', 'stock', 'category_id', 'brand_id')->with(['category:id,name', 'brand:id,name']),
         ]);
     }
 }
