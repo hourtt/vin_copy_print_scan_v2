@@ -14,7 +14,7 @@ class RecentInquiriesWidget extends TableWidget
 {
     protected static ?int $sort = 2;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
@@ -26,8 +26,7 @@ class RecentInquiriesWidget extends TableWidget
             ->columns([
                 TextColumn::make('customer')
                     ->label('Customer')
-                    ->getStateUsing(fn (Inquiry $record): string => 
-                        $record->user ? trim("{$record->user->first_name} {$record->user->last_name}") : ($record->user_name_snapshot ?? 'Guest')
+                    ->getStateUsing(fn (Inquiry $record): string => $record->user ? trim("{$record->user->first_name} {$record->user->last_name}") : ($record->user_name_snapshot ?? 'Guest')
                     )
                     ->description(fn (Inquiry $record): ?string => $record->user_email_snapshot ?? $record->user?->email)
                     ->searchable(['user_name_snapshot', 'user_email_snapshot']),

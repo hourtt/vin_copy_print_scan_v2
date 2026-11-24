@@ -20,8 +20,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Product> $products
  * @property-read int|null $products_count
- * @property-read Collection<int, Voucher> $vouchers
- * @property-read int|null $vouchers_count
  *
  * @method static \Database\Factories\CategoryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category newModelQuery()

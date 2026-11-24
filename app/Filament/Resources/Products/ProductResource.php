@@ -21,7 +21,7 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         $path = public_path('storage/icons/products.svg');
 

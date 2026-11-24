@@ -30,6 +30,7 @@ class ProcessProfileImageJob implements ShouldQueue
         $user = User::find($this->userId);
         if (! $user) {
             Storage::disk('local')->delete($this->tempPath);
+
             return;
         }
 
@@ -38,7 +39,7 @@ class ProcessProfileImageJob implements ShouldQueue
             Storage::disk('public')->delete($user->profile_image);
         }
 
-        $filename = 'images/profiles/' . basename($this->tempPath);
+        $filename = 'images/profiles/'.basename($this->tempPath);
 
         // Move the uploaded image to the public storage disk
         if (Storage::disk('local')->exists($this->tempPath)) {

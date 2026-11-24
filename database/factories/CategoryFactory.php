@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Category>
@@ -17,39 +16,39 @@ class CategoryFactory extends Factory
      */
     private static array $categories = [
         [
-            'name'        => 'Printers',
-            'slug'        => 'printers',
+            'name' => 'Printers',
+            'slug' => 'printers',
             'description' => 'Laser and inkjet printers for home and office use.',
-            'icon'        => 'printer',
-            'sort_order'  => 1,
+            'icon' => 'printer',
+            'sort_order' => 1,
         ],
         [
-            'name'        => 'Toners',
-            'slug'        => 'toners',
+            'name' => 'Toners',
+            'slug' => 'toners',
             'description' => 'Laser toner cartridges compatible with a wide range of printer models.',
-            'icon'        => 'toner',
-            'sort_order'  => 2,
+            'icon' => 'toner',
+            'sort_order' => 2,
         ],
         [
-            'name'        => 'Ink Cartridges',
-            'slug'        => 'ink-cartridges',
+            'name' => 'Ink Cartridges',
+            'slug' => 'ink-cartridges',
             'description' => 'Inkjet ink cartridges for vivid colour and crisp black prints.',
-            'icon'        => 'ink',
-            'sort_order'  => 3,
+            'icon' => 'ink',
+            'sort_order' => 3,
         ],
         [
-            'name'        => 'Paper',
-            'slug'        => 'paper',
+            'name' => 'Paper',
+            'slug' => 'paper',
             'description' => 'High-quality A3 and A4 printing paper for all print volumes.',
-            'icon'        => 'paper',
-            'sort_order'  => 4,
+            'icon' => 'paper',
+            'sort_order' => 4,
         ],
         [
-            'name'        => 'Accessories',
-            'slug'        => 'accessories',
+            'name' => 'Accessories',
+            'slug' => 'accessories',
             'description' => 'Cables, maintenance kits, and other printing accessories.',
-            'icon'        => 'accessories',
-            'sort_order'  => 5,
+            'icon' => 'accessories',
+            'sort_order' => 5,
         ],
     ];
 

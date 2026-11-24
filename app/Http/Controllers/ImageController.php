@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
-    public function upload(Request $request) {
+    public function upload(Request $request)
+    {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
@@ -30,6 +31,7 @@ class ImageController extends Controller
         if ($user->profile_image) {
             Storage::disk('public')->delete($user->profile_image);
             $user->update(['profile_image' => null]);
+
             return redirect()->back()->with('success', 'Profile image deleted successfully!');
         }
 

@@ -71,13 +71,13 @@ class PrinterModelSeeder extends Seeder
             }
 
             foreach ($modelNames as $modelName) {
-                $slug = Str::slug($brandName . '-' . $modelName);
+                $slug = Str::slug($brandName.'-'.$modelName);
                 PrinterModel::firstOrCreate(
                     ['slug' => $slug],
                     [
-                        'brand_id'   => $brand->id,
+                        'brand_id' => $brand->id,
                         'model_name' => $modelName,
-                        'slug'       => $slug,
+                        'slug' => $slug,
                     ]
                 );
             }

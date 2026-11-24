@@ -2,9 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -32,7 +31,7 @@ return new class extends Migration
                 // Check if user exists by email
                 $user = DB::table('users')->where('email', $gUser->email)->first();
 
-                if (!$user) {
+                if (! $user) {
                     // Create user
                     $nameParts = explode(' ', trim($gUser->name));
                     $firstName = $nameParts[0];
@@ -58,7 +57,7 @@ return new class extends Migration
                     ->where('provider_id', $gUser->google_id)
                     ->exists();
 
-                if (!$connectedExists) {
+                if (! $connectedExists) {
                     DB::table('connected_accounts')->insert([
                         'user_id' => $userId,
                         'provider_name' => 'google',

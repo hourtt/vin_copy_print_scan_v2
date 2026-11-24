@@ -3,13 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
-
     public function authorize(): bool
     {
         return true;
@@ -18,9 +16,9 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name'   => ['sometimes', 'required', 'string', 'max:255'],
-            'last_name'    => ['sometimes', 'required', 'string', 'max:255'],
-            'email'        => [
+            'first_name' => ['sometimes', 'required', 'string', 'max:255'],
+            'last_name' => ['sometimes', 'required', 'string', 'max:255'],
+            'email' => [
                 'sometimes',
                 'required',
                 'string',

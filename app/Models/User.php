@@ -3,15 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\QueuedResetPasswordNotification;
+use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\QueuedResetPasswordNotification;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -27,22 +32,20 @@ use App\Notifications\QueuedResetPasswordNotification;
  * @property bool $is_banned
  * @property string|null $password
  * @property string|null $remember_token
- * @property \Carbon\CarbonInterface|null $created_at
- * @property \Carbon\CarbonInterface|null $updated_at
- * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
+ * @property Carbon|null $email_verified_at
  * @property string|null $two_factor_secret
  * @property array<array-key, mixed>|null $two_factor_recovery_codes
- * @property \Illuminate\Support\Carbon|null $two_factor_confirmed_at
+ * @property Carbon|null $two_factor_confirmed_at
  * @property bool $notify_new_device_login
- * @property-read \App\Models\Cart|null $cart
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ConnectedAccount> $connectedAccounts
+ * @property-read Collection<int, ConnectedAccount> $connectedAccounts
  * @property-read int|null $connected_accounts_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
- * @property-read int|null $orders_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SecurityActivityLog> $securityActivityLogs
+ * @property-read Collection<int, SecurityActivityLog> $securityActivityLogs
  * @property-read int|null $security_activity_logs_count
+ *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
@@ -67,6 +70,7 @@ use App\Notifications\QueuedResetPasswordNotification;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereZipCode($value)
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements FilamentUser, HasName
@@ -79,7 +83,6 @@ class User extends Authenticatable implements FilamentUser, HasName
      *
      * @return array<string, string>
      */
-
     protected $fillable = [
         'first_name',
         'last_name',
@@ -148,7 +151,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         return trim("{$this->first_name} {$this->last_name}") ?: ($this->email ?? 'Admin');
     }
 
-    //  Relationships 
+    //  Relationships
 
     /**
      * All inquiries sent by this user.

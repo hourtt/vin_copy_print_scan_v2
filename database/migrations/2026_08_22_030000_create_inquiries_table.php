@@ -12,12 +12,12 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')
-                  ->constrained('users')
-                  ->onDelete('cascade');
+                ->constrained('users')
+                ->onDelete('cascade');
 
             $table->foreignId('product_id')
-                  ->constrained('products')
-                  ->onDelete('cascade');
+                ->constrained('products')
+                ->onDelete('cascade');
 
             // Snapshots - accurate even after product rename/reprice/soft-delete
             $table->string('product_name_snapshot');

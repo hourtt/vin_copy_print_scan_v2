@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
-use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Telescope;
 use Laravel\Telescope\TelescopeApplicationServiceProvider;
-use Illuminate\Support\Collection;
+
 class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 {
     /**
@@ -22,7 +22,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         $isLocal = $this->app->environment('local');
 
         Telescope::filterBatch(function (Collection $entries) use ($isLocal) {
-            return $isLocal || $entries->contains(fn($entry) => $entry->isReportableException() ||
+            return $isLocal || $entries->contains(fn ($entry) => $entry->isReportableException() ||
                 $entry->isFailedRequest() ||
                 $entry->isFailedJob() ||
                 $entry->isScheduledTask() ||

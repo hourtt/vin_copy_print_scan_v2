@@ -20,7 +20,7 @@ class InquiryResource extends Resource
 {
     protected static ?string $model = Inquiry::class;
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         $path = public_path('storage/icons/inquiries.svg');
 

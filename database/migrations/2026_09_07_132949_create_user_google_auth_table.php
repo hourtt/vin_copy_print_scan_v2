@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_google_auth', function (Blueprint $table) {
-           $table->id();
+            $table->id();
             $table->string('google_id')->unique();
             $table->string('name');
             $table->string('email')->unique();

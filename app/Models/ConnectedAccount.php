@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,9 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $provider_id
  * @property string|null $provider_token
  * @property string|null $provider_refresh_token
- * @property \Carbon\CarbonInterface|null $created_at
- * @property \Carbon\CarbonInterface|null $updated_at
- * @property-read \App\Models\User $user
+ * @property CarbonInterface|null $created_at
+ * @property CarbonInterface|null $updated_at
+ * @property-read User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConnectedAccount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConnectedAccount newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConnectedAccount query()
@@ -25,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConnectedAccount whereProviderToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConnectedAccount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConnectedAccount whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class ConnectedAccount extends Model

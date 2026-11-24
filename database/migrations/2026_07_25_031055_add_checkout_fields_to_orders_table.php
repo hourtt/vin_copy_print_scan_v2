@@ -33,7 +33,7 @@ return new class extends Migration
                 'city',
                 'state_province',
                 'zip_code',
-                'order_notes'
+                'order_notes',
             ]);
         });
     }

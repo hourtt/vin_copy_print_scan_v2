@@ -1,25 +1,18 @@
 <?php
 
-
-
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ImageController;
 
 Route::middleware(['auth', 'customer'])->group(function () {
 
-
-     //  Inquiry (replaces cart/checkout for v2 catalog flow) 
+    //  Inquiry (replaces cart/checkout for v2 catalog flow)
     Route::post('/inquire/{product}', [InquiryController::class, 'store'])
-         ->name('inquire.store');
+        ->name('inquire.store');
     Route::get('/profile/inquiries', [InquiryController::class, 'history'])
-         ->name('profile.inquiries.index');
-    Route::get('/profile/inquiries-history', [InquiryController::class, 'history'])
-         ->name('inquire.history');
+        ->name('profile.inquiries.index');
 });
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,6 +23,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/image', [ImageController::class, 'destroy'])->name('image.destroy');
 });
 
-
-require __DIR__ . '/authentication/user.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/authentication/user.php';
+require __DIR__.'/auth.php';

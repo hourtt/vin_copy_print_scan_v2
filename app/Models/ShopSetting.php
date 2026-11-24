@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property string $key
  * @property string|null $value
  * @property string $group
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ShopSetting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ShopSetting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ShopSetting query()
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ShopSetting whereKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ShopSetting whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ShopSetting whereValue($value)
+ *
  * @mixin \Eloquent
  */
 class ShopSetting extends Model
@@ -33,7 +36,7 @@ class ShopSetting extends Model
         'group',
     ];
 
-    //  Static Helpers 
+    //  Static Helpers
 
     /**
      * Retrieve a setting value by key.

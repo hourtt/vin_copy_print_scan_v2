@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -10,8 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $action
  * @property string|null $ip_address
  * @property string|null $user_agent
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property-read \App\Models\User $user
+ * @property Carbon|null $created_at
+ * @property-read User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SecurityActivityLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SecurityActivityLog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SecurityActivityLog query()
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SecurityActivityLog whereIpAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SecurityActivityLog whereUserAgent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SecurityActivityLog whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class SecurityActivityLog extends Model

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class BackfillSalesCount extends Command
 {
     protected $signature = 'products:backfill-sales-count';
+
     protected $description = 'Backfill sales_count on products from delivered order_items';
 
     public function handle(): int
@@ -44,6 +45,7 @@ class BackfillSalesCount extends Command
         }
 
         $this->info("Updated {$updated} products.");
+
         return self::SUCCESS;
     }
 }

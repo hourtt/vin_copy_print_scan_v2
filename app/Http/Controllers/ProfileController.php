@@ -26,6 +26,7 @@ class ProfileController extends Controller
             'recentInquiryCount' => $recentInquiryCount,
         ]);
     }
+
     public function update(ProfileUpdateRequest $request)
     {
         $user = $request->user();
@@ -64,7 +65,7 @@ class ProfileController extends Controller
         $rules = match ($field) {
             'name' => [
                 'first_name' => ['required', 'string', 'max:255'],
-                'last_name'  => ['required', 'string', 'max:255'],
+                'last_name' => ['required', 'string', 'max:255'],
             ],
             'email' => [
                 'email' => [

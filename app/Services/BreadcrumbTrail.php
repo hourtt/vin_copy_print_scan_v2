@@ -17,7 +17,7 @@ class BreadcrumbTrail
     {
         $stack = $this->getStack();
 
-        if (!empty($stack)) {
+        if (! empty($stack)) {
             $top = end($stack);
             if ($top['label'] === $label) {
                 return;
@@ -26,7 +26,7 @@ class BreadcrumbTrail
 
         $stack[] = [
             'label' => $label,
-            'url'   => $url,
+            'url' => $url,
         ];
 
         Session::put(self::SESSION_KEY, $stack);
@@ -69,29 +69,11 @@ class BreadcrumbTrail
             ['label' => 'Dashboard', 'url' => route('dashboard')],
         ];
 
-        if (!empty($stack)) {
+        if (! empty($stack)) {
             $top = end($stack);
             $items[] = ['label' => $top['label'], 'url' => null];
         } else {
             $items[] = ['label' => $categoryLabel, 'url' => null];
-        }
-
-        return $items;
-    }
-
-    public function resolveForCart(): array
-    {
-        $stack = $this->getStack();
-        $items = [
-            ['label' => 'Dashboard', 'url' => route('dashboard')],
-        ];
-
-        if (!empty($stack)) {
-            $top = end($stack);
-            $items[] = ['label' => $top['label'], 'url' => $top['url']];
-            $items[] = ['label' => 'Checkout', 'url' => null];
-        } else {
-            $items[] = ['label' => 'Shopping Cart', 'url' => null];
         }
 
         return $items;
@@ -114,7 +96,7 @@ class BreadcrumbTrail
             ['label' => 'Dashboard', 'url' => route('dashboard')],
         ];
 
-        if (!empty($stack)) {
+        if (! empty($stack)) {
             $top = end($stack);
             $items[] = ['label' => $top['label'], 'url' => $top['url']];
         }

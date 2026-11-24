@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id(); // * Work the same as $table->bigIncrements('id');
             $table->string('code')->unique();
-            $table->enum('discount_type',['percentage','fixed']);
-            $table->decimal('discount_value',8,2);
+            $table->enum('discount_type', ['percentage', 'fixed']);
+            $table->decimal('discount_value', 8, 2);
             $table->integer('usage_limit')->nullable();
             $table->integer('used_count')->default(0);
             $table->dateTime('expires_at')->nullable();

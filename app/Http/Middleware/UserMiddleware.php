@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserMiddleware
 {
@@ -19,7 +19,7 @@ class UserMiddleware
 
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
 
@@ -31,7 +31,7 @@ class UserMiddleware
 
             return redirect()->route('login')
                 ->withErrors([
-                    'email' => 'Your account has been suspended. Please contact support.'
+                    'email' => 'Your account has been suspended. Please contact support.',
                 ]);
         }
 

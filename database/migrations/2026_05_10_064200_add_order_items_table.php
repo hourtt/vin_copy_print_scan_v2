@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id(); // * Work the same as $table->bigIncrements('id');
 
-            //* Foreign key to orders table
+            // * Foreign key to orders table
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            //* Foreign key to products table
+            // * Foreign key to products table
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantity')->default(1);
             $table->decimal('unit_price', 10, 2);

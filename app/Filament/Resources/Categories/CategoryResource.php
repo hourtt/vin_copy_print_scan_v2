@@ -19,7 +19,7 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         $path = public_path('storage/icons/categories.svg');
 

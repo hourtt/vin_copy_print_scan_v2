@@ -45,13 +45,13 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
                 ->color('info'),
 
             Stat::make('Active Customers', number_format($activeCustomers))
-                ->description(($customerTrend >= 0 ? "+{$customerTrend}%" : "{$customerTrend}%") . ' vs last month')
+                ->description(($customerTrend >= 0 ? "+{$customerTrend}%" : "{$customerTrend}%").' vs last month')
                 ->descriptionIcon($customerTrend >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($customerTrend >= 0 ? 'success' : 'danger')
                 ->chart([$prevCustomers, $currCustomers]),
 
             Stat::make('Total Products', number_format($totalProducts))
-                ->description(($productTrend >= 0 ? "+{$productTrend}%" : "{$productTrend}%") . ' vs last month')
+                ->description(($productTrend >= 0 ? "+{$productTrend}%" : "{$productTrend}%").' vs last month')
                 ->descriptionIcon($productTrend >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($productTrend >= 0 ? 'success' : 'danger')
                 ->chart([$prevProducts, $currProducts]),

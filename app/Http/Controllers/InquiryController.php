@@ -28,25 +28,25 @@ class InquiryController extends Controller
     {
         $user = $request->user();
 
-        //  Phone-number gate 
+        //  Phone-number gate
         if (empty($user->phone_number)) {
             return response()->json(['needs_phone' => true]);
         }
 
-        //  Validate language input 
+        //  Validate language input
         $language = in_array($request->input('language'), ['en', 'km', 'zh'])
             ? $request->input('language')
             : 'en';
 
-        //  Build prefill message 
+        //  Build prefill message
         $text = $this->buildMessage($user, $product, $language);
 
-        //  Build Telegram deep-link 
+        //  Build Telegram deep-link
         $username = config('services.telegram.owner_username');
-        $telegramUrl = 'https://t.me/' . ltrim($username, '@')
-            . '?text=' . rawurlencode($text);
+        $telegramUrl = 'https://t.me/'.ltrim($username, '@')
+            .'?text='.rawurlencode($text);
 
-        //  Persist inquiry snapshot (best-effort — never block the redirect) 
+        //  Persist inquiry snapshot (best-effort — never block the redirect)
         try {
             Inquiry::create([
                 'user_id' => $user->id,
@@ -82,9 +82,9 @@ class InquiryController extends Controller
         return view('profile.inquiries.index', compact('inquiries'));
     }
 
-    // 
+    //
     // Private helpers
-    // 
+    //
 
     /**
      * Build the Telegram prefill message in the selected language.
@@ -103,21 +103,21 @@ class InquiryController extends Controller
                 "លេខទូរស័ព្ទ: {$phone}",
                 "អ៊ីមែល: {$email}",
                 "ខ្ញុំចាប់អារម្មណ៍លើ: {$pName} (\${$price})",
-                "ខ្ញុំចង់ដឹងលម្អិតបន្ថែមអំពីព័ត៌មានផលិតផលនេះ​, សុំសួរថាតើផលិតផលនេះនៅមានក្នុងស្តុកដែរឬទេមុនពេលធ្វើការកុម្ម៉ង់ជាមួយអ្នក, អរគុណ!",
+                'ខ្ញុំចង់ដឹងលម្អិតបន្ថែមអំពីព័ត៌មានផលិតផលនេះ​, សុំសួរថាតើផលិតផលនេះនៅមានក្នុងស្តុកដែរឬទេមុនពេលធ្វើការកុម្ម៉ង់ជាមួយអ្នក, អរគុណ!',
             ]),
             'zh' => implode("\n", [
                 "您好，我是 {$name}。",
                 "电话：{$phone}",
                 "邮箱：{$email}",
                 "我看中了这个产品：{$pName}（\${$price}）",
-                "我想了解一下这个商品，请问现在有现货吗？想在下单前确认一下，谢谢！",
+                '我想了解一下这个商品，请问现在有现货吗？想在下单前确认一下，谢谢！',
             ]),
             default => implode("\n", [
                 "Hi! I'm {$name}.",
                 "Phone: {$phone}",
                 "Email: {$email}",
                 "I'm interested in: {$pName} (\${$price})",
-                "I would like to know more information about this product and confirm its availability before placing an order with you, thanks!",
+                'I would like to know more information about this product and confirm its availability before placing an order with you, thanks!',
             ]),
         };
     }

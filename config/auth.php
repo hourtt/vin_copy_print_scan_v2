@@ -1,8 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Models\Admin;
-use App\Models\UserGoogleAuth;
+
 return [
 
     /*
@@ -69,7 +68,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => User::class
+            'model' => User::class,
         ],
     ],
 

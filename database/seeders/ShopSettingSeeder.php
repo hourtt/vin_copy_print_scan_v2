@@ -16,7 +16,7 @@ class ShopSettingSeeder extends Seeder
             'shop_name' => 'Vin Copy Print Scan',
             'shop_email' => 'vincopy168@gmail.com   ',
             'shop_phone' => '+855 15 693 334',
-            'shop_address' => "Village03, Sangkat02, Sihanoukville, Cambodia",
+            'shop_address' => 'Village03, Sangkat02, Sihanoukville, Cambodia',
             'shop_description' => 'Your one-stop shop for professional copying, printing, and scanning services. High quality, fast turnaround.',
         ];
 

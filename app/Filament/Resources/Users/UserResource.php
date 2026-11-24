@@ -28,7 +28,7 @@ class UserResource extends Resource
 
     protected static ?string $slug = 'customers';
 
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
         $path = public_path('storage/icons/customers.svg');
 

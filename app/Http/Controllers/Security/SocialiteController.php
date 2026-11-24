@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Security;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\ConnectedAccount;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
@@ -30,7 +29,7 @@ class SocialiteController extends Controller
             $socialUser = Socialite::driver($provider)->user();
         } catch (Exception $e) {
             return redirect()->route('login')->withErrors([
-                'error' => 'Unable to authenticate with ' . ucfirst($provider) . '. Please try again.'
+                'error' => 'Unable to authenticate with '.ucfirst($provider).'. Please try again.',
             ]);
         }
 
@@ -47,7 +46,7 @@ class SocialiteController extends Controller
 
             if ($existingConnection && $existingConnection->user_id !== $user->id) {
                 return redirect()->route('profile.edit')->withErrors([
-                    'error' => 'This ' . ucfirst($provider) . ' account is already linked to another user.'
+                    'error' => 'This '.ucfirst($provider).' account is already linked to another user.',
                 ]);
             }
 
@@ -65,7 +64,7 @@ class SocialiteController extends Controller
 
             // Log activity
             $user->securityActivityLogs()->create([
-                'action' => 'Connected ' . ucfirst($provider) . ' account',
+                'action' => 'Connected '.ucfirst($provider).' account',
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'created_at' => now(),
@@ -94,9 +93,9 @@ class SocialiteController extends Controller
         // 3. Ensure the provider supplied an email address before attempting lookup or registration
         $email = $socialUser->getEmail();
 
-        if (!$email) {
+        if (! $email) {
             return redirect()->route('login')->withErrors([
-                'error' => 'Your ' . ucfirst($provider) . ' account does not provide a public email address. Please make your email address public in your ' . ucfirst($provider) . ' settings and try again.'
+                'error' => 'Your '.ucfirst($provider).' account does not provide a public email address. Please make your email address public in your '.ucfirst($provider).' settings and try again.',
             ]);
         }
 
@@ -112,6 +111,7 @@ class SocialiteController extends Controller
             ]);
 
             Auth::login($user);
+
             return redirect()->intended(route('dashboard', absolute: false));
         }
 
@@ -155,14 +155,14 @@ class SocialiteController extends Controller
             // Prevent unlinking if it's the only login method
             if (is_null($user->password) && $user->connectedAccounts()->count() === 1) {
                 return redirect()->route('profile.edit')->withErrors([
-                    'error' => 'You must set a password in your account settings before disconnecting your only connected account.'
+                    'error' => 'You must set a password in your account settings before disconnecting your only connected account.',
                 ]);
             }
 
             $connectedAccount->delete();
 
             $user->securityActivityLogs()->create([
-                'action' => 'Disconnected ' . ucfirst($provider) . ' account',
+                'action' => 'Disconnected '.ucfirst($provider).' account',
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
                 'created_at' => now(),

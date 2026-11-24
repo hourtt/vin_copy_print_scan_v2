@@ -17,6 +17,7 @@ class AdminPanelTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private User $customer;
 
     protected function setUp(): void
@@ -53,7 +54,7 @@ class AdminPanelTest extends TestCase
         Inquiry::create([
             'user_id' => $this->customer->id,
             'product_id' => $product->id,
-            'user_name_snapshot' => $this->customer->first_name . ' ' . $this->customer->last_name,
+            'user_name_snapshot' => $this->customer->first_name.' '.$this->customer->last_name,
             'user_email_snapshot' => $this->customer->email,
             'product_name_snapshot' => $product->name,
             'product_price_snapshot' => $product->price,
