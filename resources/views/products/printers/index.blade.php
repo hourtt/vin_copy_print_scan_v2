@@ -1,6 +1,6 @@
 <x-category-layout
     title="Printers"
-    heading="ព្រីនធ័រ (Printers)"
+    heading="Printers"
     subheading="Find the perfect printer for your home or office"
     searchId="printer-search"
     searchPlaceholder="Search by name, model, description…"

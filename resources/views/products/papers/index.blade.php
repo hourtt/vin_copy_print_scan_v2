@@ -1,7 +1,7 @@
 <x-category-layout
-    title="ក្រដាសរ៉ាម (Papers)"
-    heading="ក្រដាស (Papers)"
-    subheading="ហាងរបស់យើងខ្ញុំមានលក់នូវ ក្រដាសដែលមានគុណភាពល្អ ប្រើយ៉ាងមានទំនុកចិត្ត មិនព្រួយបារម្ភអំពីការធ្វើឲ្យម៉ាស៊ីនមានបញ្ហា"
+    title="Papers"
+    heading="Papers"
+    subheading="Our store sells high-quality paper that you can use with confidence, with no worry about causing problems for your machine."
     searchId="paper-search"
     searchPlaceholder="Search by paper name strictly…"
     searchAriaLabel="Search paper products"

@@ -1,6 +1,6 @@
 <x-category-layout
-    title="ធូន័រ (Toners)"
-    heading="ធូន័រ (Toners)"
+    title="Toners"
+    heading="Toners"
     subheading="Reliable, high-yield cartridges to keep your workspace flowing without interruption."
     searchId="toner-search"
     searchPlaceholder="Search toner models..."
