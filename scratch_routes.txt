@@ -45,7 +45,7 @@
  POST email/verification-notification verification.send › Auth\EmailVerificationNotificationController@st…
  GET|HEAD forgot-password .. password.request › Auth\PasswordResetLinkController@create
  POST forgot-password .. password.email › Auth\PasswordResetLinkController@store
- GET|HEAD inks .. products.inks.index › ProductController@inks_index
+ GET|HEAD inks .. products.ink-cartridges.index › ProductController@inks_index
  POST inquire/{product} .. inquire.store › InquiryController@store
  GET|HEAD login .. login › Auth\AuthenticatedSessionController@create
  POST login .. Auth\AuthenticatedSessionController@store

@@ -17,12 +17,12 @@ Route::middleware(RedirectAdminFromHome::class)->group(function () {
         ->defaults('categorySlug', 'toners')
         ->name('products.toners.index');
 
-    Route::get('/inks', [ProductController::class, 'categoryIndex'])
+    Route::get('/ink-cartridges', [ProductController::class, 'categoryIndex'])
         ->defaults('categorySlug', 'ink-cartridges')
-        ->name('products.inks.index');
+        ->name('products.ink-cartridges.index');
 
     Route::get('/papers', [ProductController::class, 'categoryIndex'])
-        ->defaults('categorySlug', 'paper')
+        ->defaults('categorySlug', 'papers')
         ->name('products.papers.index');
 
     // Dynamic category route fallback for any future categories

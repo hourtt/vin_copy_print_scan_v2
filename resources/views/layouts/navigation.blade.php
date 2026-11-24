@@ -54,7 +54,7 @@
                                 class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
                                 Toners
                             </a>
-                            <a href="{{ route('products.inks.index') }}"
+                            <a href="{{ route('products.ink-cartridges.index') }}"
                                 class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
                                 Ink Cartridges
                             </a>
@@ -218,7 +218,7 @@
                         class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Printers</a>
                     <a href="{{ route('products.toners.index') }}"
                         class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Toners</a>
-                    <a href="{{ route('products.inks.index') }}"
+                    <a href="{{ route('products.ink-cartridges.index') }}"
                         class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Ink
                         Cartridges</a>
                     <a href="{{ route('products.papers.index') }}"

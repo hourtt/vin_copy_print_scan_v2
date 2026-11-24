@@ -36,8 +36,8 @@ class CategorySeeder extends Seeder
                 'sort_order' => 3,
             ],
             [
-                'name' => 'Paper',
-                'slug' => 'paper',
+                'name' => 'Papers',
+                'slug' => 'papers',
                 'description' => 'High-quality A3 and A4 printing paper for all print volumes.',
                 'icon' => 'paper',
                 'sort_order' => 4,

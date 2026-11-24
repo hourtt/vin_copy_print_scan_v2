@@ -63,8 +63,8 @@ class Category extends Model
             'toner' => 'toners',
             'inks' => 'ink-cartridges',
             'ink' => 'ink-cartridges',
-            'papers' => 'paper',
-            'paper' => 'paper',
+            'papers' => 'papers',
+            'paper' => 'papers',
         ]);
 
         $canonicalSlug = $aliases[$normalized] ?? $normalized;

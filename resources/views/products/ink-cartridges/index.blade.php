@@ -1,7 +1,7 @@
 <x-category-layout
     title="Ink Cartridges"
-    heading="ទឹកថ្នាំ (Ink Cartridges)"
-    subheading="ទឹកថ្នាំគ្រប់ប្រភេទ ធានាតម្លៃ និងគុណភាព សម្រាប់ម៉ាស៊ីនរបស់លោកអ្នក"
+    heading="Ink Cartridges"
+    subheading="All types of ink, with guaranteed price and quality, for your machine."
     searchId="toner-search"
     searchPlaceholder="Search ink cartridges..."
     searchAriaLabel="Search ink cartridges"
