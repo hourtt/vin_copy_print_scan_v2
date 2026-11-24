@@ -1,7 +1,7 @@
 @php
-    $isAuth = Auth::check();
-    $user = Auth::user();
-    $homeRoute = $isAuth && $user ? $user->getRedirectRoute() : route('dashboard');
+    $isAuth = Auth::check() && Auth::user()?->role === 'customer';
+    $user = $isAuth ? Auth::user() : null;
+    $homeRoute = route('dashboard');
 @endphp
 
 <nav x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 w-full bg-white border-b border-[#E5E5E2]">
@@ -265,17 +265,10 @@
                 </div>
                 <div class="space-y-0.5">
                     @if ($user)
-                        @if ($user->role === 'customer')
-                            <a href="{{ route('profile.inquiries.index') }}"
-                                class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
-                                My Inquiries
-                            </a>
-                        @endif
-                        @if ($user->role === 'admin')
-                            <a href="{{ route('filament.admin.pages.dashboard') }}"
-                                class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-indigo-600 hover:bg-[#ECEAE6] hover:text-indigo-800">Admin
-                                Dashboard</a>
-                        @endif
+                        <a href="{{ route('profile.inquiries.index') }}"
+                            class="block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">
+                            My Inquiries
+                        </a>
                         <a href="{{ route('profile.edit') }}"
                             class="block px-3 py-2.5 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Profile</a>
                     @endif

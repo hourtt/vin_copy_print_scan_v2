@@ -12,9 +12,8 @@ Route::middleware(['auth', 'customer'])->group(function () {
         ->name('inquire.store');
     Route::get('/profile/inquiries', [InquiryController::class, 'history'])
         ->name('profile.inquiries.index');
-});
 
-Route::middleware('auth')->group(function () {
+    // Customer Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/field/{field}', [ProfileController::class, 'updateField'])->name('profile.updateField');

@@ -35,12 +35,12 @@ class UserMiddleware
                 ]);
         }
 
-        if ($user->role === 'customer') {
-            return $next($request);
+        if ($user->role === 'admin') {
+            return redirect('/vin_admin_print_scan_dashboard');
         }
 
-        if ($user->role === 'admin') {
-            return redirect('/admin');
+        if ($user->role === 'customer' || empty($user->role)) {
+            return $next($request);
         }
 
         abort(403);
