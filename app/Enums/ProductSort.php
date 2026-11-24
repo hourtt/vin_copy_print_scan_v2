@@ -10,8 +10,6 @@ enum ProductSort: string
     case Newest = 'newest';
     case PriceAsc = 'price_asc';
     case PriceDesc = 'price_desc';
-    case PriceAscKebab = 'price-asc';
-    case PriceDescKebab = 'price-desc';
     case YearDesc = 'year-desc';
     case NameAsc = 'name-asc';
     case StockDesc = 'stock-desc';
@@ -45,8 +43,8 @@ enum ProductSort: string
     public function apply(Builder $query): Builder
     {
         return match ($this) {
-            self::PriceAsc, self::PriceAscKebab => $query->orderBy('price', 'asc'),
-            self::PriceDesc, self::PriceDescKebab => $query->orderBy('price', 'desc'),
+            self::PriceAsc => $query->orderBy('price', 'asc'),
+            self::PriceDesc => $query->orderBy('price', 'desc'),
             self::YearDesc => $query->orderBy('created_at', 'desc'),
             self::NameAsc => $query->orderBy('name', 'asc'),
             self::StockDesc => $query->orderBy('stock', 'desc'),
