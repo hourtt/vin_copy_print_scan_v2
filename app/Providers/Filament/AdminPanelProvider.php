@@ -24,7 +24,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('vin_admin_print_scan_dashboard')
             ->login()
             ->brandLogo(asset('storage/images/logo-horizontal-layout.webp'))
             ->brandLogoHeight('2.5rem')

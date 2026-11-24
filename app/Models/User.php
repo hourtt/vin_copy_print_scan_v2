@@ -132,7 +132,7 @@ class User extends Authenticatable implements FilamentUser, HasName
      */
     public function getRedirectRoute(): string
     {
-        return $this->role === 'admin' ? '/admin' : '/';
+        return $this->role === 'admin' ? '/vin_admin_print_scan_dashboard' : '/';
     }
 
     /**

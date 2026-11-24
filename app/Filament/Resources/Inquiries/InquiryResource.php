@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Inquiries;
 
-use App\Filament\Resources\Inquiries\Pages\CreateInquiry;
-use App\Filament\Resources\Inquiries\Pages\EditInquiry;
 use App\Filament\Resources\Inquiries\Pages\ListInquiries;
 use App\Filament\Resources\Inquiries\Schemas\InquiryForm;
 use App\Filament\Resources\Inquiries\Tables\InquiriesTable;
@@ -14,11 +12,27 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
 class InquiryResource extends Resource
 {
     protected static ?string $model = Inquiry::class;
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
 
     public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
     {
@@ -48,8 +62,6 @@ class InquiryResource extends Resource
     {
         return [
             'index' => ListInquiries::route('/'),
-            'create' => CreateInquiry::route('/create'),
-            'edit' => EditInquiry::route('/{record}/edit'),
         ];
     }
 

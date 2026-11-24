@@ -42,6 +42,37 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_admin_cannot_authenticate_via_customer_login_screen(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => $admin->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    public function test_banned_user_cannot_authenticate_via_customer_login_screen(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'customer',
+            'is_banned' => true,
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertSessionHasErrors(['email']);
+    }
+
     public function test_users_can_logout(): void
     {
         $user = User::factory()->create();

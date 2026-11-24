@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Inquiries\Schemas;
 
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -13,32 +12,32 @@ class InquiryForm
     {
         return $schema
             ->components([
-                Select::make('user_id')
-                    ->relationship('user', 'id')
-                    ->required(),
-                Select::make('product_id')
-                    ->relationship('product', 'name')
-                    ->required(),
-                TextInput::make('product_name_snapshot')
-                    ->required(),
-                TextInput::make('product_price_snapshot')
-                    ->required()
-                    ->numeric(),
                 TextInput::make('user_name_snapshot')
-                    ->required(),
+                    ->label('Customer Name')
+                    ->disabled(),
                 TextInput::make('user_email_snapshot')
-                    ->email()
-                    ->required(),
+                    ->label('Customer Email')
+                    ->disabled(),
                 TextInput::make('user_phone_snapshot')
-                    ->tel()
-                    ->default(null),
+                    ->label('Customer Phone')
+                    ->disabled(),
+                TextInput::make('product_name_snapshot')
+                    ->label('Product Name')
+                    ->disabled(),
+                TextInput::make('product_price_snapshot')
+                    ->label('Price ($)')
+                    ->numeric()
+                    ->disabled(),
+                TextInput::make('language')
+                    ->label('Inquiry Language')
+                    ->disabled(),
+                TextInput::make('created_at')
+                    ->label('Date Submitted')
+                    ->disabled(),
                 Textarea::make('message')
-                    ->default(null)
+                    ->label('Customer Message')
+                    ->disabled()
                     ->columnSpanFull(),
-                Select::make('language')
-                    ->options(['en' => 'En', 'km' => 'Km', 'zh' => 'Zh'])
-                    ->default('en')
-                    ->required(),
             ]);
     }
 }

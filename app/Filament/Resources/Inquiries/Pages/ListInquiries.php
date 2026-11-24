@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Inquiries\Pages;
 
 use App\Filament\Resources\Inquiries\InquiryResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListInquiries extends ListRecords
@@ -12,8 +11,6 @@ class ListInquiries extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            CreateAction::make(),
-        ];
+        return [];
     }
 }

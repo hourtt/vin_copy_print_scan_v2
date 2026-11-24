@@ -56,7 +56,7 @@ class RecentInquiriesWidget extends TableWidget
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-m-eye')
-                    ->url(fn (Inquiry $record): string => InquiryResource::getUrl('edit', ['record' => $record])),
+                    ->url(fn (): string => InquiryResource::getUrl('index')),
             ])
             ->paginated([5, 10, 25])
             ->defaultPaginationPageOption(5);

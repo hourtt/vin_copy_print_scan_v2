@@ -2,9 +2,7 @@
 
 namespace App\Filament\Resources\Inquiries\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,42 +12,34 @@ class InquiriesTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.id')
-                    ->searchable(),
-                TextColumn::make('product.name')
-                    ->searchable(),
-                TextColumn::make('product_name_snapshot')
-                    ->searchable(),
-                TextColumn::make('product_price_snapshot')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('user_name_snapshot')
+                    ->label('Customer')
                     ->searchable(),
                 TextColumn::make('user_email_snapshot')
+                    ->label('Email')
                     ->searchable(),
                 TextColumn::make('user_phone_snapshot')
+                    ->label('Phone')
                     ->searchable(),
+                TextColumn::make('product_name_snapshot')
+                    ->label('Product')
+                    ->searchable(),
+                TextColumn::make('product_price_snapshot')
+                    ->label('Price ($)')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('language')
                     ->badge(),
                 TextColumn::make('created_at')
+                    ->label('Submitted At')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                ViewAction::make(),
             ]);
     }
 }

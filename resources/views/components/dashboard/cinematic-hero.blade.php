@@ -30,12 +30,12 @@
                     <!-- Primary Action -->
                     <a href="{{ route('services') }}"
                         class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors">
-                        សេវាកម្មរបស់យើងខ្ញុំ
+                        Our service
                     </a>
                     <!-- Secondary Action -->
                     <a href="{{ route('product-catalog.index') }}"
                         class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm">
-                        កាតាឡុកផលិតផល
+                        Product catalog
                     </a>
                 </div>
 
@@ -61,10 +61,10 @@
                     class="absolute inset-0 m-auto rounded-full pointer-events-none w-[85%] aspect-square bg-[radial-gradient(circle,rgba(45,122,106,0.07)_0%,transparent_70%)] blur-[2px]">
                 </div>
                 {{-- The image — no card, no border, no shadow --}}
-                <img src="{{ asset('storage/images/modern_printer_hero.webp') }}"
+                <img src="{{ asset("storage/images/modern_printer_hero.webp") }}"
                     alt="Modern Canon printer on a clean desk"
                     class="relative w-full max-w-[520px] drop-shadow-none max-h-[68vh] object-contain mix-blend-multiply rounded-lg"
-                    loading="eager" loading="lazy">
+                  loading="lazy">
             </div>
         </div>
     </div>

@@ -57,7 +57,7 @@ class HomepageTest extends TestCase
 
         $response = $this->actingAs($admin)->get(route('dashboard'));
 
-        $response->assertRedirect('/admin');
+        $response->assertRedirect('/vin_admin_print_scan_dashboard');
     }
 
     public function test_regular_customer_can_view_homepage(): void

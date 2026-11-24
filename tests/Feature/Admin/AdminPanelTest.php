@@ -37,13 +37,19 @@ class AdminPanelTest extends TestCase
 
     public function test_guest_is_redirected_from_admin_dashboard(): void
     {
+        $response = $this->get('/vin_admin_print_scan_dashboard');
+        $response->assertRedirect('/vin_admin_print_scan_dashboard/login');
+    }
+
+    public function test_old_admin_route_returns_404(): void
+    {
         $response = $this->get('/admin');
-        $response->assertRedirect('/admin/login');
+        $response->assertStatus(404);
     }
 
     public function test_regular_user_cannot_access_admin_dashboard(): void
     {
-        $response = $this->actingAs($this->customer)->get('/admin');
+        $response = $this->actingAs($this->customer)->get('/vin_admin_print_scan_dashboard');
         $response->assertStatus(403);
     }
 
@@ -62,7 +68,7 @@ class AdminPanelTest extends TestCase
             'message' => 'Interested in buying',
         ]);
 
-        $response = $this->actingAs($this->admin)->get('/admin');
+        $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard');
         $response->assertStatus(200);
         $response->assertSee('Dashboard');
 
@@ -79,25 +85,25 @@ class AdminPanelTest extends TestCase
 
     public function test_admin_can_access_filament_products_resource(): void
     {
-        $response = $this->actingAs($this->admin)->get('/admin/products');
+        $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard/products');
         $response->assertStatus(200);
     }
 
     public function test_admin_can_access_filament_categories_resource(): void
     {
-        $response = $this->actingAs($this->admin)->get('/admin/categories');
+        $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard/categories');
         $response->assertStatus(200);
     }
 
     public function test_admin_can_access_filament_customers_resource(): void
     {
-        $response = $this->actingAs($this->admin)->get('/admin/customers');
+        $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard/customers');
         $response->assertStatus(200);
     }
 
     public function test_admin_can_access_filament_inquiries_resource(): void
     {
-        $response = $this->actingAs($this->admin)->get('/admin/inquiries');
+        $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard/inquiries');
         $response->assertStatus(200);
     }
 }
