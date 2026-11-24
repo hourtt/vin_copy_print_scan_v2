@@ -14,12 +14,12 @@ class AdminSeeder extends Seeder
     {
         // * Point the seeder to the Admin
         User::updateOrCreate(
-            ['email' => 'lyengPrinter@gmail.com'],
+            ['email' => env('ADMIN_EMAIL')],
             [
-                'first_name' => 'Eng',
-                'last_name' => 'Ly',
-                'email' => 'lyengPrinter@gmail.com',
-                'password' => bcrypt('lyengPrinter@731946'),
+                'first_name' => env('ADMIN_NAME'),
+                'last_name' => env('ADMIN_LASTNAME'),
+                'email' => env('ADMIN_EMAIL'),
+                'password' => bcrypt(env('ADMIN_PASSWORD')),
                 'role' => 'admin',
             ]
         );

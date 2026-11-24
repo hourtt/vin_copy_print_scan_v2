@@ -122,4 +122,48 @@ class AdminPanelTest extends TestCase
         $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard/inquiries');
         $response->assertStatus(200);
     }
+
+    public function test_admin_can_access_filament_profile_page(): void
+    {
+        $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard/profile');
+        $response->assertStatus(200);
+    }
+
+    public function test_admin_is_blocked_from_public_storefront_and_customer_pages(): void
+    {
+        $responseHome = $this->actingAs($this->admin)->get('/');
+        $responseHome->assertRedirect('/vin_admin_print_scan_dashboard');
+
+        $responseCatalog = $this->actingAs($this->admin)->get('/product-catalog');
+        $responseCatalog->assertRedirect('/vin_admin_print_scan_dashboard');
+
+        $responseServices = $this->actingAs($this->admin)->get('/services');
+        $responseServices->assertRedirect('/vin_admin_print_scan_dashboard');
+
+        $responseCustomerProfile = $this->actingAs($this->admin)->get('/profile');
+        $responseCustomerProfile->assertRedirect('/vin_admin_print_scan_dashboard');
+    }
+
+    public function test_customer_without_profile_image_generates_initial_avatar(): void
+    {
+        $jenni = User::factory()->create([
+            'first_name' => 'Jenni',
+            'last_name' => 'Doe',
+            'profile_image' => null,
+        ]);
+
+        $this->assertStringStartsWith('data:image/svg+xml;base64,', $jenni->avatar_url);
+        $svgContent = base64_decode(substr($jenni->avatar_url, strlen('data:image/svg+xml;base64,')));
+        $this->assertStringContainsString('J', $svgContent);
+    }
+
+    public function test_customer_with_profile_image_returns_stored_avatar_url(): void
+    {
+        $uploaded = User::factory()->create([
+            'first_name' => 'Alex',
+            'profile_image' => 'profile_images/alex.jpg',
+        ]);
+
+        $this->assertStringContainsString('profile_images/alex.jpg', $uploaded->avatar_url);
+    }
 }
