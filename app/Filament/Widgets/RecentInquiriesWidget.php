@@ -57,13 +57,16 @@ class RecentInquiriesWidget extends TableWidget
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-m-eye')
+                    ->button()
+                    ->color('primary')
                     ->modalHeading(fn (Inquiry $record): string => '#INQ-'.str_pad($record->id, 5, '0', STR_PAD_LEFT))
                     ->modalWidth('3xl')
                     ->schema(fn (Schema $schema): Schema => InquiryInfolist::configure($schema))
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Close'),
             ])
-            ->recordAction('view')
+            ->recordAction(null)
+            ->recordUrl(null)
             ->paginated([5, 10, 25])
             ->defaultPaginationPageOption(5);
     }

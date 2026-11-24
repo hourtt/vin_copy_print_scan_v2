@@ -47,6 +47,7 @@ class InquiriesTable
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Close'),
             ])
-            ->recordAction('view');
+            ->recordAction(null)
+            ->recordUrl(null);
     }
 }

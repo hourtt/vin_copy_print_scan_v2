@@ -38,6 +38,8 @@ class CategoriesTable
             ->recordActions([
                 EditAction::make(),
             ])
+            ->recordAction(null)
+            ->recordUrl(null)
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
