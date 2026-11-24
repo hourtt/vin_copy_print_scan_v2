@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Inquiries\Tables;
 
+use App\Models\Inquiry;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -32,14 +33,22 @@ class InquiriesTable
                     ->badge(),
                 TextColumn::make('created_at')
                     ->label('Submitted At')
-                    ->dateTime()
+                    ->dateTime('M d, Y  h:i A')
                     ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-            ]);
+                ViewAction::make()
+                    ->modalHeading(fn (Inquiry $record): string => 'Customer Inquiry #INQ-'.str_pad($record->id, 5, '0', STR_PAD_LEFT))
+                    ->modalWidth('3xl')
+                    ->modalContent(fn (Inquiry $record) => view('filament.resources.inquiries.inquiry-detail', [
+                        'record' => $record,
+                    ]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
+            ])
+            ->recordAction('view');
     }
 }

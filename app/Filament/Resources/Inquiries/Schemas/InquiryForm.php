@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Inquiries\Schemas;
 
+use Carbon\Carbon;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -33,6 +34,7 @@ class InquiryForm
                     ->disabled(),
                 TextInput::make('created_at')
                     ->label('Date Submitted')
+                    ->formatStateUsing(fn ($state) => $state ? Carbon::parse($state)->timezone('Asia/Phnom_Penh')->format('M d, Y • h:i A') : '—')
                     ->disabled(),
                 Textarea::make('message')
                     ->label('Customer Message')

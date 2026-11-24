@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Resources\Inquiries\InquiryResource;
 use App\Models\Inquiry;
 use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
@@ -49,15 +48,22 @@ class RecentInquiriesWidget extends TableWidget
 
                 TextColumn::make('created_at')
                     ->label('Date')
-                    ->dateTime('M d, Y H:i')
+                    ->dateTime('M d, Y • h:i A', 'Asia/Phnom_Penh')
                     ->sortable(),
             ])
             ->recordActions([
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-m-eye')
-                    ->url(fn (): string => InquiryResource::getUrl('index')),
+                    ->modalHeading(fn (Inquiry $record): string => 'Customer Inquiry #INQ-'.str_pad($record->id, 5, '0', STR_PAD_LEFT))
+                    ->modalWidth('3xl')
+                    ->modalContent(fn (Inquiry $record) => view('filament.resources.inquiries.inquiry-detail', [
+                        'record' => $record,
+                    ]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
             ])
+            ->recordAction('view')
             ->paginated([5, 10, 25])
             ->defaultPaginationPageOption(5);
     }

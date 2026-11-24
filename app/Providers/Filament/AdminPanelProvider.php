@@ -26,6 +26,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('vin_admin_print_scan_dashboard')
             ->login()
+            ->breadcrumbs(false)
             ->brandLogo(asset('storage/images/logo-horizontal-layout.webp'))
             ->brandLogoHeight('2.5rem')
             ->colors([
