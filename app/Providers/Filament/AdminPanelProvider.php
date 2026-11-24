@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\EditProfile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -26,6 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('vin_admin_print_scan_dashboard')
             ->login()
+            ->profile(EditProfile::class, isSimple: false)
             ->breadcrumbs(false)
             ->brandLogo(asset('storage/images/logo-horizontal-layout.webp'))
             ->brandLogoHeight('2.5rem')
