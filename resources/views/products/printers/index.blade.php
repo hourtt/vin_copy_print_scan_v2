@@ -7,8 +7,8 @@
     searchAriaLabel="Search printers"
     :sortOptions="[
         'default' => 'Sort: Default',
-        'price-asc' => 'Price: Low → High',
-        'price-desc' => 'Price: High → Low',
+        'price_asc' => 'Price: Low → High',
+        'price_desc' => 'Price: High → Low',
         'year-desc' => 'Newest Model First',
         'name-asc' => 'Name A → Z',
         'stock-desc' => 'Most in Stock',

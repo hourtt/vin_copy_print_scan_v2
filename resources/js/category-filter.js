@@ -216,9 +216,6 @@ function initCategoryFilter() {
 }
 
 // 4. Lifecycle Event Listeners
-document.addEventListener("turbo:load", initCategoryFilter);
-
-// Initial page load fallback
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initCategoryFilter);
 } else {

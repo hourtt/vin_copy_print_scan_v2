@@ -5,7 +5,7 @@
 
         {{-- Group Heading --}}
         <div class="flex items-center gap-4 mb-6">
-            <h2 class="font-['Kantumruy Pro',serif] text-2xl font-semibold text-[#27272a] whitespace-nowrap">
+            <h2 class="font-['Kantumruy_Pro',serif] text-2xl font-semibold text-[#27272a] whitespace-nowrap">
                 {{ $groupHeading }}
             </h2>
             <div class="flex-1 h-px bg-[#e4e4e7]"></div>
@@ -57,7 +57,7 @@
                         <div class="text-xs font-bold capitalize tracking-wide text-[#3f3f46]">
                             {{ $subLabel }}
                         </div>
-                        <div class="font-['Kantumruy Pro',serif] text-base sm:text-lg font-semibold text-[#27272a] leading-snug line-clamp-2"
+                        <div class="font-['Kantumruy_Pro',serif] text-base sm:text-lg font-semibold text-[#27272a] leading-snug line-clamp-2"
                             title="{{ $product?->name }}">
                             {{ $product?->name }}
                         </div>

@@ -7,9 +7,8 @@ export default defineConfig({
             input: [
                 "resources/css/app.css",
                 "resources/js/app.js",
+                "resources/js/category-filter.js",
                 "resources/js/profile.js",
-                "resources/js/checkout-bundle.js",
-                "resources/js/services.js",
             ],
             refresh: true,
         }),

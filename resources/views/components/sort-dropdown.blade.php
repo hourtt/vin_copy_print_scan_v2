@@ -14,8 +14,8 @@
     $rawOptions = count($options) > 0 ? $options : [
         'recommended' => 'Recommended',
         'newest'      => 'Newest',
-        'price-asc'   => 'Price: Low → High',
-        'price-desc'  => 'Price: High → Low',
+        'price_asc'   => 'Price: Low → High',
+        'price_desc'  => 'Price: High → Low',
     ];
 
     // Normalize options so both associative array ['key' => 'Label'] and list of objects [['value' => '...', 'label' => '...']] work seamlessly

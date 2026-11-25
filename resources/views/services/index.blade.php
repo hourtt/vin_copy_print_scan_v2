@@ -11,7 +11,7 @@
     <link href="https://fonts.bunny.net/css?family=fraunces:400,500,600,700,900i&family=dm-sans:300,400,500,600"
         rel="stylesheet" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/services.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>

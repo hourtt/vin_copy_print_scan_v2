@@ -17,7 +17,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $user = $request->user();
+        $user = $request->user()->load('connectedAccounts');
 
         $recentInquiryCount = $user->inquiries()->count();
 
@@ -43,7 +43,12 @@ class ProfileController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Profile updated successfully!',
-                'user' => $user,
+                'user' => [
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'phone_number' => $user->phone_number,
+                ],
             ]);
         }
 

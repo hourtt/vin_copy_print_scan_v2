@@ -5,7 +5,7 @@
     $isTerminal = in_array($lastItem['label'] ?? '', ['Checkout', 'Shopping Cart', 'Product Catalog', 'Product Catalogs']);
 @endphp
 
-<nav class="flex flex-wrap items-center text-sm font-['Kantumruy Pro',sans-serif] py-2 mb-6 gap-y-2">
+<nav class="flex flex-wrap items-center text-sm font-['Kantumruy_Pro',sans-serif] py-2 mb-6 gap-y-2">
     {{-- @if ($showBack)
         <a href="{{ route('breadcrumb.back', ['from' => $isTerminal ? 'terminal' : 'category']) }}"
            class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 mr-3 transition-colors shrink-0"

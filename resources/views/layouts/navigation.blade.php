@@ -22,14 +22,14 @@
             <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-8">
 
                 <a href="{{ $homeRoute }}"
-                    class="nav-link text-sm font-medium transition-colors duration-200 font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
+                    class="nav-link text-sm font-medium transition-colors duration-200 font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
                     Home
                 </a>
 
                 {{-- Products dropdown --}}
                 <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button @click="open = !open"
-                        class="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 focus:outline-none font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]"
+                        class="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 focus:outline-none font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]"
                         :class="{ '!text-[#0D0D0B]': open }">
                         Products
                         <svg class="w-4 h-4 shrink-0 transition-transform duration-200" :class="{ 'rotate-180': open }"
@@ -47,19 +47,19 @@
                         class="absolute z-50 top-full left-1/2 -translate-x-1/2 mt-3 w-48 rounded-xl overflow-hidden bg-white border border-[#E5E5E2] shadow-[0_8px_24px_rgba(0,0,0,0.07)]">
                         <div class="flex flex-col gap-1.5">
                             <a href="{{ route('products.printers.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-t-md justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-t-md justify-center">
                                 Printers
                             </a>
                             <a href="{{ route('products.toners.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
                                 Toners
                             </a>
                             <a href="{{ route('products.ink-cartridges.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
                                 Ink Cartridges
                             </a>
                             <a href="{{ route('products.papers.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-b-md justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-b-md justify-center">
                                 Papers
                             </a>
                         </div>
@@ -67,7 +67,7 @@
                 </div>
 
                 <a href="{{ route('services') }}"
-                    class="text-sm font-medium transition-colors duration-200 font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
+                    class="text-sm font-medium transition-colors duration-200 font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
                     Services
                 </a>
             </div>
@@ -162,11 +162,11 @@
                     {{-- Guest: Sign In text link + Register pill --}}
                     <div class="hidden sm:flex items-center gap-4">
                         <a href="{{ route('login') }}"
-                            class="text-sm font-medium transition-colors duration-200 font-['Kantumruy Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
+                            class="text-sm font-medium transition-colors duration-200 font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:text-[#0D0D0B]">
                             Sign In
                         </a>
                         <a href="{{ route('register') }}"
-                            class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-normal text-white transition-all duration-200 hover:brightness-90 bg-[#305CDE] font-['Kantumruy Pro',sans-serif]">
+                            class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-normal text-white transition-all duration-200 hover:brightness-90 bg-[#305CDE] font-['Kantumruy_Pro',sans-serif]">
                             Get Started
                         </a>
                     </div>
