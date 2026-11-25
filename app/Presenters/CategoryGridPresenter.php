@@ -14,27 +14,21 @@ class CategoryGridPresenter
      */
     public function present(LengthAwarePaginator $products, Category $category): array
     {
-        $isPaper = $category->isPaper();
-        $isInk = $category->isInk();
-        $isPrinter = $category->isPrinter();
-
-        $subLabelFallback = match (true) {
-            $isPaper => 'Paper',
-            $isInk => 'Ink',
-            $isPrinter => 'Printer',
-            default => 'Toner',
-        };
+        $defaults = config("catalog.grid_defaults.{$category->type->value}")
+            ?? config('catalog.grid_defaults.default', [
+                'groupBy' => 'brand_id',
+                'headingRelation' => 'brand',
+                'headingFallback' => 'Other',
+                'subLabelRelation' => 'brand',
+                'subLabelFallback' => 'Product',
+                'compatKey' => 'compatibility',
+                'badgeCase' => 'uppercase',
+            ]);
 
         return [
             'products' => $products,
-            'groupBy' => $isPaper ? 'category_id' : 'brand_id',
-            'headingRelation' => $isPaper ? 'category' : 'brand',
-            'headingFallback' => $isPaper ? 'Uncategorized' : 'Other',
-            'subLabelRelation' => $isPaper ? 'category' : 'brand',
-            'subLabelFallback' => $subLabelFallback,
-            'compatKey' => $isInk ? 'spec:Compatible Printers' : 'compatibility',
+            ...$defaults,
             'emptyMessage' => "No {$category->name} found.",
-            'badgeCase' => $isInk ? 'capitalize' : 'uppercase',
         ];
     }
 }

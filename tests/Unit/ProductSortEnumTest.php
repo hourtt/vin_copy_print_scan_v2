@@ -10,9 +10,9 @@ class ProductSortEnumTest extends TestCase
     public function test_from_string_resolves_valid_snake_and_kebab_cases(): void
     {
         $this->assertEquals(ProductSort::PriceAsc, ProductSort::fromString('price_asc'));
-        $this->assertEquals(ProductSort::PriceAscKebab, ProductSort::fromString('price-asc'));
+        $this->assertEquals(ProductSort::PriceAsc, ProductSort::fromString('price-asc'));
         $this->assertEquals(ProductSort::PriceDesc, ProductSort::fromString('price_desc'));
-        $this->assertEquals(ProductSort::PriceDescKebab, ProductSort::fromString('price-desc'));
+        $this->assertEquals(ProductSort::PriceDesc, ProductSort::fromString('price-desc'));
         $this->assertEquals(ProductSort::YearDesc, ProductSort::fromString('year-desc'));
         $this->assertEquals(ProductSort::NameAsc, ProductSort::fromString('name-asc'));
         $this->assertEquals(ProductSort::StockDesc, ProductSort::fromString('stock-desc'));
@@ -29,10 +29,13 @@ class ProductSortEnumTest extends TestCase
     public function test_values_returns_all_case_values(): void
     {
         $values = ProductSort::values();
+        $acceptedValues = ProductSort::acceptedValues();
 
         $this->assertContains('recommended', $values);
         $this->assertContains('newest', $values);
         $this->assertContains('price_asc', $values);
-        $this->assertContains('price-asc', $values);
+        $this->assertContains('price_desc', $values);
+        $this->assertContains('price-asc', $acceptedValues);
+        $this->assertContains('price-desc', $acceptedValues);
     }
 }

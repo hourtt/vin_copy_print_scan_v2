@@ -45,12 +45,12 @@ class ProductSeeder extends Seeder
             ['category' => 'ink-cartridges', 'brand' => 'Epson', 'name' => 'Epson 003 Black Ink Bottle',    'price' => 12.00,  'stock' => 100, 'featured' => true,  'specs' => ['Yield' => '7,500 pages', 'Color' => 'Black',     'Compatible Printers' => 'EcoTank L3110, L3150, L3250']],
             ['category' => 'ink-cartridges', 'brand' => 'Epson', 'name' => 'Epson 003 CMY Color Ink Set',   'price' => 38.00,  'stock' => 90, 'featured' => false, 'specs' => ['Yield' => '5,000 pages', 'Color' => 'CMY Set',   'Compatible Printers' => 'EcoTank L3110, L3150, L3250']],
 
-            //  Paper
-            ['category' => 'paper', 'brand' => null, 'name' => 'A4 80gsm Multipurpose Paper (500 sheets)',  'price' => 8.50,   'stock' => 200, 'featured' => true,  'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '80 gsm', 'Sheets per Ream' => '500', 'Brightness' => '104%']],
-            ['category' => 'paper', 'brand' => null, 'name' => 'A4 80gsm Multipurpose Paper (5 Reams)',     'price' => 39.00,  'stock' => 80, 'featured' => false, 'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '80 gsm', 'Total Sheets' => '2,500', 'Brightness' => '104%']],
-            ['category' => 'paper', 'brand' => null, 'name' => 'A3 80gsm Printing Paper (500 sheets)',      'price' => 16.00,  'stock' => 60, 'featured' => false, 'specs' => ['Size' => 'A3 (297×420mm)', 'Weight' => '80 gsm', 'Sheets per Ream' => '500', 'Brightness' => '102%']],
-            ['category' => 'paper', 'brand' => null, 'name' => 'A4 90gsm Premium Paper (500 sheets)',       'price' => 11.00,  'stock' => 120, 'featured' => false, 'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '90 gsm', 'Sheets per Ream' => '500', 'Finish' => 'Smooth']],
-            ['category' => 'paper', 'brand' => null, 'name' => 'A4 Photo Glossy Paper 200gsm (20 sheets)',  'price' => 6.50,   'stock' => 150, 'featured' => false, 'specs' => ['Size' => 'A4', 'Weight' => '200 gsm', 'Finish' => 'High Gloss', 'Compatibility' => 'Inkjet Printers']],
+            //  Papers
+            ['category' => 'papers', 'brand' => null, 'name' => 'A4 80gsm Multipurpose Paper (500 sheets)',  'price' => 8.50,   'stock' => 200, 'featured' => true,  'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '80 gsm', 'Sheets per Ream' => '500', 'Brightness' => '104%']],
+            ['category' => 'papers', 'brand' => null, 'name' => 'A4 80gsm Multipurpose Paper (5 Reams)',     'price' => 39.00,  'stock' => 80, 'featured' => false, 'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '80 gsm', 'Total Sheets' => '2,500', 'Brightness' => '104%']],
+            ['category' => 'papers', 'brand' => null, 'name' => 'A3 80gsm Printing Paper (500 sheets)',      'price' => 16.00,  'stock' => 60, 'featured' => false, 'specs' => ['Size' => 'A3 (297×420mm)', 'Weight' => '80 gsm', 'Sheets per Ream' => '500', 'Brightness' => '102%']],
+            ['category' => 'papers', 'brand' => null, 'name' => 'A4 90gsm Premium Paper (500 sheets)',       'price' => 11.00,  'stock' => 120, 'featured' => false, 'specs' => ['Size' => 'A4 (210×297mm)', 'Weight' => '90 gsm', 'Sheets per Ream' => '500', 'Finish' => 'Smooth']],
+            ['category' => 'papers', 'brand' => null, 'name' => 'A4 Photo Glossy Paper 200gsm (20 sheets)',  'price' => 6.50,   'stock' => 150, 'featured' => false, 'specs' => ['Size' => 'A4', 'Weight' => '200 gsm', 'Finish' => 'High Gloss', 'Compatibility' => 'Inkjet Printers']],
         ];
 
         foreach ($products as $item) {
@@ -98,8 +98,8 @@ class ProductSeeder extends Seeder
             'HP 58A Black Toner (CF258A)' => ['hp-laserjet-pro-m404dn', 'hp-laserjet-mfp-m428fdw'],
             'HP 26X High Yield Toner (CF226X)' => ['hp-laserjet-pro-m404dn', 'hp-laserjet-mfp-m428fdw'],
             // Canon toners
-            'Canon Cartridge 054 Black' => ['canon-imagecl-ass-mf445dw', 'canon-imagecl-ass-mf455dw'],
-            'Canon Cartridge 054H High Yield' => ['canon-imagecl-ass-mf445dw', 'canon-imagecl-ass-mf455dw'],
+            'Canon Cartridge 054 Black' => ['canon-imageclass-mf445dw', 'canon-imageclass-mf455dw'],
+            'Canon Cartridge 054H High Yield' => ['canon-imageclass-mf445dw', 'canon-imageclass-mf455dw'],
             // Brother toners
             'Brother TN-2480 Toner' => ['brother-hl-l2350dw', 'brother-mfc-l2750dw', 'brother-dcp-l2550dw'],
             'Brother TN-2430 Standard Toner' => ['brother-hl-l2350dw', 'brother-mfc-l2750dw'],
@@ -112,8 +112,8 @@ class ProductSeeder extends Seeder
             'Canon PG-47 Black Ink' => ['canon-pixma-e400', 'canon-pixma-e480', 'canon-pixma-ts307'],
             'Canon CL-57 Color Ink' => ['canon-pixma-e400', 'canon-pixma-e480', 'canon-pixma-ts307'],
             // Epson inks
-            'Epson 003 Black Ink Bottle' => ['epson-eco-tank-l3110', 'epson-eco-tank-l3150', 'epson-eco-tank-l3250'],
-            'Epson 003 CMY Color Ink Set' => ['epson-eco-tank-l3110', 'epson-eco-tank-l3150', 'epson-eco-tank-l3250'],
+            'Epson 003 Black Ink Bottle' => ['epson-ecotank-l3110', 'epson-ecotank-l3150', 'epson-ecotank-l3250'],
+            'Epson 003 CMY Color Ink Set' => ['epson-ecotank-l3110', 'epson-ecotank-l3150', 'epson-ecotank-l3250'],
         ];
 
         foreach ($compatibilityMap as $productName => $modelSlugs) {
@@ -138,7 +138,7 @@ class ProductSeeder extends Seeder
             'printers' => "The {$productName} delivers professional-quality printing for demanding office environments. Designed for reliability and speed, it handles high-volume print jobs with ease.",
             'toners' => "Genuine {$productName} cartridge engineered for optimal performance with compatible printers. Delivers sharp, fade-resistant prints with consistent page yield.",
             'ink-cartridges' => "The {$productName} produces vibrant colours and crisp black text. Formulated for use with compatible inkjet printers to deliver reliable, smear-resistant output.",
-            'paper' => "{$productName} is ideal for everyday office printing. Acid-free and compatible with laser and inkjet printers for clear, professional documents.",
+            'papers' => "{$productName} is ideal for everyday office printing. Acid-free and compatible with laser and inkjet printers for clear, professional documents.",
             'accessories' => "{$productName} is a quality accessory designed to extend the life and performance of your printing equipment.",
         ];
 

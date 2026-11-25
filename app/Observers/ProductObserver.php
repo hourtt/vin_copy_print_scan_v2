@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Http\Controllers\Api\CategoryController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 
@@ -44,25 +45,20 @@ class ProductObserver
      */
     private function flushProductCaches(Product $product): void
     {
-        Cache::forget('homepage_curated_products');
-        Cache::forget('catalog_categories_list');
-        Cache::forget('homepage_curated_product_ids');
-        Cache::forget('catalog_category_ids');
-        Cache::forget('catalog_category_ids_v2');
-        Cache::forget('all_active_category_ids_v2');
+        Cache::forget(config('catalog.cache.keys.homepage_curated', 'homepage_curated_products'));
+        Cache::forget(config('catalog.cache.keys.catalog_categories', 'catalog_categories_list'));
+        Cache::forget(CategoryController::CACHE_KEY);
+
+        $prefix = (string) config('catalog.cache.keys.category_brands_prefix', 'category_brands_');
 
         if ($product->category_id) {
-            Cache::forget("category_brands_{$product->category_id}");
-            Cache::forget("category_brand_ids_{$product->category_id}");
-            Cache::forget("category_brand_ids_v2_{$product->category_id}");
+            Cache::forget("{$prefix}{$product->category_id}");
         }
 
         // If the category was modified, flush the old category's brand cache as well
         if ($product->wasChanged('category_id') && $product->getOriginal('category_id')) {
             $oldId = $product->getOriginal('category_id');
-            Cache::forget("category_brands_{$oldId}");
-            Cache::forget("category_brand_ids_{$oldId}");
-            Cache::forget("category_brand_ids_v2_{$oldId}");
+            Cache::forget("{$prefix}{$oldId}");
         }
     }
 }

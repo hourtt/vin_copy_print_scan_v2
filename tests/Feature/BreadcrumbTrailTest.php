@@ -13,7 +13,7 @@ class BreadcrumbTrailTest extends TestCase
         parent::setUp();
 
         Category::updateOrCreate(['slug' => 'printers'], ['name' => 'Printer']);
-        Category::updateOrCreate(['slug' => 'paper'], ['name' => 'Paper']);
+        Category::updateOrCreate(['slug' => 'papers'], ['name' => 'Paper']);
     }
 
     public function test_example_a_navigation_and_multi_level_back_arrow(): void

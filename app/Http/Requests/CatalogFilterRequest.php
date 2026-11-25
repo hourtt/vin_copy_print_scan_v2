@@ -29,7 +29,7 @@ class CatalogFilterRequest extends FormRequest
             'categories.*' => ['integer', 'min:1'],
             'min_price' => ['nullable', 'numeric', 'min:0'],
             'max_price' => ['nullable', 'numeric', 'min:0'],
-            'sort' => ['nullable', 'string', Rule::in(ProductSort::values())],
+            'sort' => ['nullable', 'string', Rule::in(ProductSort::acceptedValues())],
             'search' => ['nullable', 'string', 'max:100'],
             'cat' => ['nullable', function ($attribute, $value, $fail) {
                 if ($value !== 'all' && ! filter_var($value, FILTER_VALIDATE_INT)) {

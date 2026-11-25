@@ -24,17 +24,35 @@ enum ProductSort: string
             return self::Recommended;
         }
 
-        return self::tryFrom($sort) ?? self::Recommended;
+        return match ($sort) {
+            'price-asc' => self::PriceAsc,
+            'price-desc' => self::PriceDesc,
+            default => self::tryFrom($sort) ?? self::Recommended,
+        };
     }
 
     /**
-     * Allowed values for validation.
+     * Allowed canonical values for validation.
      *
      * @return array<int, string>
      */
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
+    }
+
+    /**
+     * All accepted input sort values, including legacy kebab-case aliases.
+     *
+     * @return array<int, string>
+     */
+    public static function acceptedValues(): array
+    {
+        return array_values(array_unique([
+            ...self::values(),
+            'price-asc',
+            'price-desc',
+        ]));
     }
 
     /**

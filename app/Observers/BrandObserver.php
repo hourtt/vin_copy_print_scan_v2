@@ -28,14 +28,13 @@ class BrandObserver
      */
     private function flushBrandCaches(Brand $brand): void
     {
-        Cache::forget('homepage_curated_products');
-        Cache::forget('catalog_categories_list');
+        Cache::forget(config('catalog.cache.keys.homepage_curated', 'homepage_curated_products'));
+        Cache::forget(config('catalog.cache.keys.catalog_categories', 'catalog_categories_list'));
 
+        $prefix = (string) config('catalog.cache.keys.category_brands_prefix', 'category_brands_');
         $categoryIds = $brand->products()->distinct()->pluck('category_id')->filter()->all();
         foreach ($categoryIds as $catId) {
-            Cache::forget("category_brands_{$catId}");
-            Cache::forget("category_brand_ids_{$catId}");
-            Cache::forget("category_brand_ids_v2_{$catId}");
+            Cache::forget("{$prefix}{$catId}");
         }
     }
 }

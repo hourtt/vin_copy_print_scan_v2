@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ProductSort;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductIndexRequest extends FormRequest
 {
@@ -14,6 +16,20 @@ class ProductIndexRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $rawCategory = $this->input('category') ?? $this->route('category');
+
+        if (is_string($rawCategory) && $rawCategory !== '') {
+            $normalized = strtolower(trim($rawCategory));
+            $aliases = config('catalog.slug_aliases', []);
+
+            $this->merge([
+                'category' => $aliases[$normalized] ?? $normalized,
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [
@@ -21,7 +37,7 @@ class ProductIndexRequest extends FormRequest
             'category' => 'nullable|string|exists:categories,slug',
             'brand_id' => 'nullable|integer|exists:brands,id',
             'search' => 'nullable|string|max:255',
-            'sort' => 'nullable|string|in:price-asc,price-desc,newest,name-asc',
+            'sort' => ['nullable', 'string', Rule::in(ProductSort::acceptedValues())],
             'per_page' => 'nullable|integer|min:1|max:50',
         ];
     }
