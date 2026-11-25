@@ -39,10 +39,6 @@ use Illuminate\Support\Str;
  * @property-read array $stock_status
  * @property-read Collection<int, ProductImage> $images
  * @property-read int|null $images_count
- * @property-read Collection<int, OrderItem> $orderItems
- * @property-read int|null $order_items_count
- * @property-read Collection<int, Voucher> $voucher
- * @property-read int|null $voucher_count
  *
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product featured()
