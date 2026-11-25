@@ -123,27 +123,6 @@ class InquiryInfolist
                                         return $record->user->is_banned ? 'danger' : 'success';
                                     }),
                             ]),
-
-                        Actions::make([
-                            Action::make('call')
-                                ->label('Call')
-                                ->icon('heroicon-m-phone')
-                                ->color('gray')
-                                ->button()
-                                ->url(fn (Inquiry $record): ?string => ($record->user_phone_snapshot ?: $record->user?->phone_number) ? 'tel:'.($record->user_phone_snapshot ?: $record->user?->phone_number) : null)
-                                ->visible(fn (Inquiry $record): bool => (bool) ($record->user_phone_snapshot ?: $record->user?->phone_number)),
-
-                            Action::make('email')
-                                ->label('Email')
-                                ->icon('heroicon-m-envelope')
-                                ->color('primary')
-                                ->button()
-                                ->url(fn (Inquiry $record): ?string => ($record->user_email_snapshot ?: $record->user?->email) ? 'mailto:'.($record->user_email_snapshot ?: $record->user?->email).'?subject='.rawurlencode('Regarding your inquiry for '.$record->product_name_snapshot) : null)
-                                ->visible(fn (Inquiry $record): bool => (bool) ($record->user_email_snapshot ?: $record->user?->email)),
-                        ])
-                            ->extraAttributes([
-                                'class' => 'flex flex-wrap gap-2 pt-2',
-                            ]),
                     ]),
 
                 // 3. Product (Fixed 112px image on left, details on right, stacked below sm)
@@ -213,29 +192,6 @@ class InquiryInfolist
                         ])
                             ->extraAttributes([
                                 'class' => 'flex flex-col sm:flex-row gap-4 items-start w-full min-w-0',
-                            ]),
-
-                        Actions::make([
-                            Action::make('edit_product')
-                                ->label('Edit product')
-                                ->icon('heroicon-m-pencil-square')
-                                ->color('gray')
-                                ->button()
-                                ->url(fn (Inquiry $record): ?string => $record->product ? route('filament.admin.resources.products.edit', ['record' => $record->product]) : null)
-                                ->openUrlInNewTab()
-                                ->visible(fn (Inquiry $record): bool => (bool) $record->product),
-
-                            Action::make('view_in_store')
-                                ->label('View in store')
-                                ->icon('heroicon-m-arrow-top-right-on-square')
-                                ->color('primary')
-                                ->button()
-                                ->url(fn (Inquiry $record): ?string => $record->product ? route('products.show', $record->product->slug) : null)
-                                ->openUrlInNewTab()
-                                ->visible(fn (Inquiry $record): bool => (bool) $record->product),
-                        ])
-                            ->extraAttributes([
-                                'class' => 'flex flex-wrap gap-2 pt-2',
                             ]),
                     ]),
 

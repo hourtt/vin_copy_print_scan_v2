@@ -19,11 +19,11 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('category_id')
-                    ->numeric()
+                TextColumn::make('category.name')
+                    ->label('Category')
                     ->sortable(),
-                TextColumn::make('brand_id')
-                    ->numeric()
+                TextColumn::make('brand.name')
+                    ->label('Brand')
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
@@ -41,7 +41,8 @@ class ProductsTable
                 TextColumn::make('sales_count')
                     ->numeric()
                     ->sortable(),
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                    ->disk('public'),
                 IconColumn::make('is_featured')
                     ->boolean(),
                 TextColumn::make('created_at')

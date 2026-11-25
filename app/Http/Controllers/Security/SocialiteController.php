@@ -11,11 +11,20 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
+    private const ALLOWED_PROVIDERS = ['google', 'github'];
+
+    private function ensureSupportedProvider(string $provider): void
+    {
+        abort_unless(in_array($provider, self::ALLOWED_PROVIDERS, true), 404);
+    }
+
     /**
      * Redirect the user to the provider authentication page.
      */
     public function redirect(string $provider)
     {
+        $this->ensureSupportedProvider($provider);
+
         return Socialite::driver($provider)->redirect();
     }
 
@@ -24,6 +33,8 @@ class SocialiteController extends Controller
      */
     public function callback(string $provider)
     {
+        $this->ensureSupportedProvider($provider);
+
         try {
             /** @var \Laravel\Socialite\Two\User $socialUser */
             $socialUser = Socialite::driver($provider)->user();
@@ -80,6 +91,11 @@ class SocialiteController extends Controller
 
         if ($connectedAccount) {
             $user = $connectedAccount->user;
+
+            if ($redirect = $this->denyDisallowedUser($user)) {
+                return $redirect;
+            }
+
             Auth::login($user);
 
             $connectedAccount->update([
@@ -103,6 +119,10 @@ class SocialiteController extends Controller
         $user = User::where('email', $email)->first();
 
         if ($user) {
+            if ($redirect = $this->denyDisallowedUser($user)) {
+                return $redirect;
+            }
+
             $user->connectedAccounts()->create([
                 'provider_name' => $provider,
                 'provider_id' => $socialUser->getId(),
@@ -146,6 +166,8 @@ class SocialiteController extends Controller
      */
     public function disconnect(string $provider)
     {
+        $this->ensureSupportedProvider($provider);
+
         $user = Auth::user();
 
         /** @var ConnectedAccount|null $connectedAccount */
@@ -170,5 +192,31 @@ class SocialiteController extends Controller
         }
 
         return redirect()->route('profile.edit')->with('status', 'account-disconnected');
+    }
+
+    /**
+     * Prevent admins and banned users from logging in via customer OAuth routes.
+     */
+    private function denyDisallowedUser(?User $user)
+    {
+        if (! $user) {
+            return redirect()->route('login')->withErrors([
+                'error' => 'Unable to locate user account.',
+            ]);
+        }
+
+        if ($user->role === 'admin') {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Admin accounts cannot log in via the customer portal. Please use the private admin login portal.',
+            ]);
+        }
+
+        if ($user->is_banned) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Your account has been suspended from this website. Please contact support.',
+            ]);
+        }
+
+        return null;
     }
 }

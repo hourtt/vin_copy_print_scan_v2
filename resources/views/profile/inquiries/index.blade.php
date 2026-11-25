@@ -29,7 +29,7 @@
                             <th class="px-5 py-3.5 text-left text-xs font-semibold text-[#6B6B6B] uppercase tracking-wide">Price</th>
                             <th class="px-5 py-3.5 text-left text-xs font-semibold text-[#6B6B6B] uppercase tracking-wide">Language</th>
                             <th class="px-5 py-3.5 text-left text-xs font-semibold text-[#6B6B6B] uppercase tracking-wide">Date</th>
-                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-[#6B6B6B] uppercase tracking-wide">Product</th>
+                            <th class="px-5 py-3.5 text-left text-xs font-semibold text-[#6B6B6B] uppercase tracking-wide">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#F0F0EE]">
@@ -55,10 +55,15 @@
                                     {{ $inquiry->created_at->diffForHumans() }}
                                 </td>
                                 <td class="px-5 py-4">
-                                    @if($inquiry->product)
-                                        <a href="{{ route('products.' . Str::plural(strtolower($inquiry->product->category->name ?? 'printers')) . '.index') }}"
+                                    @if($inquiry->product && ! $inquiry->product->trashed())
+                                        <a href="{{ route('products.show', $inquiry->product) }}"
                                            class="text-xs font-medium text-[#2563EB] hover:underline">
                                             View →
+                                        </a>
+                                    @elseif($inquiry->product?->category)
+                                        <a href="{{ route('products.category.index', $inquiry->product->category->slug) }}"
+                                           class="text-xs font-medium text-[#2563EB] hover:underline">
+                                            Browse Category →
                                         </a>
                                     @else
                                         <span class="text-xs text-[#9A9A96]">Product removed</span>

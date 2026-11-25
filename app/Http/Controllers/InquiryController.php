@@ -42,7 +42,7 @@ class InquiryController extends Controller
         $text = $this->buildMessage($user, $product, $language);
 
         //  Build Telegram deep-link
-        $username = config('services.telegram.owner_username');
+        $username = (string) config('services.telegram.owner_username', '');
         $telegramUrl = 'https://t.me/'.ltrim($username, '@')
             .'?text='.rawurlencode($text);
 
@@ -75,7 +75,7 @@ class InquiryController extends Controller
     public function history(Request $request): View
     {
         $inquiries = Inquiry::where('user_id', $request->user()->id)
-            ->with('product')
+            ->with(['product.category'])
             ->latest()
             ->paginate(10);
 

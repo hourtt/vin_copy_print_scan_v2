@@ -34,20 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
-    'github' => [
-        'client_id' => env('GITHUB_CLIENT_ID'),
-        'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => env('GITHUB_REDIRECT_URI', 'http://localhost:8000/auth/callback/github'),
-    ],
-
-    'google_maps' => [
-        'embed_url' => env('GOOGLE_MAPS_EMBED'),
-        'link' => env('GOOGLE_MAPS_LINK'),
-    ],
-
+    
     'telegram' => [
-        'owner_username' => env('TELEGRAM_OWNER_USERNAME'),
+        'owner_username' => ltrim((string) env('TELEGRAM_OWNER_USERNAME', ''), '@'),
     ],
 
     'google' => [

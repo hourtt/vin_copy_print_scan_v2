@@ -20,6 +20,10 @@ class UserMiddleware
         $user = Auth::user();
 
         if (! $user) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+
             return redirect()->route('login');
         }
 
@@ -29,6 +33,10 @@ class UserMiddleware
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Your account has been suspended.'], 403);
+            }
+
             return redirect()->route('login')
                 ->withErrors([
                     'email' => 'Your account has been suspended. Please contact support.',
@@ -36,6 +44,10 @@ class UserMiddleware
         }
 
         if ($user->role === 'admin') {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Forbidden.'], 403);
+            }
+
             return redirect('/vin_admin_print_scan_dashboard');
         }
 
