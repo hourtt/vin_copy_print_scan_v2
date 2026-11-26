@@ -26,6 +26,7 @@ class ImageController extends Controller
 
     public function destroy()
     {
+        /** @var User $user */
         $user = Auth::user();
 
         if ($user->profile_image) {

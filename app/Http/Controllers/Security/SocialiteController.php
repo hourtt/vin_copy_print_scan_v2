@@ -73,14 +73,6 @@ class SocialiteController extends Controller
                 ]
             );
 
-            // Log activity
-            $user->securityActivityLogs()->create([
-                'action' => 'Connected '.ucfirst($provider).' account',
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'created_at' => now(),
-            ]);
-
             return redirect()->route('profile.edit')->with('status', 'account-connected');
         }
 
@@ -168,6 +160,7 @@ class SocialiteController extends Controller
     {
         $this->ensureSupportedProvider($provider);
 
+        /** @var User $user */
         $user = Auth::user();
 
         /** @var ConnectedAccount|null $connectedAccount */
@@ -182,13 +175,6 @@ class SocialiteController extends Controller
             }
 
             $connectedAccount->delete();
-
-            $user->securityActivityLogs()->create([
-                'action' => 'Disconnected '.ucfirst($provider).' account',
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'created_at' => now(),
-            ]);
         }
 
         return redirect()->route('profile.edit')->with('status', 'account-disconnected');
