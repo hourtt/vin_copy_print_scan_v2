@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             PrinterModelSeeder::class,
             ProductSeeder::class,
-            ShopSettingSeeder::class,
         ]);
     }
 }

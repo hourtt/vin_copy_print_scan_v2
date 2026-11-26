@@ -32,16 +32,10 @@ use Illuminate\Support\Carbon;
  * @property CarbonInterface|null $created_at
  * @property CarbonInterface|null $updated_at
  * @property Carbon|null $email_verified_at
- * @property string|null $two_factor_secret
- * @property array<array-key, mixed>|null $two_factor_recovery_codes
- * @property Carbon|null $two_factor_confirmed_at
- * @property bool $notify_new_device_login
  * @property-read Collection<int, ConnectedAccount> $connectedAccounts
  * @property-read int|null $connected_accounts_count
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read Collection<int, SecurityActivityLog> $securityActivityLogs
- * @property-read int|null $security_activity_logs_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
@@ -54,14 +48,10 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIsBanned($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereNotifyNewDeviceLogin($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorConfirmedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorRecoveryCodes($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -84,18 +74,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
         'phone_number',
         'password',
         'is_banned',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
-        'two_factor_confirmed_at',
-        'notify_new_device_login',
         'profile_image',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
     ];
 
     protected function casts(): array
@@ -103,9 +87,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'two_factor_recovery_codes' => 'array',
-            'two_factor_confirmed_at' => 'datetime',
-            'notify_new_device_login' => 'boolean',
             'is_banned' => 'boolean',
         ];
     }
@@ -193,22 +174,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
     public function connectedAccounts()
     {
         return $this->hasMany(ConnectedAccount::class);
-    }
-
-    /**
-     * Security activity logs.
-     */
-    public function securityActivityLogs()
-    {
-        return $this->hasMany(SecurityActivityLog::class);
-    }
-
-    /**
-     * The user's favorite products.
-     */
-    public function favorites()
-    {
-        return $this->belongsToMany(Product::class, 'favorites')->withTimestamps();
     }
 
     /**
