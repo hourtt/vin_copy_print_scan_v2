@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('printer_models', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
+            $table->foreignId('brand_id')->constrained('brands')->cascadeOnDelete();
             $table->string('model_name');           // e.g. "LaserJet Pro M404dn"
             $table->string('slug')->unique();       // e.g. "hp-laserjet-pro-m404dn"
             $table->timestamps();

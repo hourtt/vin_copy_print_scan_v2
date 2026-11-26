@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_compatible_models', function (Blueprint $table) {
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->foreignId('printer_model_id')->constrained('printer_models')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('printer_model_id')->constrained('printer_models')->cascadeOnDelete();
             $table->primary(['product_id', 'printer_model_id']);
         });
     }

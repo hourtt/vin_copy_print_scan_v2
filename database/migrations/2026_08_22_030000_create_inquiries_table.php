@@ -13,11 +13,11 @@ return new class extends Migration
 
             $table->foreignId('user_id')
                 ->constrained('users')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreignId('product_id')
                 ->constrained('products')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             // Snapshots - accurate even after product rename/reprice/soft-delete
             $table->string('product_name_snapshot');
@@ -33,6 +33,8 @@ return new class extends Migration
             $table->enum('language', ['en', 'km', 'zh'])->default('en');
 
             $table->timestamps();
+
+            $table->index(['user_id', 'created_at'], 'idx_inquiries_user_created');
         });
     }
 

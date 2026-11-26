@@ -17,15 +17,15 @@ return new class extends Migration
             $table->string('last_name');
             $table->enum('role', ['customer', 'admin'])->default('customer');
             $table->string('email')->unique();
+            $table->string('profile_image')->nullable();
             $table->string('phone_number')->nullable();
-            $table->string('address')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
-            $table->string('zip_code')->nullable();
+            $table->boolean('is_banned')->default(false);
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->index(['role', 'is_banned'], 'idx_users_role_banned');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

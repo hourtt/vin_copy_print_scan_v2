@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('type', 20)->default('printer');
             $table->text('description')->nullable();
             $table->string('icon')->nullable();       // e.g. 'printer', 'toner', 'ink', 'paper'
             $table->unsignedTinyInteger('sort_order')->default(0);
             $table->timestamps();
+
+            $table->index('sort_order', 'idx_categories_sort_order');
         });
     }
 
