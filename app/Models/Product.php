@@ -37,8 +37,6 @@ use Illuminate\Support\Str;
  * @property-read string $effective_price
  * @property-read bool $is_on_sale
  * @property-read array $stock_status
- * @property-read Collection<int, ProductImage> $images
- * @property-read int|null $images_count
  *
  * @method static \Database\Factories\ProductFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Product featured()
@@ -96,14 +94,6 @@ class Product extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
-    }
-
-    /**
-     * A product can have many gallery images.
-     */
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
 
     /**
@@ -193,7 +183,7 @@ class Product extends Model
             function (Builder $q, string $search) {
                 $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $search);
 
-                return $q->where('name', 'like', "%{$escaped}%");
+                return $q->whereLike('name', "%{$escaped}%", caseSensitive: false);
             }
         );
 
