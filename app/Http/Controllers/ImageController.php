@@ -19,7 +19,7 @@ class ImageController extends Controller
         $tempPath = $request->file('image')->store('temp/profiles', 'local');
 
         // Process profile image asynchronously via queue
-        ProcessProfileImageJob::dispatch($user->id, $tempPath);
+        ProcessProfileImageJob::dispatchSync($user->id, $tempPath);
 
         return redirect()->back()->with('success', 'Profile image uploaded and is being processed!');
     }

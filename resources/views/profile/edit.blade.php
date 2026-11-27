@@ -6,7 +6,7 @@
                 <x-profiles.header-avatar />
                 <x-profiles.activity-overview :recentInquiryCount="$recentInquiryCount ?? 0" />
                 <x-profiles.personal-info-card />
-                <x-profiles.security-integrations-card />
+                {{-- <x-profiles.security-integrations-card /> --}}
             </div>
         </main>
     </div>
