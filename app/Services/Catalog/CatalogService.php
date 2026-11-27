@@ -93,7 +93,7 @@ class CatalogService
         $data = $this->cache->get($key);
 
         // If not cached or corrupted (e.g. __PHP_Incomplete_Class), re-query and re-cache clean scalar arrays
-        if (! is_array($data)) {
+        if (!\is_array($data)) {
             $this->cache->forget($key);
 
             $data = Brand::whereHas('products', fn ($q) => $q->where('category_id', $category->id))
