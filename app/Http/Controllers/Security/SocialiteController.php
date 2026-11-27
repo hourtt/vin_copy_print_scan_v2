@@ -11,6 +11,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
+    
     private const ALLOWED_PROVIDERS = ['google', 'github'];
 
     private function ensureSupportedProvider(string $provider): void
@@ -43,7 +44,8 @@ class SocialiteController extends Controller
                 'error' => 'Unable to authenticate with '.ucfirst($provider).'. Please try again.',
             ]);
         }
-
+        //* get provider id and cast to string (Since provider id is integer and database column is varchar)
+        $providerId = (string) $socialUser->getId();
         // 1. If user is already authenticated, link the account
         if (Auth::check()) {
             /** @var User $user */
@@ -52,7 +54,7 @@ class SocialiteController extends Controller
             // FIXED: Query ConnectedAccount globally to check across all users
             /** @var ConnectedAccount|null $existingConnection */
             $existingConnection = ConnectedAccount::where('provider_name', $provider)
-                ->where('provider_id', $socialUser->getId())
+                ->where('provider_id', $providerId)
                 ->first();
 
             if ($existingConnection && $existingConnection->user_id !== $user->id) {
@@ -65,7 +67,7 @@ class SocialiteController extends Controller
             $user->connectedAccounts()->updateOrCreate(
                 [
                     'provider_name' => $provider,
-                    'provider_id' => $socialUser->getId(),
+                    'provider_id' => $providerId,
                 ],
                 [
                     'provider_token' => $socialUser->token,
@@ -78,7 +80,7 @@ class SocialiteController extends Controller
 
         // 2. User is guest: check if this social account is already linked
         $connectedAccount = ConnectedAccount::where('provider_name', $provider)
-            ->where('provider_id', $socialUser->getId())
+            ->where('provider_id', $providerId)
             ->first();
 
         if ($connectedAccount) {
@@ -117,7 +119,7 @@ class SocialiteController extends Controller
 
             $user->connectedAccounts()->create([
                 'provider_name' => $provider,
-                'provider_id' => $socialUser->getId(),
+                'provider_id' => $providerId,
                 'provider_token' => $socialUser->token,
                 'provider_refresh_token' => $socialUser->refreshToken,
             ]);
@@ -143,7 +145,7 @@ class SocialiteController extends Controller
 
         $user->connectedAccounts()->create([
             'provider_name' => $provider,
-            'provider_id' => $socialUser->getId(),
+            'provider_id' => $providerId,
             'provider_token' => $socialUser->token,
             'provider_refresh_token' => $socialUser->refreshToken,
         ]);
