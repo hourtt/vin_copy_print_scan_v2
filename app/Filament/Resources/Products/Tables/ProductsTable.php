@@ -33,7 +33,9 @@ class ProductsTable
                     ->money()
                     ->sortable(),
                 TextColumn::make('discount_price')
+                    ->label('Sale price')
                     ->money()
+                    ->placeholder('No discount')
                     ->sortable(),
                 TextColumn::make('stock')
                     ->numeric()

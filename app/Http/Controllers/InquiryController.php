@@ -52,7 +52,7 @@ class InquiryController extends Controller
                 'user_id' => $user->id,
                 'product_id' => $product->id,
                 'product_name_snapshot' => $product->name,
-                'product_price_snapshot' => $product->discount_price ?? $product->price,
+                'product_price_snapshot' => $product->effective_price,
                 'user_name_snapshot' => trim("{$user->first_name} {$user->last_name}"),
                 'user_email_snapshot' => $user->email,
                 'user_phone_snapshot' => $user->phone_number,
@@ -95,7 +95,7 @@ class InquiryController extends Controller
         $phone = $user->phone_number;
         $email = $user->email;
         $pName = $product->name;
-        $price = number_format($product->discount_price ?? $product->price, 2);
+        $price = number_format((float) $product->effective_price, 2);
 
         return match ($language) {
             'km' => implode("\n", [

@@ -65,10 +65,38 @@ class ProductScopesTest extends TestCase
             'stock' => 5,
         ]);
 
+        $zeroDiscountItem = Product::create([
+            'category_id' => $this->category->id,
+            'name' => 'Zero Discount Item',
+            'slug' => 'zero-discount-item',
+            'price' => 800.00,
+            'discount_price' => 0,
+            'stock' => 5,
+        ]);
+
+        $equalDiscountItem = Product::create([
+            'category_id' => $this->category->id,
+            'name' => 'Equal Discount Item',
+            'slug' => 'equal-discount-item',
+            'price' => 800.00,
+            'discount_price' => 800.00,
+            'stock' => 5,
+        ]);
+
         $results = Product::onSale()->get();
 
         $this->assertTrue($results->contains('id', $saleItem->id));
         $this->assertFalse($results->contains('id', $regularItem->id));
+        $this->assertFalse($results->contains('id', $zeroDiscountItem->id));
+        $this->assertFalse($results->contains('id', $equalDiscountItem->id));
+
+        $this->assertNull($zeroDiscountItem->discount_price);
+        $this->assertFalse($zeroDiscountItem->is_on_sale);
+        $this->assertSame('800.00', $zeroDiscountItem->effective_price);
+
+        $this->assertNull($equalDiscountItem->discount_price);
+        $this->assertFalse($equalDiscountItem->is_on_sale);
+        $this->assertSame('800.00', $equalDiscountItem->effective_price);
     }
 
     public function test_scope_popular(): void

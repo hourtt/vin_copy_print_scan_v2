@@ -97,7 +97,9 @@ class Product extends Model
     }
 
     /**
-     * Printer models this product (toner/ink) is compatible with.
+     * Printer models that this product (toner/ink) is compatible with.
+     * Used on the Product Detail page to show "Compatible Printers".
+     * Example: HP 26A Toner -> [LaserJet Pro M404dn, LaserJet MFP M428fdw]
      */
     public function compatibleModels()
     {
@@ -141,6 +143,7 @@ class Product extends Model
     public function scopeOnSale(Builder $query): Builder
     {
         return $query->whereNotNull('discount_price')
+            ->where('discount_price', '>', 0)
             ->whereColumn('discount_price', '<', 'price');
     }
 
@@ -211,7 +214,16 @@ class Product extends Model
             $query->where('brand_id', (int) $brandId);
         }
 
-        // 6. Price range
+        // 6. Compatible printer model filter
+        $query->when(
+            ! empty($filters['printer_model_id']),
+            fn (Builder $q) => $q->whereHas(
+                'compatibleModels',
+                fn (Builder $m) => $m->where('printer_models.id', (int) $filters['printer_model_id'])
+            )
+        );
+
+        // 7. Price range
         if (isset($filters['min_price']) && is_numeric($filters['min_price'])) {
             $query->where('price', '>=', (float) $filters['min_price']);
         }
@@ -234,7 +246,7 @@ class Product extends Model
         return $query->with([
             'category',
             'brand',
-            'compatibleModels:id,brand_id,model_name',
+            'compatibleModels:id,brand_id,model_name,slug',
         ]);
     }
 
@@ -263,11 +275,13 @@ class Product extends Model
     }
 
     /**
-     * The price the customer actually pays (discount or regular).
+     * The price the customer actually pays (sale price or regular price).
      */
     public function getEffectivePriceAttribute(): string
     {
-        return (string) ($this->discount_price ?? $this->price);
+        return $this->is_on_sale
+            ? (string) $this->discount_price
+            : (string) $this->price;
     }
 
     /**
@@ -275,7 +289,9 @@ class Product extends Model
      */
     public function getIsOnSaleAttribute(): bool
     {
-        return $this->discount_price !== null && $this->discount_price < $this->price;
+        return $this->discount_price !== null
+            && (float) $this->discount_price > 0
+            && (float) $this->discount_price < (float) $this->price;
     }
 
     /**
@@ -304,6 +320,16 @@ class Product extends Model
         static::creating(function ($product) {
             if (empty($product->slug)) {
                 $product->slug = Str::slug($product->name);
+            }
+        });
+
+        static::saving(function (self $product) {
+            // Treat 0, negative, or non-discounted (>= price) values as no discount
+            if (
+                $product->discount_price !== null
+                && ((float) $product->discount_price <= 0 || (float) $product->discount_price >= (float) $product->price)
+            ) {
+                $product->discount_price = null;
             }
         });
     }
