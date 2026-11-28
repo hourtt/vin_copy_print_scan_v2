@@ -130,7 +130,7 @@
                 @forelse($products->groupBy(function($item) { return $item->category->name ?? 'Uncategorized'; }) as $categoryName => $groupedProducts)
                     <div>
                         <h3 class="text-xl font-bold text-[#212529] mb-4">{{ $categoryName }}</h3>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
                             @foreach ($groupedProducts as $product)
                                 @include('components.product-card-catalog', ['product' => $product])
                             @endforeach
