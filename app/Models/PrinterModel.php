@@ -30,6 +30,8 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
+
+
 class PrinterModel extends Model
 {
     use HasFactory;
@@ -54,7 +56,19 @@ class PrinterModel extends Model
     }
 
     /**
-     * Products (toners, inks) compatible with this printer model.
+     * Full display name including brand (e.g. "HP LaserJet Pro M404dn").
+     */
+    public function getFullNameAttribute(): string
+    {
+        $brandName = $this->relationLoaded('brand') ? $this->brand?->name : null;
+
+        return trim(($brandName ? $brandName.' ' : '').($this->model_name ?? ''));
+    }
+
+    /**
+     * Supplies (toners/inks) from the `products` table that fit this printer model.
+     * Used for the "Find Supplies by Printer" filter.
+     * Example: LaserJet Pro M404dn -> [HP 26A Toner, HP 58A Toner, HP 26X Toner]
      */
     public function compatibleProducts()
     {

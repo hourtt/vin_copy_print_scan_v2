@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * STORE CATALOG (Independent)
+     * Stores everything the store actually sells (Printers, Toners, Inks, Papers).
+     * - Belongs to a Category (required) and a Brand (optional, e.g., Papers have no brand).
+     * - Printers we SELL live here with price/stock.
+     * - Toners & Inks optionally link to `printer_models` via `product_compatible_models`.
      */
     public function up(): void
     {
@@ -16,7 +20,7 @@ return new class extends Migration
             // Foreign key to categories table
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             // Foreign key to brands table (nullable — not all products may have a brand)
-            $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('set null');
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();

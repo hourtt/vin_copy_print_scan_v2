@@ -59,8 +59,12 @@
                                 Ink Cartridges
                             </a>
                             <a href="{{ route('products.papers.index') }}"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] rounded-b-md justify-center">
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#4A4A48] hover:bg-[#D3D3D3] hover:text-[#0D0D0B] justify-center">
                                 Papers
+                            </a>
+                            <a href="{{ route('compatibility.index') }}"
+                                class="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-150 font-['Kantumruy_Pro',sans-serif] text-[#2563EB] font-medium hover:bg-[#D3D3D3] rounded-b-md justify-center border-t border-[#F0F0EE]">
+                                Find by Printer
                             </a>
                         </div>
                     </div>
@@ -225,6 +229,11 @@
                         class="block px-3 py-2 rounded-lg text-sm transition-colors font-['Kantumruy_Pro',sans-serif] text-[#6B6B6B] hover:bg-[#ECEAE6] hover:text-[#0D0D0B]">Papers</a>
                 </div>
             </div>
+
+            <a href="{{ route('compatibility.index') }}"
+                class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['Kantumruy_Pro',sans-serif] text-[#2563EB]">
+                Find by Printer
+            </a>
 
             <a href="{{ route('services') }}"
                 class="block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors font-['Kantumruy_Pro',sans-serif] text-[#0D0D0B]">

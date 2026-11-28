@@ -93,7 +93,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): View
     {
-        $product->loadMissing(['category', 'brand', 'compatibleModels:id,brand_id,model_name']);
+        $product->loadMissing(['category', 'brand', 'compatibleModels:id,brand_id,model_name,slug']);
 
         return view('products.show', compact('product'));
     }

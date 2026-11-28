@@ -29,6 +29,7 @@ class CatalogFilterRequest extends FormRequest
             'categories.*' => ['integer', 'min:1'],
             'min_price' => ['nullable', 'numeric', 'min:0'],
             'max_price' => ['nullable', 'numeric', 'min:0'],
+            'printer_model_id' => ['nullable', 'integer', 'min:1'],
             'sort' => ['nullable', 'string', Rule::in(ProductSort::acceptedValues())],
             'search' => ['nullable', 'string', 'max:100'],
             'cat' => ['nullable', function ($attribute, $value, $fail) {
@@ -53,7 +54,8 @@ class CatalogFilterRequest extends FormRequest
      *     max_price: float|null,
      *     sort: string|null,
      *     search: string|null,
-     *     brand_id: int|null
+     *     brand_id: int|null,
+     *     printer_model_id: int|null
      * }
      */
     public function filters(): array
@@ -80,6 +82,7 @@ class CatalogFilterRequest extends FormRequest
             'sort' => $validated['sort'] ?? null,
             'search' => isset($validated['search']) ? trim($validated['search']) : null,
             'brand_id' => $brandId,
+            'printer_model_id' => isset($validated['printer_model_id']) ? (int) $validated['printer_model_id'] : null,
         ];
     }
 }

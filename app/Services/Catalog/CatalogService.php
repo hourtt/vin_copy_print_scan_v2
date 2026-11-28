@@ -4,6 +4,7 @@ namespace App\Services\Catalog;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\PrinterModel;
 use App\Models\Product;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -142,5 +143,66 @@ class CatalogService
         }
 
         return 'products-catalog.index';
+    }
+
+    /**
+     * Get brands that have printer models in the compatibility directory, cached.
+     *
+     * @return Collection<int, Brand>
+     */
+    public function printerBrands(): Collection
+    {
+        $ttl = (int) config('catalog.cache.catalog_categories_ttl', 43200);
+        $key = 'printer_brands_list';
+
+        $data = $this->cache->get($key);
+
+        if (! \is_array($data)) {
+            $this->cache->forget($key);
+
+            $data = Brand::whereHas('printerModels')
+                ->orderBy('name')
+                ->get()
+                ->map(fn (Brand $b) => ['id' => $b->id, 'name' => $b->name, 'slug' => $b->slug])
+                ->all();
+
+            $this->cache->put($key, $data, $ttl);
+        }
+
+        return collect($data)->map(fn (array $item) => (new Brand)->forceFill($item));
+    }
+
+    /**
+     * Get printer models optionally filtered by brand ID and model search query.
+     *
+     * @return Collection<int, PrinterModel>
+     */
+    public function printerModels(?int $brandId = null, ?string $search = null): Collection
+    {
+        $trimmed = $search !== null ? trim($search) : null;
+        $escaped = $trimmed
+            ? str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $trimmed)
+            : null;
+
+        return PrinterModel::with('brand')
+            ->withCount('compatibleProducts')
+            ->when($brandId, fn ($q) => $q->where('brand_id', $brandId))
+            ->when($escaped, fn ($q) => $q->whereLike('model_name', "%{$escaped}%", caseSensitive: false))
+            ->orderBy('model_name')
+            ->get();
+    }
+
+    /**
+     * Get all compatible products (toners, ink cartridges) for a printer model.
+     *
+     * @return Collection<int, Product>
+     */
+    public function compatibleProducts(PrinterModel $printerModel): Collection
+    {
+        return $printerModel->compatibleProducts()
+            ->with(['category', 'brand'])
+            ->orderBy('category_id')
+            ->orderBy('name')
+            ->get();
     }
 }

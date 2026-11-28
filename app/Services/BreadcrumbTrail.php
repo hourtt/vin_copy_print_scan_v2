@@ -105,4 +105,22 @@ class BreadcrumbTrail
 
         return $items;
     }
+
+    public function resolveForCompatibility(?string $printerLabel = null): array
+    {
+        $this->reset();
+
+        $items = [
+            ['label' => 'Dashboard', 'url' => route('dashboard')],
+        ];
+
+        if ($printerLabel) {
+            $items[] = ['label' => 'Find by Printer', 'url' => route('compatibility.index')];
+            $items[] = ['label' => $printerLabel, 'url' => null];
+        } else {
+            $items[] = ['label' => 'Find by Printer', 'url' => null];
+        }
+
+        return $items;
+    }
 }

@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\PrinterModel;
 use App\Models\Product;
 use App\Observers\BrandObserver;
 use App\Observers\CategoryObserver;
+use App\Observers\PrinterModelObserver;
 use App\Observers\ProductObserver;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
@@ -30,7 +32,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::preventLazyLoading(! app()->isProduction());
         Model::preventSilentlyDiscardingAttributes(! app()->isProduction());
-
+        Model::automaticallyEagerLoadRelationships();
+        
         TextColumn::configureUsing(function (TextColumn $column): void {
             $column->placeholder('N/A');
         });
@@ -42,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
         Category::observe(CategoryObserver::class);
         Brand::observe(BrandObserver::class);
+        PrinterModel::observe(PrinterModelObserver::class);
     }
 }

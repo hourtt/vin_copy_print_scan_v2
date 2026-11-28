@@ -36,6 +36,7 @@ class ProductIndexRequest extends FormRequest
             'category_id' => 'nullable|integer|exists:categories,id',
             'category' => 'nullable|string|exists:categories,slug',
             'brand_id' => 'nullable|integer|exists:brands,id',
+            'printer_model_id' => 'nullable|integer|exists:printer_models,id',
             'search' => 'nullable|string|max:255',
             'sort' => ['nullable', 'string', Rule::in(ProductSort::acceptedValues())],
             'per_page' => 'nullable|integer|min:1|max:50',

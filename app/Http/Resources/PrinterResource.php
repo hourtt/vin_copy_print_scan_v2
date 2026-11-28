@@ -17,7 +17,7 @@ class PrinterResource extends JsonResource
         return [
             'id' => $this->id,
             'brand_id' => $this->brand_id,
-            'brand' => $this->brand,
+            'brand' => $this->whenLoaded('brand'),
             'model_name' => $this->model_name,
             'slug' => $this->slug,
             'compatible_products' => ProductResource::collection($this->whenLoaded('compatibleProducts')),

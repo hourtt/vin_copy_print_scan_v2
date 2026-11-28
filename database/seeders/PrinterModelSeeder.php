@@ -10,9 +10,14 @@ use Illuminate\Support\Str;
 class PrinterModelSeeder extends Seeder
 {
     /**
-     * Seed popular printer models per brand.
-     * Must run after BrandSeeder.
+     * Seeds the master compatibility list of printer models per brand.
+     *
+     * IMPORTANT:
+     * - Must run AFTER BrandSeeder and BEFORE ProductSeeder.
+     * - These are reference models for compatibility matching, NOT store inventory.
+     *   To make a printer buyable, add it to ProductSeeder as well.
      */
+    
     public function run(): void
     {
         $models = [

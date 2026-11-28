@@ -95,8 +95,13 @@
                             @if($product->compatibleModels->count() > 0)
                                 <div class="grid grid-cols-3 gap-4 mt-3 pt-3 border-t border-gray-200">
                                     <dt class="font-medium text-gray-500">Compatible With</dt>
-                                    <dd class="col-span-2 text-gray-900">
-                                        {{ $product->compatibleModels->pluck('name')->join(', ') }}
+                                    <dd class="col-span-2 flex flex-wrap gap-1.5">
+                                        @foreach($product->compatibleModels as $model)
+                                            <a href="{{ route('compatibility.show', $model) }}"
+                                               class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-white border border-gray-200 text-gray-800 hover:border-[#2563EB] hover:text-[#2563EB] transition-colors">
+                                                {{ $model->full_name ?: $model->name }}
+                                            </a>
+                                        @endforeach
                                     </dd>
                                 </div>
                             @endif

@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
-     * Stores known printer models (e.g. HP LaserJet Pro M404dn) for compatible-model search.
+     * PRINTER DIRECTORY (Reference List Only — Not for sale)
+     * Master list of printer models grouped by Brand, used strictly for compatibility matching.
+     * - Includes printers we DO NOT sell (e.g., older models customers still buy ink/toner for).
+     * - Does NOT store price or stock.
+     * - Flow: Brand -> PrinterModel -> (pivot) -> Compatible Products.
      */
     public function up(): void
     {

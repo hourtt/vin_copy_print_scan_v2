@@ -111,6 +111,21 @@ class AdminPanelTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_admin_can_access_filament_brands_and_printer_models_resources(): void
+    {
+        $this->actingAs($this->admin)
+            ->get('/vin_admin_print_scan_dashboard/brands')
+            ->assertStatus(200);
+
+        $this->actingAs($this->admin)
+            ->get('/vin_admin_print_scan_dashboard/printer-models')
+            ->assertStatus(200);
+
+        $this->actingAs($this->admin)
+            ->get('/vin_admin_print_scan_dashboard/products/create')
+            ->assertStatus(200);
+    }
+
     public function test_admin_can_access_filament_customers_resource(): void
     {
         $response = $this->actingAs($this->admin)->get('/vin_admin_print_scan_dashboard/customers');

@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
-     * Pivot table linking toners/inks to the printer models they are compatible with.
+     * COMPATIBILITY BRIDGE (Many-to-Many Pivot Table)
+     * Connects sellable supplies (`products`) to the printers they fit (`printer_models`).
+     * - One Toner/Ink can fit many Printer Models.
+     * - One Printer Model can use many Toners/Inks.
+     * - Items like Papers and Printers do not need entries here.
      */
     public function up(): void
     {

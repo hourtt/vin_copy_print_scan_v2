@@ -30,6 +30,7 @@ class BrandObserver
     {
         Cache::forget(config('catalog.cache.keys.homepage_curated', 'homepage_curated_products'));
         Cache::forget(config('catalog.cache.keys.catalog_categories', 'catalog_categories_list'));
+        Cache::forget('printer_brands_list');
 
         $prefix = (string) config('catalog.cache.keys.category_brands_prefix', 'category_brands_');
         $categoryIds = $brand->products()->distinct()->pluck('category_id')->filter()->all();

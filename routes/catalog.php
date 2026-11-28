@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PrinterCompatibilityController;
 use App\Http\Controllers\ProductController;
 use App\Http\Middleware\RedirectAdminFromHome;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::middleware(RedirectAdminFromHome::class)->group(function () {
         ->name('products.category.index');
 
     Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/find-by-printer', [PrinterCompatibilityController::class, 'index'])->name('compatibility.index');
+    Route::get('/find-by-printer/{printerModel:slug}', [PrinterCompatibilityController::class, 'show'])->name('compatibility.show');
     Route::get('/breadcrumb/back', [ProductController::class, 'breadcrumbBack'])->name('breadcrumb.back');
     Route::view('/services', 'services.index')->name('services');
 });
